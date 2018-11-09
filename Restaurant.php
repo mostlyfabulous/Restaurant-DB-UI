@@ -2,57 +2,58 @@
   Created by Jiemin Zhang, 2011
   Modified by Simona Radu and others
   This file shows the very basics of how to execute PHP commands
-  on Oracle.  
+  on Oracle.
   specifically, it will drop a table, create a table, insert values
   update values, and then query for values
- 
+
   IF YOU HAVE A TABLE CALLED "tab1" IT WILL BE DESTROYED
 
   The script assumes you already have a server set up
   All OCI commands are commands to the Oracle libraries
   To get the file to work, you must place it somewhere where your
   Apache server can run it, and you must rename it to have a ".php"
-  extension.  You must also change the username and password on the 
+  extension.  You must also change the username and password on the
   OCILogon below to be your ORACLE username and password -->
 
 <p>If you wish to reset the table, press the reset button. If this is the first time you're running this page, you MUST use reset</p>
+<a href="index.php">Index page</a>
 <form method="POST" action="oracle-test.php">
    
 <p><input type="submit" value="Reset" name="reset"></p>
 </form>
 
 <p>Insert values into tab1 below:</p>
-<p><font size="2"> Number&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+<p><font size="2"> Number&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Name</font></p>
 <form method="POST" action="oracle-test.php">
 <!--refresh page when submit-->
 
-   <p><input type="text" name="insNo" size="6"><input type="text" name="insName" 
+   <p><input type="text" name="insNo" size="6"><input type="text" name="insName"
 size="18">
 <!--define two variables to pass the value-->
-      
+
 <input type="submit" value="insert" name="insertsubmit"></p>
 </form>
-<!-- create a form to pass the values. See below for how to 
-get the values--> 
+<!-- create a form to pass the values. See below for how to
+get the values-->
 
 <p> Update the name by inserting the old and new values below: </p>
-<p><font size="2"> Old Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+<p><font size="2"> Old Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 New Name</font></p>
 <form method="POST" action="oracle-test.php">
 <!--refresh page when submit-->
 
-   <p><input type="text" name="oldName" size="6"><input type="text" name="newName" 
+   <p><input type="text" name="oldName" size="6"><input type="text" name="newName"
 size="18">
 <!--define two variables to pass the value-->
-      
+
 <input type="submit" value="update" name="updatesubmit"></p>
 <input type="submit" value="run hardcoded queries" name="dostuff"></p>
 </form>
 
 <?php
 
-//this tells the system that it's no longer just parsing 
+//this tells the system that it's no longer just parsing
 //html; it's now parsing PHP
 
 $success = True; //keep track of errors so it redirects the page only if there are no errors
@@ -65,7 +66,7 @@ function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL com
 
 	if (!$statement) {
 		echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
-		$e = OCI_Error($db_conn); // For OCIParse errors pass the       
+		$e = OCI_Error($db_conn); // For OCIParse errors pass the
 		// connection handle
 		echo htmlentities($e['message']);
 		$success = False;
@@ -87,9 +88,9 @@ function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL com
 function executeBoundSQL($cmdstr, $list) {
 	/* Sometimes the same statement will be executed for several times ... only
 	 the value of variables need to be changed.
-	 In this case, you don't need to create the statement several times; 
+	 In this case, you don't need to create the statement several times;
 	 using bind variables can make the statement be shared and just parsed once.
-	 This is also very useful in protecting against SQL injection.  
+	 This is also very useful in protecting against SQL injection.
       See the sample code below for how this functions is used */
 
 	global $db_conn, $success;
@@ -128,7 +129,7 @@ function printResult($result) { //prints results from a select statement
 	echo "<tr><th>ID</th><th>Name</th></tr>";
 
 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-		echo "<tr><td>" . $row["NID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]" 
+		echo "<tr><td>" . $row["NID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
 
@@ -218,33 +219,33 @@ if ($db_conn) {
 /* OCILogon() allows you to log onto the Oracle database
      The three arguments are the username, password, and database.
      You will need to replace "username" and "password" for this to
-     to work. 
+     to work.
      all strings that start with "$" are variables; they are created
-     implicitly by appearing on the left hand side of an assignment 
+     implicitly by appearing on the left hand side of an assignment
      statement */
 /* OCIParse() Prepares Oracle statement for execution
       The two arguments are the connection and SQL query. */
 /* OCIExecute() executes a previously parsed statement
       The two arguments are the statement which is a valid OCI
-      statement identifier, and the mode. 
+      statement identifier, and the mode.
       default mode is OCI_COMMIT_ON_SUCCESS. Statement is
       automatically committed after OCIExecute() call when using this
       mode.
       Here we use OCI_DEFAULT. Statement is not committed
       automatically when using this mode. */
-/* OCI_Fetch_Array() Returns the next row from the result data as an  
+/* OCI_Fetch_Array() Returns the next row from the result data as an
      associative or numeric array, or both.
-     The two arguments are a valid OCI statement identifier, and an 
-     optinal second parameter which can be any combination of the 
+     The two arguments are a valid OCI statement identifier, and an
+     optinal second parameter which can be any combination of the
      following constants:
 
-     OCI_BOTH - return an array with both associative and numeric 
-     indices (the same as OCI_ASSOC + OCI_NUM). This is the default 
-     behavior.  
-     OCI_ASSOC - return an associative array (as OCI_Fetch_Assoc() 
-     works).  
-     OCI_NUM - return a numeric array, (as OCI_Fetch_Row() works).  
-     OCI_RETURN_NULLS - create empty elements for the NULL fields.  
-     OCI_RETURN_LOBS - return the value of a LOB of the descriptor.  
+     OCI_BOTH - return an array with both associative and numeric
+     indices (the same as OCI_ASSOC + OCI_NUM). This is the default
+     behavior.
+     OCI_ASSOC - return an associative array (as OCI_Fetch_Assoc()
+     works).
+     OCI_NUM - return a numeric array, (as OCI_Fetch_Row() works).
+     OCI_RETURN_NULLS - create empty elements for the NULL fields.
+     OCI_RETURN_LOBS - return the value of a LOB of the descriptor.
      Default mode is OCI_BOTH.  */
 ?>
