@@ -14,10 +14,10 @@
   Apache server can run it, and you must rename it to have a ".php"
   extension.  You must also change the username and password on the
   OCILogon below to be your ORACLE username and password -->
-<PHP> echo '<link rel="stylesheet" type="text/css" href="enjoy.css"></head>'; <PHP>
-
+<PHP><link rel="stylesheet" type="text/css" href="enjoy.css"></head><PHP>
+<p>Restaurant PHP table</p>
 <p>If you wish to reset the table, press the reset button. If this is the first time you're running this page, you MUST use reset</p>
-<a href="index.php">Index page</a>
+<p><a href="index.php">Index page</a></p>
 <form method="POST" action="Restaurant.php">
 
 <p><input type="submit" value="Reset" name="reset"></p>
