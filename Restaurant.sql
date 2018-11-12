@@ -1,28 +1,7 @@
 -- updated the size of notes in titles relation// Hazra
 
-drop table salesdetails;
--- cascade delete from sales and titles
-
-drop table sales;
+drop table restaurant;
 -- has no dependencies
-
-drop table titleditors;
--- cascade delete from editors and titles
-
-drop table titleauthors;
--- cascade delete from authors and titles
-
-drop table titles;
--- cascade delete from publishers
-
-drop table publishers;
--- has no dependencies
-
-drop table authors;
--- has no dependencies
-
-drop table editors;
--- cascade delete for some of its own rows
 
 commit;
 
@@ -39,15 +18,15 @@ grant select on Restaurant to public;
 commit;
 
 insert into Restaurant
-values('1234', '6133 University Blvd', 'Vancouver', 'BC' 'V6T1Z1');
+values('B1234', '6133 University Blvd', 'Vancouver', 'BC' 'V6T1Z1');
 
 insert into Restaurant
-values('1235', '750 Hornby St', 'Vancouver', 'BC', 'V6Z2H7');
+values('B1235', '750 Hornby St', 'Vancouver', 'BC', 'V6Z2H7');
 
 insert into Restaurant
-values('1236', '30 10 Ave SW', 'Calgary', 'AB', 'T2R0A9');
+values('B1236', '30 10 Ave SW', 'Calgary', 'AB', 'T2R0A9');
 
 insert into Restaurant
-values('1237', '675 Belleville St', 'Victoria', 'BC', 'V8W9W2');
+values('B1237', '675 Belleville St', 'Victoria', 'BC', 'V8W9W2');
 
 commit;
