@@ -11,8 +11,7 @@ address varchar(40),
 city varchar(20),
 province char(2),
 postalCode varchar(6),
-PRIMARY KEY (phoneNumber)
-
+PRIMARY KEY (phoneNumber));
 grant select on Customer to public;
 
 commit;

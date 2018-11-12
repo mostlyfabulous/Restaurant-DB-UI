@@ -1,13 +1,13 @@
 -- updated the size of notes in titles relation// Hazra
 
-drop table deliverydriver
+drop table deliverydriver;
 -- has no dependencies
 
 commit;
 
 CREATE TABLE DeliveryDriver(
     driverID CHAR(30),
-    PRIMARY KEY (driverId));
+    PRIMARY KEY (driverID));
 	 
 grant select on DeliveryDriver to public;
 
