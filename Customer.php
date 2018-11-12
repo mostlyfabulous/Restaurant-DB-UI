@@ -24,12 +24,12 @@
 </form>
 
 <p>Insert values into tab1 below:</p>
-<p><font size="2"> Number&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Name</font></p>
+<p><font size="2"> OrderID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+menuItemID</font></p>
 <form method="POST" action="Customer.php">
 <!--refresh page when submit-->
 
-   <p><input type="text" name="insNo" size="6"><input type="text" name="insName"
+   <p><input type="text" name="insORDERID" size="6"><input type="text" name="insMenuItemID"
 size="18">
 <!--define two variables to pass the value-->
 
@@ -38,7 +38,7 @@ size="18">
 <!-- create a form to pass the values. See below for how to
 get the values-->
 
-<p> Update the name by inserting the old and new values below: </p>
+<p> TODO: Update the name by inserting the old and new values below </p>
 <p><font size="2"> Old Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 New Name</font></p>
 <form method="POST" action="Customer.php">
@@ -125,12 +125,12 @@ function executeBoundSQL($cmdstr, $list) {
 }
 
 function printResult($result) { //prints results from a select statement
-	echo "<br>Got data from table tab1:<br>";
+	echo "<br>Got data from table OrderHas:<br>";
 	echo "<table>";
 	echo "<tr><th>ID</th><th>Name</th></tr>";
 
 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-		echo "<tr><td>" . $row["NID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]"
+		echo "<tr>$row[0]</tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
 
@@ -142,19 +142,19 @@ if ($db_conn) {
 	if (array_key_exists('reset', $_POST)) {
 		// Drop old table...
 		echo "<br> dropping table <br>";
-		executePlainSQL("Drop table tab1");
+		executePlainSQL("Drop table ORDERHAS");
 
 		// Create new table...
 		echo "<br> creating new table <br>";
-		executePlainSQL("create table tab1 (nid number, name varchar2(30), primary key (nid))");
+		executePlainSQL("create table ORDERHAS (ORDERID CHAR(30), menuItemID CHAR(30), primary key (ORDERID, menuItemID))");
 		OCICommit($db_conn);
 
 	} else
 		if (array_key_exists('insertsubmit', $_POST)) {
 			//Getting the values from user and insert data into the table
 			$tuple = array (
-				":bind1" => $_POST['insNo'],
-				":bind2" => $_POST['insName']
+				":bind1" => $_POST['insORDERID'],
+				":bind2" => $_POST['insMenuItemID']
 			);
 			$alltuples = array (
 				$tuple
@@ -178,21 +178,21 @@ if ($db_conn) {
 			} else
 				if (array_key_exists('dostuff', $_POST)) {
 					// Insert data into table...
-					executePlainSQL("insert into tab1 values (10, 'Frank')");
+					// executePlainSQL("insert into Orders values (10, 'Frank')");
 					// Inserting data into table using bound variables
 					$list1 = array (
-						":bind1" => 6,
-						":bind2" => "All"
+						":bind1" => 'OTEST1',
+						":bind2" => "Grass"
 					);
 					$list2 = array (
-						":bind1" => 7,
-						":bind2" => "John"
+						":bind1" => 'OTEST2',
+						":bind2" => "Water"
 					);
 					$allrows = array (
 						$list1,
 						$list2
 					);
-					executeBoundSQL("insert into tab1 values (:bind1, :bind2)", $allrows); //the function takes a list of lists
+					executeBoundSQL("insert into OrderHas values (:bind1, :bind2)", $allrows); //the function takes a list of lists
 					// Update data...
 					//executePlainSQL("update tab1 set nid=10 where nid=2");
 					// Delete data...
@@ -205,7 +205,7 @@ if ($db_conn) {
 		header("location: Customer.php");
 	} else {
 		// Select data...
-		$result = executePlainSQL("select * from tab1");
+		$result = executePlainSQL("select * from ORDERHAS");
 		printResult($result);
 	}
 
