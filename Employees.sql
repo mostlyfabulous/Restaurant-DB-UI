@@ -10,8 +10,8 @@ commit;
 
 create table Employee(
     branchID CHAR(30);
-    socialInsuranceNumber INTEGER UNIQUE,
-    PRIMARY KEY (socialInsuranceNumber),
+    socialInsuranceNumber CHAR(9) UNIQUE,
+    PRIMARY KEY (socialInsuranceNumber, branchID),
     FOREIGN KEY (branchID) REFERENCES Restaurant,
         ON DELETE NO ACTION
         ON UPDATE CASCADE
