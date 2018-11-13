@@ -23,9 +23,9 @@
 <p><input type="submit" value="Reset" name="reset"></p>
 </form>
 
-<p>Insert values into tab1 below:</p>
+<p>Insert values into ORDERHAS below:</p>
 <p><font size="2"> OrderID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-menuItemID</font></p>
+MENUITEMID</font></p>
 <form method="POST" action="Customer.php">
 <!--refresh page when submit-->
 
@@ -127,10 +127,10 @@ function executeBoundSQL($cmdstr, $list) {
 function printResult($result) { //prints results from a select statement
 	echo "<br>Got data from table OrderHas:<br>";
 	echo "<table>";
-	echo "<tr><th>ID</th><th>Name</th></tr>";
+	echo "<tr><th>OrderID</th><th>MenuItemID</th></tr>";
 
 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-		echo "<tr>$row[0]</tr>"; //or just use "echo $row[0]"
+		echo "<tr><td>" . $row["ORDERID"] . "</td><td>" . $row["MENUITEMID"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
 
@@ -146,7 +146,7 @@ if ($db_conn) {
 
 		// Create new table...
 		echo "<br> creating new table <br>";
-		executePlainSQL("create table ORDERHAS (ORDERID CHAR(30), menuItemID CHAR(30), primary key (ORDERID, menuItemID))");
+		executePlainSQL("create table ORDERHAS (ORDERID CHAR(30), MENUITEMID CHAR(30), primary key (ORDERID, MENUITEMID))");
 		OCICommit($db_conn);
 
 	} else
@@ -159,7 +159,7 @@ if ($db_conn) {
 			$alltuples = array (
 				$tuple
 			);
-			executeBoundSQL("insert into tab1 values (:bind1, :bind2)", $alltuples);
+			executeBoundSQL("insert into ORDERHAS values (:bind1, :bind2)", $alltuples);
 			OCICommit($db_conn);
 
 		} else
@@ -181,12 +181,12 @@ if ($db_conn) {
 					// executePlainSQL("insert into Orders values (10, 'Frank')");
 					// Inserting data into table using bound variables
 					$list1 = array (
-						":bind1" => 'OTEST1',
-						":bind2" => "Grass"
+						":bind1" => 'O0001',
+						":bind2" => 'Grass'
 					);
 					$list2 = array (
-						":bind1" => 'OTEST2',
-						":bind2" => "Water"
+						":bind1" => 'O0002',
+						":bind2" => 'Water'
 					);
 					$allrows = array (
 						$list1,
