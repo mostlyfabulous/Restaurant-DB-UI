@@ -1,19 +1,6 @@
-<!--Test Oracle file for UBC CPSC 304
+<!--Test Oracle file for UBC CPSC 304, modified by Group 12 for W1 2018 session
   Created by Jiemin Zhang, 2011
-  Modified by Simona Radu and others
-  This file shows the very basics of how to execute PHP commands
-  on Oracle.
-  specifically, it will drop a table, create a table, insert values
-  update values, and then query for values
-
-  IF YOU HAVE A TABLE CALLED "tab1" IT WILL BE DESTROYED
-
-  The script assumes you already have a server set up
-  All OCI commands are commands to the Oracle libraries
-  To get the file to work, you must place it somewhere where your
-  Apache server can run it, and you must rename it to have a ".php"
-  extension.  You must also change the username and password on the
-  OCILogon below to be your ORACLE username and password -->
+  Modified by Simona Radu and others -->
 <PHP> <link rel="stylesheet" type="text/css" href="enjoy.css"></head> <PHP>
 <p>Customer PHP table</p>
 <p>If you wish to reset the table, press the reset button. If this is the first time you're running this page, you MUST use reset</p>
@@ -22,7 +9,18 @@
 
 <p><input type="submit" value="Reset" name="reset"></p>
 </form>
+<?php
+$success = True; //keep track of errors so it redirects the page only if there are no errors
+$db_conn = OCILogon("ora_u4b1b", "a46210167", "dbhost.ugrad.cs.ubc.ca:1522/ug");
 
+if ($_POST && $success) {
+  header("location: Customer.php");
+} else {
+  // Select data...
+  $result = executePlainSQL("select * from MenuItem");
+  printMenuItems($result);
+}
+?>
 <p>Insert values into ORDERHAS below:</p>
 <p><font size="2"> OrderID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 MENUITEMID</font></p>
@@ -131,6 +129,18 @@ function printResult($result) { //prints results from a select statement
 
 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 		echo "<tr><td>" . $row["ORDERID"] . "</td><td>" . $row["MENUITEMID"] . "</td></tr>"; //or just use "echo $row[0]"
+	}
+	echo "</table>";
+
+}
+
+function printMenuItems($result) { //prints results from a select statement
+	echo "<br>Got data from table OrderHas:<br>";
+	echo "<table>";
+	echo "<tr><th>MenuItemID</th><th>Name</th></tr>";
+
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "<tr><td>" . $row["MENUITEMID"] . "</td><td>" . $row["ITEMNAME"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
 
