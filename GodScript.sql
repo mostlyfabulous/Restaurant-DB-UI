@@ -238,6 +238,8 @@ values('C5525', '978320817', 'B1235');
 insert into Chef
 values('C5450', '313312348', 'B1236');
 
+insert into Chef
+values('C5451', '313312348', 'B1237');
 
 insert into MenuItem
 values('MI001', 'Cobb Salad', 'C3131', 'B1234');
@@ -252,16 +254,16 @@ insert into MenuItem
 values('MI004', 'Grilled Cheese', 'C3132', 'B1234');
 
 insert into MenuItem
-values('MI004', 'Grilled Cheese', 'C3132', 'B1235');
+values('MI004', 'Grilled Cheese', 'C5525', 'B1235');
 
 insert into MenuItem
-values('MI004', 'Grilled Cheese', 'C3132', 'B1236');
+values('MI004', 'Grilled Cheese', 'C5450', 'B1236');
 
 insert into MenuItem
-values('MI005', 'Mac and Cheese', 'C3132', 'B1236');
+values('MI005', 'Mac and Cheese', 'C5450', 'B1236');
 
 insert into MenuItem
-values('MI005', 'Mac and Cheese', 'C3132', 'B1237');
+values('MI005', 'Mac and Cheese', 'C5451', 'B1237');
 
 insert into DeliveryDriver
 values('D0001');
