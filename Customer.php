@@ -7,23 +7,20 @@
 <form method="POST" action="Customer.php">
 <p><input type="submit" value="Reset" name="reset"></p>
 </form>
-<form method="POST" action="Customer.php">
-<p><input type="submit" value="PLXZZ" name="selectsubmit"></p>
-</form>
 
 <p>Select MenuItems by Branch ID below:</p>
-<form method="POST" action="Customer.php">
+  <form method="GET" action="Customer.php">
 <p> <input type="text" name="setbid" size="10" placeholder="BranchID">
-    <input type="submit" value="submit" name="selectsubmit"></p>
-    <input type="submit" value="submit" name="insertsubmit"></p>
+    <input type="submit" value="broken" name="selectsubmit"></p>
+    <input type="submit" value="works" name="insertsubmit"></p>
 </form>
 
 <?php
-if ($db_conn && array_key_exists('selectsubmit', $_POST) || array_key_exists('insertsubmit', $_POST)) {
+if ($db_conn && array_key_exists('selectsubmit', $_GET) || array_key_exists('insertsubmit', $_POST)) {
   // Get MenuItems by BranchID
   echo "<p> Attempting to get MenuItems </p>";
   $tuple = array (
-    ":bind1" => $_POST['setbid']
+    ":bind1" => $_GET['setbid']
   );
   $alltuples = array (
     $tuple
@@ -41,7 +38,6 @@ if ($db_conn && array_key_exists('selectsubmit', $_POST) || array_key_exists('in
 // $result = executePlainSQL("select * from MenuItem where BranchID='B1234'", $alltuples);
 // printMenuItems($result);
 ?>
-
 
 <p>Insert values into ORDERHAS below this is a very basic way for the customer to
   add items to their order:</p>
@@ -71,7 +67,6 @@ get the values-->
 
 // Connect Oracle...
 if ($db_conn) {
-
 	if (array_key_exists('reset', $_POST)) {
 		// Drop old table...
 		echo "<br> dropping table <br>";
