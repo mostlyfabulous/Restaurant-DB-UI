@@ -1,5 +1,8 @@
 -- updated the size of notes in titles relation// Hazra
 
+drop table Ingredients;
+-- cascade update from supplier
+
 drop table IngredientsInStock;
 -- cascade update from supplier
 
@@ -8,98 +11,141 @@ drop table IngredientsToOrder;
 
 commit;
 
+create table Ingredients
+	(ingredientName CHAR(50),
+	supplierID CHAR(30),
+	primary key(ingredientName),
+	foreign key (supplierID) references Supplier
+		ON DELETE CASCADE);
+
 create table IngredientsInStock
-	(branchID CHAR(30), not null
-    ingredientName CHAR(50), not null
-    lotNumber INTEGER, not null
-    expiryDate CHAR(50),
-	quantityLeft CHAR(30),
-	select suppliedFromsupplierID from SUPPLIER,
-	select deliversSupplierID from SUPPLIER,
+	(branchID CHAR(30),
+    ingredientName CHAR(50),
+    lotNumber INTEGER,
+    expiryDate DATE,
+		quantityLeft INTEGER,
+		deliveryTime TIMESTAMP;
 	primary key (ingredientName, lotNumber, branchID)
-	foreign key (suppliedFromsupplierID, deliversSupplierID) references Supplier,
-		ON DELETE NO ACTION
-		ON UPDATE CASCADE);
-	 
+	foreign key (ingredientName) references Ingredients);
 grant select on IngredientsInStock to public;
 
 create table IngredientsToOrder
-	(branchID CHAR(30), not null
-	ingredientName CHAR(50), not null
-    lotNumber INTEGER, not null
-	quantityToOrder CHAR(30),
-	select suppliedFromsupplierID FROM SUPPLIER,
-	primary key (ingredientName, lotNumber, branchID)
-	foreign key (suppliedFromsupplierID) REFERENCES Supplier,
-		ON DELETE NO ACTION
-		ON UPDATE CASCADE );
+	(branchID CHAR(30),
+	ingredientName CHAR(50),
+	quantityToOrder INTEGER,
+	primary key (ingredientName, branchID)
+	foreign key (ingredientName) references Ingredients);
 
 grant select on IngredientsToOrder to public;
 
 commit;
 
+insert into IngredientsToOrder
+values('Peanut Butter', 'S310');
+
+insert into Ingredients
+values('Salt', 'S310');
+
+insert into Ingredients
+values('Basamati Rice', 'S310');
+
+insert into Ingredients
+values('Chickpeas', 'S310');
+
+insert into Ingredients
+values('Bread Flour', 'S310');
+
+insert into Ingredients
+values('Cake Flour', 'S310');
+
+insert into Ingredients
+values('Olive Oil', 'S310');
+
+insert into Ingredients
+values('Ketchup', 'S311');
+
+insert into Ingredients
+values('Butter', 'S312');
+
+insert into Ingredients
+values('Whole Milk', 'S312');
+
+insert into Ingredients
+values('Russet Potato', 'S313');
+
+insert into Ingredients
+values('Apple', 'S313');
+
+insert into Ingredients
+values('Egg', 'S313');
+
+insert into Ingredients
+values('Chicken Thigh', 'S314');
+
+
+
 insert into IngredientsInStock
-values('IS1235', 'Russet Potato', '60', '2018-12-13', '10', 'S313', 'S313' );
+values('B1234', 'Russet Potato', 60, '2018-12-13', 10, '2018-11-15 10:35:01', 'M4621');
 
 insert into IngredientsInStock
-values('IS1234', 'Salt', '11', '2020-01-25', '10', 'S310', 'S310');
+values('B1234', 'Salt', 11, '2020-01-25', 10, '2018-08-10 11:12:13', 'M4621');
 
 insert into IngredientsInStock
-values('IS1234', 'Basamati Rice', '49', '2019-11-03', '5', 'S310', 'S310');
+values('B1235', 'Basamati Rice', 9, '2019-11-03', 5, '2018-06-16 16:01:32', 'M0167');
 
 insert into IngredientsInStock
-values('IS1234', 'Chickpeas', '9', '2019-09-21', '10', 'S310', 'S310');
+values('B1235', 'Chickpeas', 9, '2019-09-21', 10, '2018-08-23 13:09:54', 'M0167');
 
 insert into IngredientsInStock
-values('IS1234', 'Apple', '99', '2018-12-10', '50', 'S313', 'S313');
+values('B1234', 'Apple', 99, '2018-12-10', 50, '2018-11-22 09:44:25', 'M4621');
 
 insert into IngredientsInStock
-values('IS1234', 'Egg', '273', '2018-12-02', '50', 'S313', 'S313');
+values('B1234', 'Egg', 273, '2018-12-02', 50, '2018-11-10 15:53:05', 'M4621');
 
 
 insert into IngredientsToOrder
-values('IO1234', 'Salt', '12', '150', 'S310');
- 
-insert into IngredientsToOrder
-values('IO1234', 'Basamati Rice', '50','100', 'S310');
+values('B1235', 'Salt', 12);
 
 insert into IngredientsToOrder
-values('IO1234', 'Ketchup', '12','100', 'S311');
+values('B1235', 'Basamati Rice', 50);
 
 insert into IngredientsToOrder
-values('IO1234', 'Peanut Butter', '15','30', 'S310');
+values('Ketchup', '12','100', 'S311');
 
 insert into IngredientsToOrder
-values('IO1234', 'Chickpeas', '10','200', 'S310');
+values('Peanut Butter', '15','30', 'S310');
 
 insert into IngredientsToOrder
-values('IO1234', 'Bread Flour', '20','500', 'S310');
+values('Chickpeas', '10','200', 'S310');
 
 insert into IngredientsToOrder
-values('IO1234', 'Butter', '80','100', 'S312');
+values('Bread Flour', '20','500', 'S310');
 
 insert into IngredientsToOrder
-values('IO1234', 'Apple', '100','40', 'S313');
+values('Butter', '80','100', 'S312');
 
 insert into IngredientsToOrder
-values('IO1234', 'Whole Milk', '92','50', 'S312');
+values('Apple', '100','40', 'S313');
 
 insert into IngredientsToOrder
-values('IO1234', 'Chicken Thigh', '100','100', 'S314');
+values('Whole Milk', '92','50', 'S312');
 
 insert into IngredientsToOrder
-values('IO1234', 'Russet Potato', '40','60', 'S313');
+values('Chicken Thigh', '100','100', 'S314');
 
 insert into IngredientsToOrder
-values('IO1234', 'Egg', '274','100', 'S313');
+values('Russet Potato', '40','60', 'S313');
 
 insert into IngredientsToOrder
-values('IO1235', 'Russet Potato', '61','60', 'S313');
+values('Egg', '274','100', 'S313');
 
 insert into IngredientsToOrder
-values('IO1235', 'Cake Flour', '13','60', 'S310');
+values('Russet Potato', '61','60', 'S313');
 
 insert into IngredientsToOrder
-values('IO1235', 'Olive Oil', '15','80', 'S310');
+values('Cake Flour', '13','60', 'S310');
+
+insert into IngredientsToOrder
+values('Olive Oil', '15','80', 'S310');
 
 commit;
