@@ -1,5 +1,25 @@
 -- updated the size of notes in titles relation// Hazra
+--//////////////////////////////////////////////////////////////////////////////
 
+-- drop table ingredientorders;
+--
+-- drop table transfers;
+--
+--drop table timerestocker;
+--
+--drop table ingredientstoorder;
+
+drop table ingredientsinstock;
+
+drop table ingredients;
+
+drop table supplier;
+
+drop table homelessshelter;
+
+drop table disposal;
+
+--//////////////////////////////////////////////////////////////////////////////
 drop table orderhas;
 -- cascade update from orders, menuitem
 
@@ -143,6 +163,49 @@ CREATE TABLE OrderHas(
     FOREIGN KEY (menuItemID, branchID) REFERENCES MenuItem
 				ON DELETE CASCADE);
 commit ;
+
+--////////////////////////////////////////////////////////////////////////////////
+
+CREATE TABLE Disposal (
+phoneNumber INTEGER,
+PRIMARY KEY (phoneNumber));
+commit;
+
+CREATE TABLE HomelessShelter (
+phoneNumber INTEGER,
+address varchar(40),
+city varchar(20),
+province char(2),
+postalCode varchar(6),
+PRIMARY KEY (phoneNumber));
+commit;
+
+CREATE TABLE Supplier(
+  supplierID CHAR(30),
+  bankAccountNo INTEGER,
+  PRIMARY KEY (supplierID));
+
+CREATE TABLE Ingredients (
+	ingredientName CHAR(50),
+	supplierID CHAR(30),
+	PRIMARY KEY (ingredientName),
+	FOREIGN KEY (supplierID) REFERENCES Supplier
+		ON DELETE CASCADE);
+
+CREATE TABLE IngredientsInStock(
+		branchID CHAR(30),
+    ingredientName CHAR(50),
+    lotNumber INTEGER,
+    expiryDate DATE,
+		quantityLeft INTEGER,
+		deliveryTime TIMESTAMP,
+		managerID CHAR(30),
+	PRIMARY KEY (ingredientName, lotNumber, branchID),
+	FOREIGN KEY (ingredientName) REFERENCES Ingredients,
+	FOREIGN KEY (managerID) REFERENCES Manager);
+
+commit ;
+--////////////////////////////////////////////////////////////////////////////////
 
 insert into Customer
 values('7783209817', '2350 Health Sciences Mall', 'Vancouver', 'BC',
@@ -384,3 +447,132 @@ values('O000007', 'MI004', 'B1234');
 
 insert into OrderHas
 values('O000008', 'MI003', 'B1235');
+
+--//////////////////////////////////DISPOSAL/////////////////////////////////////////////
+
+insert into Disposal
+values('7785598006');
+
+insert into Disposal
+values('7785558007');
+
+insert into Disposal
+values('7783397777');
+
+insert into Disposal
+values('7789870055');
+
+insert into Disposal
+values('7786258776');
+
+----//////////////////////////////////HOMELESSSHELTER/////////////////////////////////////////////
+
+insert into HomelessShelter
+values('7786208716','2345 West 45th Ave', 'Vancouver', 'BC', 'V6T8X3');
+
+insert into HomelessShelter
+values('7786255481','5432 West 4rd Ave', 'Vancouver', 'BC', 'V6T1L9');
+
+insert into HomelessShelter
+values('7787840909','222 West Broadway', 'Vancouver', 'BC', 'V6T5T9');
+
+insert into HomelessShelter
+values('7786298004','204 Metrotown', 'Vancouver', 'BC', 'V6T9M3');
+
+insert into HomelessShelter
+values('7785388993','555 West Balsam', 'Vancouver', 'BC', 'V6T8N5');
+
+----//////////////////////////////////SUPPLIER/////////////////////////////////////////////
+
+insert into Supplier;
+values('S001', 100000000);
+
+insert into Supplier;
+values('S002', 543342111);
+
+insert into Supplier
+values('S003', 444333222);
+
+insert into Supplier
+values('S310', 333222111);
+
+insert into Supplier
+values('S311', 111222333);
+
+insert into Supplier
+values('S312', 222333444);
+
+insert into Supplier
+values('S313', 333444555);
+
+insert into Supplier
+values('S314', 444555666);
+commit;
+
+
+----//////////////////////////////////INGREDIENTS/////////////////////////////////////////////
+insert into Ingredients
+values('Peanut Butter', 'S310');
+
+insert into Ingredients
+values('Salt', 'S310');
+
+insert into Ingredients
+values('Basamati Rice', 'S310');
+
+insert into Ingredients
+values('Chickpeas', 'S310');
+
+insert into Ingredients
+values('Bread Flour', 'S310');
+
+insert into Ingredients
+values('Cake Flour', 'S310');
+
+insert into Ingredients
+values('Olive Oil', 'S310');
+
+insert into Ingredients
+values('Ketchup', 'S311');
+
+insert into Ingredients
+values('Butter', 'S312');
+
+insert into Ingredients
+values('Whole Milk', 'S312');
+
+insert into Ingredients
+values('Russet Potato', 'S313');
+
+insert into Ingredients
+values('Apple', 'S313');
+
+insert into Ingredients
+values('Egg', 'S313');
+
+insert into Ingredients
+values('Chicken Thigh', 'S314');
+
+
+----//////////////////////////////////INGREDIENTSINSTOCK/////////////////////////////////////////////
+
+insert into IngredientsInStock
+values('B1234', 'Russet Potato', 60, '2018-12-13', 10, '2018-11-15 10:35:01', 'M4621');
+
+insert into IngredientsInStock
+values('B1234', 'Salt', 11, '2020-01-25', 10, '2018-08-10 11:12:13', 'M4621');
+
+insert into IngredientsInStock
+values('B1235', 'Basamati Rice', 9, '2019-11-03', 5, '2018-06-16 16:01:32', 'M0167');
+
+insert into IngredientsInStock
+values('B1235', 'Chickpeas', 9, '2019-09-21', 10, '2018-08-23 13:09:54', 'M0167');
+
+insert into IngredientsInStock
+values('B1234', 'Apple', 99, '2018-12-10', 50, '2018-11-22 09:44:25', 'M4621');
+
+insert into IngredientsInStock
+values('B1234', 'Egg', 273, '2018-12-02', 50, '2018-11-10 15:53:05', 'M4621');
+
+
+--///////////////////////////////////////////////////////////////////////////////
