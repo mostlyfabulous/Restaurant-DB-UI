@@ -3,48 +3,71 @@
 <h>Customer PHP table</h>
 <p>If you wish to reset the table, press the reset button. If this is the first time you're running this page, you MUST use reset</p>
 <p><a href="index.php">Index page</a></p>
-<form method="POST" action="Customer.php">
 
+<form method="POST" action="Customer.php">
 <p><input type="submit" value="Reset" name="reset"></p>
 </form>
-<?php
+<form method="POST" action="Customer.php">
+<p><input type="submit" value="PLXZZ" name="selectsubmit"></p>
+</form>
 
-if ($_POST && $success) {
-  header("location: Customer.php");
-} else {
-  // Select data...
-  $result = executePlainSQL("select * from MenuItem");
+<p>Select MenuItems by Branch ID below:</p>
+<form method="POST" action="Customer.php">
+<p> <input type="text" name="setbid" size="10" placeholder="BranchID">
+    <input type="submit" value="submit" name="selectsubmit"></p>
+    <input type="submit" value="submit" name="insertsubmit"></p>
+</form>
+
+<?php
+if ($db_conn && array_key_exists('selectsubmit', $_POST) || array_key_exists('insertsubmit', $_POST)) {
+  // Get MenuItems by BranchID
+  echo "<p> Attempting to get MenuItems </p>";
+  $tuple = array (
+    ":bind1" => $_POST['setbid']
+  );
+  $alltuples = array (
+    $tuple
+  );
+  $result = executeBoundSQL("select * from MenuItem where BRANCHID=:bind1", $alltuples);
   printMenuItems($result);
+  $result = executeBoundSQL("select * from MenuItem where BRANCHID='B1234'", $alltuples);
+  printMenuItems($result);
+  // $result = executePlainSQL("select * from Restaurant", $alltuples);
+  // dropdownBranches($result);
+  // $result = executePlainSQL("select * from Restaurant", $alltuples);
+  // https://www.w3schools.com/tags/att_option_value.asp TODO: use result of selection
+  // printBranches($result);
 }
+// $result = executePlainSQL("select * from MenuItem where BranchID='B1234'", $alltuples);
+// printMenuItems($result);
 ?>
-<p>Insert values into ORDERHAS below:</p>
+
+
+<p>Insert values into ORDERHAS below this is a very basic way for the customer to
+  add items to their order:</p>
 <form method="POST" action="Customer.php">
 <!--refresh page when submit-->
 <p> <input type="text" name="insORDERID" size="10" placeholder="Order ID">
     <input type="text" name="insMenuItemID" size="18"placeholder="Menu Item">
-<!--define two variables to pass the value-->
-
+    <input type="text" name="insBranchID" size="10"placeholder="Branch ID">
+<!--define 3 variables to pass the value-->
 <input type="submit" value="insert" name="insertsubmit"></p>
 </form>
 <!-- create a form to pass the values. See below for how to
 get the values-->
 
-<p> TODO: Update the name by inserting the old and new values below </p>
+<p> TODO: Update the order by using a query </p>
 <form method="POST" action="Customer.php">
 <!--refresh page when submit-->
 
-<p><input type="text" name="oldName" size="18" placeholder="Old Name"><input type="text" name="newName"
-size="18" placeholder="New Name">
+<p> <input type="text" name="oldName" size="18" placeholder="Old Name">
+    <input type="text" name="newName" size="18" placeholder="New Name">
 <!--define two variables to pass the value-->
-
 <input type="submit" value="update" name="updatesubmit">
 <input type="submit" value="run hardcoded queries" name="dostuff"></p>
 </form> <br>
 
 <?php
-
-// $success = True; //keep track of errors so it redirects the page only if there are no errors
-// $db_conn = OCILogon("ora_u4b1b", "a46210167", "dbhost.ugrad.cs.ubc.ca:1522/ug");
 
 // Connect Oracle...
 if ($db_conn) {
@@ -64,12 +87,13 @@ if ($db_conn) {
 			//Getting the values from user and insert data into the table
 			$tuple = array (
 				":bind1" => $_POST['insORDERID'],
-				":bind2" => $_POST['insMenuItemID']
+				":bind2" => $_POST['insMenuItemID'],
+        ":bind3" => $_POST['insBranchID']
 			);
 			$alltuples = array (
 				$tuple
 			);
-			executeBoundSQL("insert into ORDERHAS values (:bind1, :bind2)", $alltuples);
+			executeBoundSQL("insert into ORDERHAS values (:bind1, :bind2, :bind3)", $alltuples);
 			OCICommit($db_conn);
 
 		} else
@@ -120,7 +144,6 @@ if ($db_conn) {
     $result = executePlainSQL("select * from MenuItem");
     printMenuItems($result);
 	}
-
 	//Commit to save changes...
 	OCILogoff($db_conn);
 } else {
