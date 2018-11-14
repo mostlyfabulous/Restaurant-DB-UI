@@ -573,27 +573,3 @@ values('B1234', 'Apple', 99, '2018-12-10', 50, '2018-11-22 09:44:25', 'M4621');
 
 insert into IngredientsInStock
 values('B1234', 'Egg', 273, '2018-12-02', 50, '2018-11-10 15:53:05', 'M4621');
-
-
---/////////////////////////////////////check//////////////////////////////////////////
-
--- insert into IngredientsInStock
--- values('B1234', 'Russet Potato', 60, '2018-12-13', 10, '2018-11-15 10:35:01', 'M4621');
---
--- insert into IngredientsInStock
--- values('B1234', 'Salt', 11, '2020-01-25', 10, '2018-08-10 11:12:13', 'M4621');
---
--- insert into IngredientsInStock
--- values('B1235', 'Basamati Rice', 9, '2019-11-03', 5, '2018-06-16 16:01:32', 'M0167');
---
--- insert into IngredientsInStock
--- values('B1235', 'Chickpeas', 9, '2019-09-21', 10, '2018-08-23 13:09:54', 'M0167');
---
--- insert into IngredientsInStock
--- values('B1234', 'Apple', 99, '2018-12-10', 50, '2018-11-22 09:44:25', 'M4621');
---
--- insert into IngredientsInStock
--- values('B1234', 'Egg', 273, '2018-12-02', 50, '2018-11-10 15:53:05', 'M4621');
-
-
---/////////////////////////////////////check//////////////////////////////////////////
