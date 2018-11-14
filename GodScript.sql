@@ -85,7 +85,7 @@ create table Employee(
 grant select on Employee to public;
 
 create table Manager(
-	managerID CHAR(30),
+	  managerID CHAR(30),
     socialInsuranceNumber CHAR(9),
     branchID CHAR(30),
     PRIMARY KEY (managerID),
@@ -206,9 +206,8 @@ CREATE TABLE IngredientsInStock(
 	FOREIGN KEY (ingredientName) REFERENCES Ingredients,
 	FOREIGN KEY (managerID) REFERENCES Manager);
 
-commit ;
---////////////////////////////////////////////////////////////////////////////////
 
+--////////////////////////////////////////////////////////////////////////////////
 
 insert into Customer
 values('7783209817', '2350 Health Sciences Mall', 'Vancouver', 'BC',
@@ -304,8 +303,6 @@ values('C5525', '978320817', 'B1235');
 insert into Chef
 values('C5450', '313312348', 'B1236');
 
-insert into Chef
-values('C5451', '313312348', 'B1237');
 
 insert into MenuItem
 values('MI001', 'Cobb Salad', 'C3131', 'B1234');
@@ -320,16 +317,16 @@ insert into MenuItem
 values('MI004', 'Grilled Cheese', 'C3132', 'B1234');
 
 insert into MenuItem
-values('MI004', 'Grilled Cheese', 'C5525', 'B1235');
+values('MI004', 'Grilled Cheese', 'C3132', 'B1235');
 
 insert into MenuItem
-values('MI004', 'Grilled Cheese', 'C5450', 'B1236');
+values('MI004', 'Grilled Cheese', 'C3132', 'B1236');
 
 insert into MenuItem
-values('MI005', 'Mac and Cheese', 'C5450', 'B1236');
+values('MI005', 'Mac and Cheese', 'C3132', 'B1236');
 
 insert into MenuItem
-values('MI005', 'Mac and Cheese', 'C5451', 'B1237');
+values('MI005', 'Mac and Cheese', 'C3132', 'B1237');
 
 insert into DeliveryDriver
 values('D0001');
@@ -410,7 +407,7 @@ insert into OrderHas
 values('O000001', 'MI003', 'B1234');
 
 insert into OrderHas
-values('O000001', 'MI005', 'B1234');
+values('O000001', 'MI005', 'B1236');
 
 insert into OrderHas
 values('O000002', 'MI002', 'B1234');
@@ -419,28 +416,28 @@ insert into OrderHas
 values('O000003', 'MI004', 'B1234');
 
 insert into OrderHas
-values('O000003', 'MI005', 'B1234');
+values('O000003', 'MI005', 'B1236');
 
 insert into OrderHas
-values('O000004', 'MI001', 'B1235');
+values('O000004', 'MI001', 'B1234');
 
 insert into OrderHas
-values('O000004', 'MI003', 'B1235');
+values('O000004', 'MI003', 'B1234');
 
 insert into OrderHas
-values('O000005', 'MI002', 'B1235');
+values('O000005', 'MI002', 'B1234');
 
 insert into OrderHas
-values('O000005', 'MI003', 'B1235');
+values('O000005', 'MI003', 'B1234');
 
 insert into OrderHas
 values('O000005', 'MI004', 'B1235');
 
 insert into OrderHas
-values('O000005', 'MI005', 'B1235');
+values('O000005', 'MI005', 'B1236');
 
 insert into OrderHas
-values('O000006', 'MI005', 'B1234');
+values('O000006', 'MI005', 'B1237');
 
 insert into OrderHas
 values('O000007', 'MI001', 'B1234');
@@ -449,7 +446,7 @@ insert into OrderHas
 values('O000007', 'MI004', 'B1234');
 
 insert into OrderHas
-values('O000008', 'MI003', 'B1235');
+values('O000008', 'MI003', 'B1234');
 
 --//////////////////////////////////DISPOSAL/////////////////////////////////////////////
 
@@ -487,10 +484,10 @@ values('7785388993','555 West Balsam', 'Vancouver', 'BC', 'V6T8N5');
 
 ----//////////////////////////////////SUPPLIER/////////////////////////////////////////////
 
-insert into Supplier;
+insert into Supplier
 values('S001', 100000000);
 
-insert into Supplier;
+insert into Supplier
 values('S002', 543342111);
 
 insert into Supplier
