@@ -1,36 +1,36 @@
 -- updated the size of notes in titles relation// Hazra
 
-drop table customer;
--- has no dependencies
+drop table orderhas;
+-- cascade update from orders, menuitem
 
-drop table restaurant;
--- has no dependencies
+drop table takeoutorder;
+-- cascade update from Order, Restaurant, Customer, and DeliveryDriver
 
-drop table employee;
--- cascade update from restaurant
-
-drop table manager;
--- cascade update from employee
-
-drop table chef;
--- cascade update from employee
-
-drop table menuitem;
--- cascade update from Restaurant
+drop table pickuporder;
+-- cascade update from Order, Restaurant, and Customer
 
 drop table deliverydriver;
 -- has no dependencies
 
 drop table orders;
 
-drop table pickuporder;
--- cascade update from Order, Restaurant, and Customer
+drop table menuitem;
+-- cascade update from Restaurant
 
-drop table takeoutorder;
--- cascade update from Order, Restaurant, Customer, and DeliveryDriver
+drop table chef;
+-- cascade update from employee
 
-drop table orderhas;
--- cascade update from orders, menuitem
+drop table manager;
+-- cascade update from employee
+
+drop table employee;
+-- cascade update from restaurant
+
+drop table restaurant;
+-- has no dependencies
+
+drop table customer;
+-- has no dependencies
 
 commit;
 
@@ -49,7 +49,7 @@ create table Restaurant(
     city varchar(20) not null,
     province char(2) not null,
     postalCode varchar(6) not null,
-	PRIMARY KEY (branchID));	
+	PRIMARY KEY (branchID));
 grant select on Restaurant to public;
 commit;
 
@@ -123,8 +123,8 @@ CREATE TABLE TakeoutOrder(
     FOREIGN KEY (driverID) REFERENCES DeliveryDriver);
 
 CREATE TABLE PickupOrder(
-    PickUpTime TIMESTAMP,
     orderID CHAR(30),
+		PickUpTime TIMESTAMP,
     phoneNumber INTEGER,
     branchID CHAR(30),
     PRIMARY KEY (orderID),
@@ -137,12 +137,11 @@ CREATE TABLE OrderHas(
     orderID CHAR(30),
     menuItemID CHAR(30),
     branchID CHAR(30),
-    PRIMARY KEY (orderID, menuItemID),
+    PRIMARY KEY (orderID, menuItemID, branchID),
     FOREIGN KEY (orderID) REFERENCES Orders
         ON DELETE CASCADE,
-    FOREIGN KEY (menuItemID) REFERENCES MenuItem
-		ON DELETE CASCADE
-	FOREIGN KEY ();
+    FOREIGN KEY (menuItemID, branchID) REFERENCES MenuItem
+				ON DELETE CASCADE);
 commit ;
 
 insert into Customer
@@ -241,28 +240,28 @@ values('C5450', '313312348', 'B1236');
 
 
 insert into MenuItem
-values('MI001', 'Cobb Salad', '3131', 'B1234');
+values('MI001', 'Cobb Salad', 'C3131', 'B1234');
 
 insert into MenuItem
-values('MI002', 'Yam Fries',  '3131', 'B1234');
+values('MI002', 'Yam Fries',  'C3131', 'B1234');
 
 insert into MenuItem
-values('MI003', 'Tomato Soup', '3132', 'B1234');
+values('MI003', 'Tomato Soup', 'C3132', 'B1234');
 
 insert into MenuItem
-values('MI004', 'Grilled Cheese', '3132', 'B1234');
+values('MI004', 'Grilled Cheese', 'C3132', 'B1234');
 
 insert into MenuItem
-values('MI004', 'Grilled Cheese', '3132', 'B1235');
+values('MI004', 'Grilled Cheese', 'C3132', 'B1235');
 
 insert into MenuItem
-values('MI004', 'Grilled Cheese', '3132', 'B1236');
+values('MI004', 'Grilled Cheese', 'C3132', 'B1236');
 
 insert into MenuItem
-values('MI005', 'Mac and Cheese', '3132', 'B1236');
+values('MI005', 'Mac and Cheese', 'C3132', 'B1236');
 
 insert into MenuItem
-values('MI005', 'Mac and Cheese', '3132', 'B1237');
+values('MI005', 'Mac and Cheese', 'C3132', 'B1237');
 
 insert into DeliveryDriver
 values('D0001');
@@ -317,8 +316,8 @@ values('O000003', '2018-12-02 11:06:10', '6133 University Blvd', 'Vancouver', 'B
     'V6T1Z1', 'D0002', '7783334444', 'B1234');
 
 insert into TakeoutOrder
-values('O000004', '2018-12-02 11:47:05', '689 Thurlow St', 'Vancouver', 'BC', 
-    'V6E 4M3', 'D0003', '7781112222', 'B1235');
+values('O000004', '2018-12-02 11:47:05', '689 Thurlow St', 'Vancouver', 'BC',
+    'V6E4M3', 'D0003', '7781112222', 'B1235');
 
 insert into TakeoutOrder
 values('O000005', '2018-12-02 10:02:27', '701 W Georgia St', 'Vancouver', 'BC',
@@ -334,54 +333,52 @@ insert into PickupOrder
 values('O000008', '2018-12-01 13:10:10', '7781115555', 'B1235');
 
 insert into OrderHas
-values('O000001', 'MI001');
+values('O000001', 'MI001', 'B1234');
 
 insert into OrderHas
-values('O000001', 'MI002');
+values('O000001', 'MI002', 'B1234');
 
 insert into OrderHas
-values('O000001', 'MI003');
+values('O000001', 'MI003', 'B1234');
 
 insert into OrderHas
-values('O000002', 'MI002');
+values('O000001', 'MI005', 'B1234');
 
 insert into OrderHas
-values('O000003', 'MI004');
+values('O000002', 'MI002', 'B1234');
 
 insert into OrderHas
-values('O000003', 'MI005');
+values('O000003', 'MI004', 'B1234');
 
 insert into OrderHas
-values('O000004', 'MI001');
+values('O000003', 'MI005', 'B1234');
 
 insert into OrderHas
-values('O000004', 'MI003');
+values('O000004', 'MI001', 'B1235');
 
 insert into OrderHas
-values('O000005', 'MI002');
+values('O000004', 'MI003', 'B1235');
 
 insert into OrderHas
-values('O000005', 'MI003');
+values('O000005', 'MI002', 'B1235');
 
 insert into OrderHas
-values('O000005', 'MI004');
+values('O000005', 'MI003', 'B1235');
 
 insert into OrderHas
-values('O000005', 'MI005');
+values('O000005', 'MI004', 'B1235');
 
 insert into OrderHas
-values('O000006', 'MI005');
+values('O000005', 'MI005', 'B1235');
 
 insert into OrderHas
-values('O000007', 'MI001');
+values('O000006', 'MI005', 'B1234');
 
 insert into OrderHas
-values('O000007', 'MI004');
+values('O000007', 'MI001', 'B1234');
 
 insert into OrderHas
-values('O000008', 'MI003');
+values('O000007', 'MI004', 'B1234');
 
 insert into OrderHas
-values('O000001', 'MI005');
-
-
+values('O000008', 'MI003', 'B1235');

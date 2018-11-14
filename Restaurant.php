@@ -23,29 +23,25 @@
 <p><input type="submit" value="Reset" name="reset"></p>
 </form>
 
-<p>Insert values into tab1 below:</p>
-<p><font size="2"> Number&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Name</font></p>
+<p>Input your driverID to view orders to deliver:</p>
+<p><font size="2"> driverID</font></p>
 <form method="POST" action="Restaurant.php">
 <!--refresh page when submit-->
 
-   <p><input type="text" name="insNo" size="6"><input type="text" name="insName"
-size="18">
+   <p><input type="text" name="insNo" size="6">
 <!--define two variables to pass the value-->
 
-<input type="submit" value="insert" name="insertsubmit"></p>
+<input type="submit" value="submit" name="vieworderssubmit"></p>
 </form>
 <!-- create a form to pass the values. See below for how to
 get the values-->
 
-<p> Update the name by inserting the old and new values below: </p>
-<p><font size="2"> Old Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-New Name</font></p>
+<p> Update the order when delivered: </p>
+<p><font size="2"> driverIDe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+orderID</font></p>
 <form method="POST" action="Restaurant.php">
 <!--refresh page when submit-->
-
-   <p><input type="text" name="oldName" size="6"><input type="text" name="newName"
-size="18">
+   <p><input type="text" name="driverID" size="6"><input type="text" name="orderID" size="18">
 <!--define two variables to pass the value-->
 
 <input type="submit" value="update" name="updatesubmit"></p>
@@ -149,30 +145,32 @@ if ($db_conn) {
 		executePlainSQL("create table tab1 (nid number, name varchar2(30), primary key (nid))");
 		OCICommit($db_conn);
 
-	} else
-		if (array_key_exists('insertsubmit', $_POST)) {
-			//Getting the values from user and insert data into the table
-			$tuple = array (
-				":bind1" => $_POST['insNo'],
-				":bind2" => $_POST['insName']
-			);
-			$alltuples = array (
-				$tuple
-			);
-			executeBoundSQL("insert into tab1 values (:bind1, :bind2)", $alltuples);
-			OCICommit($db_conn);
-
+	 }
+   // else
+		// if (array_key_exists('vieworderssubmit', $_POST)) {
+		// 	Getting the values from user and select from table
+		// 	$tuple = array (
+		// 		":bind1" => $_POST['driverID']
+		// 	);
+		// 	$alltuples = array (
+		// 		$tuple
+		// 	);
+		// 	// executeBoundSQL("insert into tab1 values (:bind1, :bind2)", $alltuples);
+   //    $result = executePlainSQL("select * from TakeoutOrder where driverID = :bind1");
+   //    printResult($result);
+		// 	OCICommit($db_conn);
 		} else
 			if (array_key_exists('updatesubmit', $_POST)) {
 				// Update tuple using data from user
 				$tuple = array (
-					":bind1" => $_POST['oldName'],
-					":bind2" => $_POST['newName']
+					":bind1" => $_POST['driverID'],
+					":bind2" => $_POST['orderID']
 				);
 				$alltuples = array (
 					$tuple
 				);
-				executeBoundSQL("update tab1 set name=:bind2 where name=:bind1", $alltuples);
+        // TODO: problem
+				executeBoundSQL("update TakeoutOrder set deliveryTime = CURRENT_TIMESTAMP where driverID=:bind1 and orderID=:bind2", $alltuples);
 				OCICommit($db_conn);
 
 			} else
