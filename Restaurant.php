@@ -120,6 +120,27 @@ function executeBoundSQL($cmdstr, $list) {
 
 }
 
+function printDelivery($result) { //prints results from a select statement
+	echo "<br>Got data from table TakeoutOrder:<br>";
+	echo "<table>";
+	echo "<tr>
+      <th>OrderID</th>  <th>Delivery Time</th>
+      <th>Driver ID</th>   <th>BranchID</th>
+      </tr>";
+
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "<tr><td>"
+        . $row["orderID"] . "</td><td>"
+        . $row["deliveryTime"] . "</td><td>"
+        . $row["driverID"] . "</td><td>"
+       . $row["branchID"]
+    . "</td></tr>"; //or just use "echo $row[0]"
+	}
+	echo "</table>";
+
+}
+
+
 function printResult($result) { //prints results from a select statement
 	echo "<br>Got data from table tab1:<br>";
 	echo "<table>";
@@ -144,21 +165,19 @@ if ($db_conn) {
 		echo "<br> creating new table <br>";
 		executePlainSQL("create table tab1 (nid number, name varchar2(30), primary key (nid))");
 		OCICommit($db_conn);
-
-	 }
-   // else
+	 // } else
 		// if (array_key_exists('vieworderssubmit', $_POST)) {
-		// 	Getting the values from user and select from table
-		// 	$tuple = array (
-		// 		":bind1" => $_POST['driverID']
-		// 	);
-		// 	$alltuples = array (
-		// 		$tuple
-		// 	);
-		// 	// executeBoundSQL("insert into tab1 values (:bind1, :bind2)", $alltuples);
-   //    $result = executePlainSQL("select * from TakeoutOrder where driverID = :bind1");
-   //    printResult($result);
-		// 	OCICommit($db_conn);
+   //    echo "<p> Attempting to get MenuItems </p>";
+   //    $tuple = array (
+   //      ":bind1" => $_POST['setDeliveryTime']
+   //    );
+   //    $alltuples = array (
+   //      $tuple
+   //    );
+   //    $result = executeBoundSQL("select * from TakeoutOrder where BRANCHID=:bind1", $alltuples);
+   //    printMenuItems($result);
+   //    $result = executeBoundSQL("select * from TakeoutOrder where BRANCHID='B1234'", $alltuples);
+   //    printMenuItems($result);
 		} else
 			if (array_key_exists('updatesubmit', $_POST)) {
 				// Update tuple using data from user
@@ -169,9 +188,11 @@ if ($db_conn) {
 				$alltuples = array (
 					$tuple
 				);
-        // TODO: problem
+        // TODO: see if this CURRENT_TIMESTAMP is used correctly
 				executeBoundSQL("update TakeoutOrder set deliveryTime = CURRENT_TIMESTAMP where driverID=:bind1 and orderID=:bind2", $alltuples);
-				OCICommit($db_conn);
+        $result = executeBoundSQL("select * from TakeoutOrder where driverID=:bind1 and orderID=:bind2", $alltuples);
+        printDelivery($result);
+        OCICommit($db_conn);
 
 			} else
 				if (array_key_exists('dostuff', $_POST)) {
