@@ -37,11 +37,15 @@
 get the values-->
 
 <p> Update the order when delivered: </p>
-<p><font size="2"> driverIDe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-orderID</font></p>
-<form method="POST" action="Restaurant.php">
+<p><font size="2"> driverID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+orderID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+deliveryTime (format: YYYY-MM-DD)
+</font></p>
+<form method="GET" action="Restaurant.php">
 <!--refresh page when submit-->
-   <p><input type="text" name="driverID" size="6"><input type="text" name="orderID" size="18">
+   <p><input type="text" name="driverID" size="6">
+     <input type="text" name="orderID" size="18">
+     <input type="text" name="deliveryTime" size="18">
 <!--define two variables to pass the value-->
 
 <input type="submit" value="update" name="updatesubmit"></p>
@@ -116,6 +120,7 @@ function executeBoundSQL($cmdstr, $list) {
 			echo "<br>";
 			$success = False;
 		}
+    print $r;
 	}
 
 }
@@ -130,10 +135,10 @@ function printDelivery($result) { //prints results from a select statement
 
 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 		echo "<tr><td>"
-        . $row["orderID"] . "</td><td>"
-        . $row["deliveryTime"] . "</td><td>"
-        . $row["driverID"] . "</td><td>"
-       . $row["branchID"]
+        . $row["ORDERID"] . "</td><td>"
+        . $row["DELIVERYTIME"] . "</td><td>"
+        . $row["DRIVERID"] . "</td><td>"
+       . $row["BRANCHID"]
     . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
@@ -179,19 +184,25 @@ if ($db_conn) {
    //    $result = executeBoundSQL("select * from TakeoutOrder where BRANCHID='B1234'", $alltuples);
    //    printMenuItems($result);
 		} else
-			if (array_key_exists('updatesubmit', $_POST)) {
+			if (array_key_exists('updatesubmit', $_GET)) {
 				// Update tuple using data from user
+        // $delivDate = to_date(date('d-m-Y h:i:s', strtotime($_GET  ['deliveryDate'])),'dd-mm-yy hh24:mi:ss');
+        // $delivDate = mysql_real_escape_string($delivDate);
 				$tuple = array (
-					":bind1" => $_POST['driverID'],
-					":bind2" => $_POST['orderID']
+					":bind1" => $_GET['driverID'],
+					":bind2" => $_GET['orderID'],
+          ":bind3" => $_GET['deliveryTime']
 				);
 				$alltuples = array (
 					$tuple
 				);
         // TODO: see if this CURRENT_TIMESTAMP is used correctly
-				executeBoundSQL("update TakeoutOrder set deliveryTime = CURRENT_TIMESTAMP where driverID=:bind1 and orderID=:bind2", $alltuples);
-        $result = executeBoundSQL("select * from TakeoutOrder where driverID=:bind1 and orderID=:bind2", $alltuples);
-        printDelivery($result);
+        // executeBoundSQL("update TakeoutOrder set deliveryTime=:bind3 where driverID=:bind1 and orderID=:bind2", $alltuples);
+        executeBoundSQL("update TakeoutOrder set deliveryTime=:bind3 where driverID=:bind1 and  orderID=:bind2", $alltuples);
+        // executeBoundSQL("update TakeoutOrder set deliveryTime= '2018-12-14' where driverID='D0001' and  orderID='O000001'", $alltuples);
+        // O000001
+        // executeBoundSQL("update TakeoutOrder set deliveryTime = date where driverID=:bind1 and orderID=:bind2", $alltuples);
+        // $result = executeBoundSQL("select * from TakeoutOrder where driverID=:bind1 and orderID=:bind2", $alltuples);
         OCICommit($db_conn);
 
 			} else
@@ -224,8 +235,8 @@ if ($db_conn) {
 		header("location: Restaurant.php");
 	} else {
 		// Select data...
-		$result = executePlainSQL("select * from tab1");
-		printResult($result);
+		$result = executePlainSQL("select * from TakeoutOrder");
+		printDelivery($result);
 	}
 
 	//Commit to save changes...

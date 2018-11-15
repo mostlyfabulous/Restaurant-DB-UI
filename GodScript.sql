@@ -129,7 +129,7 @@ grant select on Orders to public;
 commit;
 CREATE TABLE TakeoutOrder(
     orderID CHAR(30),
-    deliveryTime TIMESTAMP,
+    deliveryTime CHAR(10),
     address varchar(40) not null,
     city varchar(20) not null,
     province char(2) not null,
@@ -146,7 +146,7 @@ CREATE TABLE TakeoutOrder(
 
 CREATE TABLE PickupOrder(
     orderID CHAR(30),
-		PickUpTime TIMESTAMP,
+		PickUpTime CHAR(10),
     phoneNumber INTEGER,
     branchID CHAR(30),
     PRIMARY KEY (orderID),
@@ -198,9 +198,9 @@ CREATE TABLE IngredientsInStock(
 		branchID CHAR(30),
     ingredientName CHAR(50),
     lotNumber INTEGER,
-    expiryDate DATE,
+		expiryDate CHAR(10),
 		quantityLeft INTEGER,
-		deliveryTime TIMESTAMP,
+		deliveryDate CHAR(10),
 		managerID CHAR(30),
 	PRIMARY KEY (ingredientName, lotNumber, branchID),
 	FOREIGN KEY (ingredientName) REFERENCES Ingredients,
@@ -369,33 +369,33 @@ insert into Orders
 values('O000008');
 
 insert into TakeoutOrder
-values('O000001', '2018-12-01 15:45:21', '2350 Health Sciences Mall', 'Vancouver', 'BC',
+values('O000001', null, '2350 Health Sciences Mall', 'Vancouver', 'BC',
     'V6T1Z3', 'D0001', '7783209817', 'B1234');
 
 insert into TakeoutOrder
-values('O000002', '2018-12-02 09:47:15', '2350 Health Sciences Mall', 'Vancouver', 'BC',
+values('O000002', '2018-12-02', '2350 Health Sciences Mall', 'Vancouver', 'BC',
     'V6T1Z3', 'D0002', '7783209817', 'B1234');
 
 insert into TakeoutOrder
-values('O000003', '2018-12-02 11:06:10', '6133 University Blvd', 'Vancouver', 'BC',
+values('O000003', null, '6133 University Blvd', 'Vancouver', 'BC',
     'V6T1Z1', 'D0002', '7783334444', 'B1234');
 
 insert into TakeoutOrder
-values('O000004', '2018-12-02 11:47:05', '689 Thurlow St', 'Vancouver', 'BC',
+values('O000004', '2018-12-02', '689 Thurlow St', 'Vancouver', 'BC',
     'V6E4M3', 'D0003', '7781112222', 'B1235');
 
 insert into TakeoutOrder
-values('O000005', '2018-12-02 10:02:27', '701 W Georgia St', 'Vancouver', 'BC',
+values('O000005', '2018-12-02', '701 W Georgia St', 'Vancouver', 'BC',
     'V7Y1G5', 'D0003', '7781112222', 'B1235');
 
 insert into PickupOrder
-values('O000006', '2018-12-01 12:10:10', '7781113333', 'B1234');
+values('O000006', '2018-12-01', '7781113333', 'B1234');
 
 insert into PickupOrder
-values('O000007', '2018-12-01 12:31:10', '7781114444', 'B1234');
+values('O000007', '2018-12-01', '7781114444', 'B1234');
 
 insert into PickupOrder
-values('O000008', '2018-12-01 13:10:10', '7781115555', 'B1235');
+values('O000008', '2018-12-01', '7781115555', 'B1235');
 
 insert into OrderHas
 values('O000001', 'MI001', 'B1234');
@@ -557,22 +557,22 @@ values('Chicken Thigh', 'S314');
 ----//////////////////////////////////INGREDIENTSINSTOCK/////////////////////////////////////////////
 
 insert into IngredientsInStock
-values('B1234', 'Russet Potato', 60, '2018-12-13', 10, '2018-11-15 10:35:01', 'M4621');
+values('B1234', 'Russet Potato', 60, '2018-12-13', 10, '2018-11-15', 'M4621');
 
 insert into IngredientsInStock
-values('B1234', 'Salt', 11, '2020-01-25', 10, '2018-08-10 11:12:13', 'M4621');
+values('B1234', 'Salt', 11, '2020-01-25', 10, '2018-08-10', 'M4621');
 
 insert into IngredientsInStock
-values('B1235', 'Basamati Rice', 9, '2019-11-03', 5, '2018-06-16 16:01:32', 'M0167');
+values('B1235', 'Basamati Rice', 9, '20191103', 5, '20180616', 'M0167');
 
 insert into IngredientsInStock
-values('B1235', 'Chickpeas', 9, '2019-09-21', 10, '2018-08-23 13:09:54', 'M0167');
+values('B1235', 'Chickpeas', 9, '2019-09-21', 10, '2018-08-23', 'M0167');
 
 insert into IngredientsInStock
-values('B1234', 'Apple', 99, '2018-12-10', 50, '2018-11-22 09:44:25', 'M4621');
+values('B1234', 'Apple', 99, '2018-12-10', 50, '2018-11-22', 'M4621');
 
 insert into IngredientsInStock
-values('B1234', 'Egg', 273, '2018-12-02', 50, '2018-11-10 15:53:05', 'M4621');
+values('B1234', 'Egg', 273, '2018-12-02', 50, '2018-11-10', 'M4621');
 
 
 --///////////////////////////////////////////////////////////////////////////////
