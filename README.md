@@ -7,7 +7,9 @@ Todo List:
 		i) Maybe the manager just queries the ingredients and their stock levels/expiry dates.
 		ii) The manger then inserts ingredients into the IngredientsToOrder table and that would be what could be sent to the suppliers?
 		
-2)
+2) Use Assert statements when inserting tuples into IngredientsToOrder
+3) Make IngredientsInStock a big table (add more columns)
+4) Reform relation 'contains' from MenuItem to Ingredients
 
 
 

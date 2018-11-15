@@ -4,7 +4,7 @@
 <?php
 
 $success = True; //keep track of errors so it redirects the page only if there are no errors
-$db_conn = OCILogon("ora_u4b1b", "a46210167", "dbhost.ugrad.cs.ubc.ca:1522/ug");
+$db_conn = OCILogon("ora_p0w0b", "a59612168", "dbhost.ugrad.cs.ubc.ca:1522/ug");
 
 function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL command and executes it
 	//echo "<br>running ".$cmdstr."<br>";
@@ -19,7 +19,7 @@ function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL com
 		$success = False;
 	}
 
-	$r = OCIExecute($statement, OCI_DEFAULT);
+	$r = OCIExecute($statement, OCI_DEFAULT); //returns true or false
 	if (!$r) {
 		echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
 		$e = oci_error($statement); // For OCIExecute errors pass the statementhandle
@@ -50,15 +50,18 @@ function executeBoundSQL($cmdstr, $list) {
 		$success = False;
 	}
 
-	foreach ($list as $tuple) {
-		foreach ($tuple as $bind => $val) {
-			//echo $val;
-			//echo "<br>".$bind."<br>";
-			OCIBindByName($statement, $bind, $val);
+	foreach ($list as $tuple) { //for each tuple in the list of tuples
+		foreach ($tuple as $bind => $val) { //for each bound variable in a tuple
+			echo $val."<br>";
+			echo gettype($val)."<br>";
+			echo strlen($val)."<br>";
+			echo "<br>".$bind."<br>";
+			OCIBindByName($statement, $bind, $val ,$maxlength = 30 , $type = SQLT_CHR );
 			unset ($val); //make sure you do not remove this. Otherwise $val will remain in an array object wrapper which will not be recognized by Oracle as a proper datatype
 
 		}
 		$r = OCIExecute($statement, OCI_DEFAULT);
+		print ($r);
 		if (!$r) {
 			echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
 			$e = OCI_Error($statement); // For OCIExecute errors pass the statement handle
@@ -67,7 +70,13 @@ function executeBoundSQL($cmdstr, $list) {
 			$success = False;
 		}
 	}
-
+	return $statement;
+	// print $r;
+	// print $statement;
+	// while ($row = OCI_Fetch_Row($statement)) {
+	// 	echo "<tr><td>" . $row["MENUITEMID"] . "</td><td>" . $row["ITEMNAME"] . "</td></tr>"; //or just use "echo $row[0]"
+	// }
+	// printMenuItems($statement);
 }
 
 function printResult($result) { //prints results from a select statement
@@ -92,6 +101,25 @@ function printMenuItems($result) { //prints results from a select statement
 	}
 	echo "</table>";
 
+}
+
+function printBranches($result) { //prints results from a select statement
+	echo "<table>";
+  echo "<caption>All Branches:</caption>";
+	echo "<tr><th>Branch ID</th><th>Address</th><th>City</th></tr>";
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "<tr><td>" . $row["BRANCHID"] . "</td><td>" . $row["ADDRESS"] . "</td><td>" . $row["CITY"] . "</td></tr>"; //or just use "echo $row[0]"
+	}
+	echo "</table>";
+}
+
+function dropdownBranches($result) { //adds results from a select statement
+	echo "<br><select>";
+	echo "<option value='0'>Please Select Option</option>";
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "<option value =" . $row['BRANCHID'] . ">" . $row['BRANCHID'] . "</option>";
+	}
+	echo "</select><br>";
 }
 
 /* OCILogon() allows you to log onto the Oracle database
