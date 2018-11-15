@@ -209,6 +209,7 @@ CREATE TABLE IngredientsInStock(
 CREATE TABLE Contains(
 	menuItemID CHAR(30),
 	itemName CHAR(30),
+	quantityInGrams INTEGER,
 	PRIMARY KEY (menuItemID, itemName),
 	FOREIGN KEY (menuItemID) REFERENCES MenuItem
 		ON DELETE CASCADE,
@@ -598,14 +599,14 @@ values('B1234', 'Garlic', 80, '2019-01-11', 50, '2018-11-01', 'M4621');
 
 ----//////////////////////////////////CONTAINS/////////////////////////////////////////////
 insert into Contains
-values('MI006', 'Garlic');
+values('MI006', 'Garlic', 10);
 
 insert into Contains
-values('MI006', 'Salt');
+values('MI006', 'Salt', 2);
 
 insert into Contains
-values('MI006', 'Butter');
+values('MI006', 'Butter', 20);
 
 insert into Contains
-values('MI006', 'Bread');
+values('MI006', 'Bread', 100);
 --///////////////////////////////////////////////////////////////////////////////
