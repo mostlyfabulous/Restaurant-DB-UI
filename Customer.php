@@ -11,21 +11,21 @@
 <p>Select MenuItems by Branch ID below:</p>
   <form method="GET" action="Customer.php">
 <p> <input type="text" name="setbid" size="10" placeholder="BranchID">
-    <input type="submit" value="broken" name="selectsubmit"></p>
-    <input type="submit" value="works" name="insertsubmit"></p>
+    <input type="submit" value="search" name="selectsubmit"></p>
 </form>
 
 <?php
-if ($db_conn && array_key_exists('selectsubmit', $_GET) || array_key_exists('insertsubmit', $_POST)) {
+if ($db_conn && array_key_exists('selectsubmit', $_GET)) {
   // Get MenuItems by BranchID
   echo "<p> Attempting to get MenuItems </p>";
   $tuple = array (
-    ":bind1" => $_GET['setbid']
+    ":bind1" => $_GET['setbid'] // does not work
+    // ":bind1" => B1235 // does not work either
   );
   $alltuples = array (
     $tuple
   );
-  $result = executeBoundSQL("select * from MenuItem where BRANCHID=:bind1", $alltuples);
+  $result = executeBoundSQL("select * from MenuItem where BRANCHID like :bind1", $alltuples);
   printMenuItems($result);
   $result = executeBoundSQL("select * from MenuItem where BRANCHID='B1234'", $alltuples);
   printMenuItems($result);
@@ -56,10 +56,10 @@ get the values-->
 <form method="POST" action="Customer.php">
 <!--refresh page when submit-->
 
-<p> <input type="text" name="oldName" size="18" placeholder="Old Name">
-    <input type="text" name="newName" size="18" placeholder="New Name">
+<p> <input type="text" name="orderID" size="18" placeholder="Order ID">
+    <input type="text" name="menuItem" size="18" placeholder="Menu Item to remove">
 <!--define two variables to pass the value-->
-<input type="submit" value="update" name="updatesubmit">
+<input type="submit" value="remove menu item from order" name="updatesubmit">
 <input type="submit" value="run hardcoded queries" name="dostuff"></p>
 </form> <br>
 
@@ -93,17 +93,17 @@ if ($db_conn) {
 
 		} else
 			if (array_key_exists('updatesubmit', $_POST)) {
-				// Update tuple using data from user
+				// delete tuple using data from user
 				$tuple = array (
-					":bind1" => $_POST['oldName'],
-					":bind2" => $_POST['newName']
+					":bind1" => $_POST['orderID'],
+					":bind2" => $_POST['menuItem']
 				);
 				$alltuples = array (
 					$tuple
 				);
-				executeBoundSQL("update tab1 set name=:bind2 where name=:bind1", $alltuples);
+				executeBoundSQL("delete from ORDERHAS where ORDERID=:bind1 and MENUITEMID=:bind2", $alltuples);
+        // delete from ORDERHAS where ORDERID='O000001' and MENUITEMID='MI001';
 				OCICommit($db_conn);
-
 			} else
 				if (array_key_exists('dostuff', $_POST)) {
 					// Insert data into table...
