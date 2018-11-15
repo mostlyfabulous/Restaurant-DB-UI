@@ -206,6 +206,14 @@ CREATE TABLE IngredientsInStock(
 	FOREIGN KEY (ingredientName) REFERENCES Ingredients,
 	FOREIGN KEY (managerID) REFERENCES Manager);
 
+CREATE TABLE Contains(
+	menuItemID CHAR(30),
+	itemName CHAR(30),
+	PRIMARY KEY (menuItemID, itemName),
+	FOREIGN KEY (menuItemID) REFERENCES MenuItem
+		ON DELETE CASCADE,
+	FOREIGN KEY (itemName) REFERENCES Ingredients
+);
 
 --////////////////////////////////////////////////////////////////////////////////
 
@@ -240,7 +248,6 @@ values('B1236', '30 10 Ave SW', 'Calgary', 'AB', 'T2R0A9');
 
 insert into Restaurant
 values('B1237', '675 Belleville St', 'Victoria', 'BC', 'V8W9W2');
-
 
 
 insert into Employee
@@ -317,16 +324,22 @@ insert into MenuItem
 values('MI004', 'Grilled Cheese', 'C3132', 'B1234');
 
 insert into MenuItem
-values('MI004', 'Grilled Cheese', 'C3132', 'B1235');
+values('MI004', 'Grilled Cheese', 'C5525', 'B1235');
 
 insert into MenuItem
-values('MI004', 'Grilled Cheese', 'C3132', 'B1236');
+values('MI004', 'Grilled Cheese', 'C5450', 'B1236');
 
 insert into MenuItem
-values('MI005', 'Mac and Cheese', 'C3132', 'B1236');
+values('MI005', 'Mac and Cheese', '5450', 'B1236');
 
 insert into MenuItem
 values('MI005', 'Mac and Cheese', 'C3132', 'B1237');
+
+insert into MenuItem
+values('MI006', 'Garlic Bread', 'C3133', 'B1234');
+
+insert into MenuItem
+values('MI006', 'Garlic Bread', 'C5555', 'B1237');
 
 insert into DeliveryDriver
 values('D0001');
@@ -551,6 +564,9 @@ insert into Ingredients
 values('Egg', 'S313');
 
 insert into Ingredients
+values('Garlic', 'S313');
+
+insert into Ingredients
 values('Chicken Thigh', 'S314');
 
 
@@ -574,5 +590,22 @@ values('B1234', 'Apple', 99, '2018-12-10', 50, '2018-11-22', 'M4621');
 insert into IngredientsInStock
 values('B1234', 'Egg', 273, '2018-12-02', 50, '2018-11-10', 'M4621');
 
+insert into IngredientsInStock
+values('B1234', 'Butter', 80, '2019-04-15', 50, '2018-10-10', 'M4621');
 
+insert into IngredientsInStock
+values('B1234', 'Garlic', 80, '2019-01-11', 50, '2018-11-01', 'M4621');
+
+----//////////////////////////////////CONTAINS/////////////////////////////////////////////
+insert into Contains
+values('MI006', 'Garlic');
+
+insert into Contains
+values('MI006', 'Salt');
+
+insert into Contains
+values('MI006', 'Butter');
+
+insert into Contains
+values('MI006', 'Bread');
 --///////////////////////////////////////////////////////////////////////////////
