@@ -68,8 +68,8 @@ function executeBoundSQL($cmdstr, $list) {
 			echo "<br>";
 			$success = False;
 		}
-		return $statement;
 	}
+	return $statement;
 }
 
 function printResult($result) { //prints results from a select statement

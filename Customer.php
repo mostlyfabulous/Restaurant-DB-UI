@@ -1,8 +1,8 @@
 <PHP> <link rel="stylesheet" type="text/css" href="enjoy.css"></head> <PHP>
 <?php include 'Utility.php'; ?>
 <h>Customer PHP table</h>
+<a href="index.php">Index page</a>
 <p>If you wish to reset the table, press the reset button. If this is the first time you're running this page, you MUST use reset</p>
-<p><a href="index.php">Index page</a></p>
 
 <form method="POST" action="Customer.php">
 <p><input type="submit" value="Reset" name="reset"></p>
@@ -94,7 +94,7 @@ if ($db_conn) {
 				$alltuples = array (
 					$tuple
 				);
-				executeBoundSQL("delete from ORDERHAS where ORDERID=:bind1 and MENUITEMID=:bind2", $alltuples);
+				executeBoundSQL("delete from ORDERHAS where ORDERID='" . $_POST['orderID'] . "'and MENUITEMID='" . $_POST['menuItem'] . "'", $alltuples);
         // delete from ORDERHAS where ORDERID='O000001' and MENUITEMID='MI001';
 				OCICommit($db_conn);
 			} else
@@ -103,18 +103,20 @@ if ($db_conn) {
 					// executePlainSQL("insert into Orders values (10, 'Frank')");
 					// Inserting data into table using bound variables
 					$list1 = array (
-						":bind1" => 'O0001',
-						":bind2" => 'Grass'
+						":bind1" => 'O000001',
+						":bind2" => 'MI001',
+            ":bind3" => 'B1234'
 					);
 					$list2 = array (
-						":bind1" => 'O0002',
-						":bind2" => 'Water'
+						":bind1" => 'O000001',
+						":bind2" => 'MI002',
+            ":bind3" => 'B1234'
 					);
 					$allrows = array (
 						$list1,
 						$list2
 					);
-					executeBoundSQL("insert into OrderHas values (:bind1, :bind2)", $allrows); //the function takes a list of lists
+					executeBoundSQL("insert into OrderHas values (:bind1, :bind2, :bind3)", $allrows); //the function takes a list of lists
 					// Update data...
 					//executePlainSQL("update tab1 set nid=10 where nid=2");
 					// Delete data...
