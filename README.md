@@ -25,13 +25,13 @@ Same Deliverables as Handed In?
 - The group shows the TA that the deliverables haven’t changed from what they handed in (e.g., timestamps). 
 - Marks will be deducted appropriately in the final deliverables, if there is a difference. 
 
-*Selection Query (Deliverable 8-10) DONE*
+**Selection Query (Deliverable 8-10) DONE**
 - The group picks one query from this category.  The group should show the before and after case (either by using SQL*Plus or their application program)
 
-*INSERT (Deliverable 2) DONE*
+**INSERT (Deliverable 2) DONE**
 - Did their program (not SQL*Plus or equivalent) perform a successful INSERT statement?  The group should show you the before and after case (either by using SQL*Plus or their application program).
 
-*DELETE (Deliverable 3) DONE*
+**DELETE (Deliverable 3) DONE**
 - Did their program (not SQL*Plus or equivalent) perform a successful DELETE statement?  The group should show you the before and after case (either by using SQL*Plus or their application program). 
 
 *UPDATE (Deliverable 4) WIP*
