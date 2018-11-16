@@ -1,8 +1,6 @@
 -- updated the size of notes in titles relation// Hazra
 
 --//////////////////////////////////////////////////////////////////////////////
---
--- drop table transfers;
 
 
 
@@ -17,6 +15,8 @@ drop table ingredientorders;
 drop table delivers;
 
 drop table contains;
+
+drop table transfers;
 
 drop table ingredientsinstock;
 
@@ -201,6 +201,11 @@ CREATE TABLE HomelessShelter (
 	FOREIGN KEY (phoneNumber) REFERENCES Location);
 	commit;
 
+
+
+
+
+
 CREATE TABLE Supplier(
   supplierID CHAR(30),
   bankAccountNo INTEGER,
@@ -225,6 +230,20 @@ CREATE TABLE IngredientsInStock(
 		ON DELETE CASCADE,
 	FOREIGN KEY (managerID) REFERENCES Manager
 );
+
+CREATE TABLE Transfers (
+	phoneNumber INTEGER,
+	branchID CHAR(30),
+	ingredientName CHAR(50),
+	lotNumber INTEGER,
+	managerID CHAR(30),
+	PRIMARY KEY (managerID,phoneNumber, branchID,ingredientName,lotNumber),
+	FOREIGN KEY (phoneNumber) REFERENCES Location,
+	FOREIGN KEY (ingredientName,lotNumber,branchID) REFERENCES IngredientsInStock
+		ON DELETE CASCADE,
+	FOREIGN KEY (managerID) REFERENCES Manager
+);
+	commit;
 
 CREATE TABLE Contains(
 	menuItemID CHAR(30),
@@ -662,7 +681,7 @@ values('Bread', 'S315');
 ----//////////////////////////////////INGREDIENTSINSTOCK/////////////////////////////////////////////
 
 insert into IngredientsInStock
-values('B1234', 'Russet Potato', 60, '2018-12-13', 10, 'M4621');
+values('B1234', 'Russet Potato', 60, '2017-12-13', 10, 'M4621');
 
 insert into IngredientsInStock
 values('B1234', 'Salt', 11, '2020-01-25', 10, 'M4621');
@@ -671,13 +690,13 @@ insert into IngredientsInStock
 values('B1235', 'Basamati Rice', 8, '2019-11-03', 5, 'M0167');
 
 insert into IngredientsInStock
-values('B1235', 'Chickpeas', 9, '2019-09-21', 10, 'M0167');
+values('B1235', 'Chickpeas', 9, '2017-09-21', 10, 'M0167');
 
 insert into IngredientsInStock
-values('B1234', 'Apple', 99, '2018-12-10', 50, 'M4621');
+values('B1234', 'Apple', 99, '2017-12-10', 50, 'M4621');
 
 insert into IngredientsInStock
-values('B1234', 'Egg', 273, '2018-12-02', 50, 'M4621');
+values('B1234', 'Egg', 273, '2017-12-02', 50, 'M4621');
 
 insert into IngredientsInStock
 values('B1234', 'Butter', 79, '2019-04-15', 50, 'M4621');
@@ -773,6 +792,26 @@ values('R1239','S312');
 
 insert into Places
 values('R1229','S312');
+
+
+
+--////////////////////////////////////////TRANSFERS///////////////////////////////////////
+
+insert into Transfers
+values('7783397777','B1234', 'Russet Potato', 60, 'M4621');
+
+insert into Transfers
+values('7783397777','B1235', 'Chickpeas', 9, 'M0167');
+
+insert into Transfers
+values('7783397777','B1234', 'Apple', 99, 'M4621');
+
+insert into Transfers
+values('7783397777','B1234', 'Egg', 273, 'M4621');
+
+
+
+
 
 
 
