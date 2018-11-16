@@ -3,9 +3,10 @@
 --//////////////////////////////////////////////////////////////////////////////
 --
 -- drop table transfers;
---
--- drop table location;
---
+
+
+
+
 
 
 
@@ -26,6 +27,8 @@ drop table supplier;
 drop table homelessshelter;
 
 drop table disposal;
+
+drop table location;
 
 --//////////////////////////////////////////////////////////////////////////////
 
@@ -176,19 +179,27 @@ commit ;
 
 --////////////////////////////////////////////////////////////////////////////////
 
+CREATE TABLE Location (
+	phoneNumber INTEGER,
+	PRIMARY KEY (phoneNumber));
+	commit;
+
 CREATE TABLE Disposal (
-phoneNumber INTEGER,
-PRIMARY KEY (phoneNumber));
-commit;
+	phoneNumber INTEGER,
+	PRIMARY KEY (phoneNumber),
+	FOREIGN KEY (phoneNumber) REFERENCES Location
+);
+	commit;
 
 CREATE TABLE HomelessShelter (
-phoneNumber INTEGER,
-address varchar(40),
-city varchar(20),
-province char(2),
-postalCode varchar(6),
-PRIMARY KEY (phoneNumber));
-commit;
+	phoneNumber INTEGER,
+	address varchar(40),
+	city varchar(20),
+	province char(2),
+	postalCode varchar(6),
+	PRIMARY KEY (phoneNumber),
+	FOREIGN KEY (phoneNumber) REFERENCES Location);
+	commit;
 
 CREATE TABLE Supplier(
   supplierID CHAR(30),
@@ -210,7 +221,8 @@ CREATE TABLE IngredientsInStock(
 		quantityLeft INTEGER,
 		managerID CHAR(30),
 	PRIMARY KEY (ingredientName, lotNumber, branchID),
-	FOREIGN KEY (ingredientName) REFERENCES Ingredients,
+	FOREIGN KEY (ingredientName) REFERENCES Ingredients
+		ON DELETE CASCADE,
 	FOREIGN KEY (managerID) REFERENCES Manager
 );
 
@@ -242,8 +254,7 @@ CREATE TABLE IngredientOrders(
     ingredienName CHAR(50),
     quantity INTEGER,
     PRIMARY KEY (restockID),
-    FOREIGN KEY (managerID) REFERENCES Manager
-        ON DELETE CASCADE);
+    FOREIGN KEY (managerID) REFERENCES Manager);
 commit ;
 
 CREATE TABLE Places(
@@ -499,6 +510,39 @@ values('O000007', 'MI004', 'B1234');
 
 insert into OrderHas
 values('O000008', 'MI003', 'B1234');
+
+--//////////////////////////////////LOCATION/////////////////////////////////////////////
+
+insert into Location
+values('7785598006');
+
+insert into Location
+values('7785558007');
+
+insert into Location
+values('7783397777');
+
+insert into Location
+values('7789870055');
+
+insert into Location
+values('7786258776');
+
+insert into Location
+values('7785388993');
+
+insert into Location
+values('7786298004');
+
+insert into Location
+values('7787840909');
+
+insert into Location
+values('7786255481');
+
+insert into Location
+values('7786208716');
+
 
 --//////////////////////////////////DISPOSAL/////////////////////////////////////////////
 
