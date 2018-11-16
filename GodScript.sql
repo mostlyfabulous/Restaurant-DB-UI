@@ -677,6 +677,11 @@ values('Chicken Thigh', 'S314');
 insert into Ingredients
 values('Bread', 'S315');
 
+insert into Ingredients
+values('Pasta', 'S315');
+
+insert into Ingredients
+values('Cheese', 'S315');
 
 ----//////////////////////////////////INGREDIENTSINSTOCK/////////////////////////////////////////////
 
@@ -706,7 +711,7 @@ values('B1234', 'Garlic', 80, '2019-01-11', 50, 'M4621');
 
 ----//////////////////////////////////CONTAINS/////////////////////////////////////////////
 insert into Contains
-values('MI006', 'B1234', 'Garlic', 10);
+values('MI006', 'B1235', 'Garlic', 10);
 
 insert into Contains
 values('MI006', 'B1235', 'Salt', 2);
@@ -717,24 +722,53 @@ values('MI006', 'B1235', 'Butter', 20);
 insert into Contains
 values('MI006', 'B1235', 'Bread', 100);
 
+
+insert into Contains
+values('MI005', 'B1237', 'Cheese', 10);
+
+insert into Contains
+values('MI005', 'B1237', 'Salt', 2);
+
+insert into Contains
+values('MI005', 'B1237', 'Butter', 20);
+
+insert into Contains
+values('MI005', 'B1237', 'Pasta', 100);
+
+
+
+insert into Contains
+values('MI004', 'B1236', 'Cheese', 10);
+
+insert into Contains
+values('MI004', 'B1236', 'Salt', 2);
+
+insert into Contains
+values('MI004', 'B1236', 'Butter', 20);
+
+insert into Contains
+values('MI004', 'B1236', 'Bread', 100);
+
+
+
 --/////////////////////////////////////DELIVERS//////////////////////////////////////////
 
 
 
 insert into Delivers
-values('B1234','Salt', 11, 'S311', '2018-12-25');
+values('B1234','Salt', 11, 'S310', '2018-12-25');
 
 insert into Delivers
-values('B1235','Basamati Rice', 8, 'S311', '2019-01-01');
+values('B1235','Basamati Rice', 8, 'S310', '2019-01-01');
 
 insert into Delivers
-values('B1235','Chickpeas', 9, 'S312','2019-02-21');
+values('B1235','Chickpeas', 9, 'S310','2019-02-21');
 
 insert into Delivers
-values('B1234','Egg', 273, 'S001','2018-12-22');
+values('B1234','Egg', 273, 'S313','2018-12-22');
 
 insert into Delivers
-values('B1234','Butter',79, 'S002','2019-03-21');
+values('B1234','Butter',79, 'S312','2019-03-21');
 
 
 --////////////////////////////////////INGREDIENTORDERS///////////////////////////////////////////
