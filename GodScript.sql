@@ -6,7 +6,8 @@
 --
 -- drop table place;
 --
--- drop table ingredientorders;
+
+drop table ingredientorders;
 
 drop table delivers;
 
@@ -231,6 +232,16 @@ CREATE TABLE Delivers(
         ON DELETE CASCADE,
     FOREIGN KEY (supplierID) REFERENCES Supplier
 				ON DELETE CASCADE);
+commit ;
+
+CREATE TABLE IngredientOrders(
+    restockID CHAR(30),
+		managerID CHAR(30),
+    ingredienName CHAR(50),
+    quantity INTEGER,
+    PRIMARY KEY (restockID),
+    FOREIGN KEY (managerID) REFERENCES Manager
+        ON DELETE CASCADE);
 commit ;
 
 --////////////////////////////////////////////////////////////////////////////////
@@ -651,6 +662,36 @@ values('B1234','Egg', 273, 'S001','2018-12-22');
 
 insert into Delivers
 values('B1234','Butter',79, 'S002','2019-03-21');
+
+
+--////////////////////////////////////IngredientOrders///////////////////////////////////////////
+
+
+
+insert into IngredientOrders
+values('R1234','M4621', 'Oliver Oil', 3);
+
+insert into IngredientOrders
+values('R1235','M0167', 'Ketchup', 10);
+
+insert into IngredientOrders
+values('R1236','M0167', 'Egg', 50);
+
+insert into IngredientOrders
+values('R5432','M4621', 'Butter', 20);
+
+insert into IngredientOrders
+values('R1237','M4621', 'Garlic', 60);
+
+insert into IngredientOrders
+values('R1238','M0167', 'Bread', 10);
+
+insert into IngredientOrders
+values('R1239','M0167', 'Chickpeas', 1);
+
+insert into IngredientOrders
+values('R1229','M4621', 'Basamati Rice', 13);
+
 
 
 --///////////////////////////////////////////////////////////////////////////////
