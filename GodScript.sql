@@ -1,14 +1,14 @@
 -- updated the size of notes in titles relation// Hazra
 
 --//////////////////////////////////////////////////////////////////////////////
-
--- drop table ingredientorders;
 --
 -- drop table transfers;
 --
---drop table timerestocker;
+-- drop table place;
 --
---drop table ingredientstoorder;
+-- drop table ingredientorders;
+
+drop table delivers;
 
 drop table contains;
 
@@ -168,6 +168,7 @@ CREATE TABLE OrderHas(
 				ON DELETE CASCADE);
 commit ;
 
+
 --////////////////////////////////////////////////////////////////////////////////
 
 CREATE TABLE Disposal (
@@ -202,11 +203,11 @@ CREATE TABLE IngredientsInStock(
     lotNumber INTEGER,
 		expiryDate CHAR(10),
 		quantityLeft INTEGER,
-		deliveryDate CHAR(10),
 		managerID CHAR(30),
 	PRIMARY KEY (ingredientName, lotNumber, branchID),
 	FOREIGN KEY (ingredientName) REFERENCES Ingredients,
-	FOREIGN KEY (managerID) REFERENCES Manager);
+	FOREIGN KEY (managerID) REFERENCES Manager
+);
 
 CREATE TABLE Contains(
 	menuItemID CHAR(30),
@@ -218,6 +219,19 @@ CREATE TABLE Contains(
 		ON DELETE CASCADE,
 	FOREIGN KEY (ingredientName) REFERENCES Ingredients
 );
+
+CREATE TABLE Delivers(
+    branchID CHAR(30),
+		ingredientName CHAR(50),
+    lotNumber INTEGER,
+    supplierID CHAR(30),
+		deliveryDate CHAR(10),
+    PRIMARY KEY (branchID, ingredientName,lotNumber),
+    FOREIGN KEY (ingredientName,lotNumber,branchID) REFERENCES IngredientsInStock
+        ON DELETE CASCADE,
+    FOREIGN KEY (supplierID) REFERENCES Supplier
+				ON DELETE CASCADE);
+commit ;
 
 --////////////////////////////////////////////////////////////////////////////////
 
@@ -583,32 +597,32 @@ values('Bread', 'S315');
 ----//////////////////////////////////INGREDIENTSINSTOCK/////////////////////////////////////////////
 
 insert into IngredientsInStock
-values('B1234', 'Russet Potato', 60, '2018-12-13', 10, '2018-11-15', 'M4621');
+values('B1234', 'Russet Potato', 60, '2018-12-13', 10, 'M4621');
 
 insert into IngredientsInStock
-values('B1234', 'Salt', 11, '2020-01-25', 10, '2018-08-10', 'M4621');
+values('B1234', 'Salt', 11, '2020-01-25', 10, 'M4621');
 
 insert into IngredientsInStock
-values('B1235', 'Basamati Rice', 9, '20191103', 5, '20180616', 'M0167');
+values('B1235', 'Basamati Rice', 8, '2019-11-03', 5, 'M0167');
 
 insert into IngredientsInStock
-values('B1235', 'Chickpeas', 9, '2019-09-21', 10, '2018-08-23', 'M0167');
+values('B1235', 'Chickpeas', 9, '2019-09-21', 10, 'M0167');
 
 insert into IngredientsInStock
-values('B1234', 'Apple', 99, '2018-12-10', 50, '2018-11-22', 'M4621');
+values('B1234', 'Apple', 99, '2018-12-10', 50, 'M4621');
 
 insert into IngredientsInStock
-values('B1234', 'Egg', 273, '2018-12-02', 50, '2018-11-10', 'M4621');
+values('B1234', 'Egg', 273, '2018-12-02', 50, 'M4621');
 
 insert into IngredientsInStock
-values('B1234', 'Butter', 80, '2019-04-15', 50, '2018-10-10', 'M4621');
+values('B1234', 'Butter', 79, '2019-04-15', 50, 'M4621');
 
 insert into IngredientsInStock
-values('B1234', 'Garlic', 80, '2019-01-11', 50, '2018-11-01', 'M4621');
+values('B1234', 'Garlic', 80, '2019-01-11', 50, 'M4621');
 
 ----//////////////////////////////////CONTAINS/////////////////////////////////////////////
 insert into Contains
-values('MI006', 'B1235', 'Garlic', 10);
+values('MI006', 'B1234', 'Garlic', 10);
 
 insert into Contains
 values('MI006', 'B1235', 'Salt', 2);
@@ -618,4 +632,25 @@ values('MI006', 'B1235', 'Butter', 20);
 
 insert into Contains
 values('MI006', 'B1235', 'Bread', 100);
+
+--/////////////////////////////////////DELIVERS//////////////////////////////////////////
+
+
+
+insert into Delivers
+values('B1234','Salt', 11, 'S311', '2018-12-25');
+
+insert into Delivers
+values('B1235','Basamati Rice', 8, 'S311', '2019-01-01');
+
+insert into Delivers
+values('B1235','Chickpeas', 9, 'S312','2019-02-21');
+
+insert into Delivers
+values('B1234','Egg', 273, 'S001','2018-12-22');
+
+insert into Delivers
+values('B1234','Butter',79, 'S002','2019-03-21');
+
+
 --///////////////////////////////////////////////////////////////////////////////
