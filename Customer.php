@@ -9,22 +9,26 @@
 </form>
 
 <p>Select MenuItems by Branch ID below:</p>
-  <form method="GET" action="Customer.php">
+  <!-- <form method="GET" action="Customer.php">
 <p> <input type="text" name="setbid" size="10" placeholder="BranchID">
     <input type="submit" value="search" name="selectsubmit"></p>
-</form>
+</form> -->
 
 <?php
+// Create's drown down selection menu based on availble restaurants
 $result = executePlainSQL("select * from Restaurant", $alltuples);
+echo "<form method='GET' action='Customer.php'>";
 dropdownBranches($result);
-if ($db_conn && array_key_exists('selectsubmit', $_GET)) {
+echo "<p><input type='submit' value='Submit'></p>";
+echo "</form>";
+
+// selectbid defined in dropdownBranches function
+if ($db_conn && array_key_exists('selectbid', $_GET)) {
   // Get MenuItems by BranchID
-  echo "<p> Fetching Menu Items </p>";
-  $sqlquery = "select * from MenuItem where BRANCHID='" . $_GET['setbid'] . "'";
+  echo "<p> Fetching Menu Items from Branch: " . $_GET['selectbid'] . "</p>";
+  $sqlquery = "select * from MenuItem where BRANCHID='" . $_GET['selectbid'] . "'";
   $result = executePlainSQL($sqlquery);
   printMenuItems($result);
-  // https://www.w3schools.com/tags/att_option_value.asp TODO: use result of selection
-  // printBranches($result);
 }
 ?>
 

@@ -107,8 +107,8 @@ function printBranches($result) { //prints results from a select statement
 }
 
 function dropdownBranches($result) { //adds results from a select statement
-	echo "<br><select>";
-	echo "<option value='0'>Please Select Option</option>";
+	echo "<br><select name='selectbid'>";
+	echo "<option value='0'>Please Select a Branch</option>";
 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 		echo "<option value =" . $row['BRANCHID'] . ">" . $row['BRANCHID'] . "</option>";
 	}
