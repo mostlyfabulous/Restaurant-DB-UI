@@ -10,6 +10,8 @@
 --
 --drop table ingredientstoorder;
 
+drop table contains;
+
 drop table ingredientsinstock;
 
 drop table ingredients;
@@ -209,12 +211,12 @@ CREATE TABLE IngredientsInStock(
 CREATE TABLE Contains(
 	menuItemID CHAR(30),
 	branchID CHAR(30),
-	itemName CHAR(30),
+	ingredientName CHAR(50),
 	quantityInGrams INTEGER,
-	PRIMARY KEY (menuItemID, branchID, itemName),
+	PRIMARY KEY (menuItemID, branchID, ingredientName),
 	FOREIGN KEY (menuItemID, branchID) REFERENCES MenuItem
 		ON DELETE CASCADE,
-	FOREIGN KEY (itemName) REFERENCES Ingredients
+	FOREIGN KEY (ingredientName) REFERENCES Ingredients
 );
 
 --////////////////////////////////////////////////////////////////////////////////
@@ -332,7 +334,7 @@ insert into MenuItem
 values('MI004', 'Grilled Cheese', 'C5450', 'B1236');
 
 insert into MenuItem
-values('MI005', 'Mac and Cheese', '5450', 'B1236');
+values('MI005', 'Mac and Cheese', 'C5450', 'B1236');
 
 insert into MenuItem
 values('MI005', 'Mac and Cheese', 'C3132', 'B1237');
@@ -341,7 +343,7 @@ insert into MenuItem
 values('MI006', 'Garlic Bread', 'C3133', 'B1234');
 
 insert into MenuItem
-values('MI006', 'Garlic Bread', 'C5555', 'B1235');
+values('MI006', 'Garlic Bread', 'C5525', 'B1235');
 
 insert into DeliveryDriver
 values('D0001');
@@ -605,20 +607,6 @@ insert into IngredientsInStock
 values('B1234', 'Garlic', 80, '2019-01-11', 50, '2018-11-01', 'M4621');
 
 ----//////////////////////////////////CONTAINS/////////////////////////////////////////////
-insert into Contains
-values('MI006', 'B1234', 'Garlic', 10);
-
-insert into Contains
-values('MI006', 'B1234', 'Salt', 2);
-
-insert into Contains
-values('MI006', 'B1234', 'Butter', 20);
-
-insert into Contains
-values('MI006', 'B1234', 'Bread', 100);
-
-
-
 insert into Contains
 values('MI006', 'B1235', 'Garlic', 10);
 
