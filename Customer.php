@@ -15,28 +15,17 @@
 </form>
 
 <?php
+$result = executePlainSQL("select * from Restaurant", $alltuples);
+dropdownBranches($result);
 if ($db_conn && array_key_exists('selectsubmit', $_GET)) {
   // Get MenuItems by BranchID
-  echo "<p> Attempting to get MenuItems </p>";
-  $tuple = array (
-    ":bind1" => $_GET['setbid'] // does not work
-    // ":bind1" => B1235 // does not work either
-  );
-  $alltuples = array (
-    $tuple
-  );
-  $result = executeBoundSQL("select * from MenuItem where BRANCHID like :bind1", $alltuples);
+  echo "<p> Fetching Menu Items </p>";
+  $sqlquery = "select * from MenuItem where BRANCHID='" . $_GET['setbid'] . "'";
+  $result = executePlainSQL($sqlquery);
   printMenuItems($result);
-  $result = executeBoundSQL("select * from MenuItem where BRANCHID='B1234'", $alltuples);
-  printMenuItems($result);
-  // $result = executePlainSQL("select * from Restaurant", $alltuples);
-  // dropdownBranches($result);
-  // $result = executePlainSQL("select * from Restaurant", $alltuples);
   // https://www.w3schools.com/tags/att_option_value.asp TODO: use result of selection
   // printBranches($result);
 }
-// $result = executePlainSQL("select * from MenuItem where BranchID='B1234'", $alltuples);
-// printMenuItems($result);
 ?>
 
 <p>Insert values into ORDERHAS below this is a very basic way for the customer to
@@ -44,7 +33,7 @@ if ($db_conn && array_key_exists('selectsubmit', $_GET)) {
 <form method="POST" action="Customer.php">
 <!--refresh page when submit-->
 <p> <input type="text" name="insORDERID" size="10" placeholder="Order ID">
-    <input type="text" name="insMenuItemID" size="18"placeholder="Menu Item">
+    <input type="text" name="insMenuItemID" size="18"placeholder="Menu Item ID">
     <input type="text" name="insBranchID" size="10"placeholder="Branch ID">
 <!--define 3 variables to pass the value-->
 <input type="submit" value="insert" name="insertsubmit"></p>

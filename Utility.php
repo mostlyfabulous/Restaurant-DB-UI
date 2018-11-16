@@ -52,16 +52,15 @@ function executeBoundSQL($cmdstr, $list) {
 
 	foreach ($list as $tuple) { //for each tuple in the list of tuples
 		foreach ($tuple as $bind => $val) { //for each bound variable in a tuple
-			echo $val."<br>";
-			echo gettype($val)."<br>";
-			echo strlen($val)."<br>";
-			echo "<br>".$bind."<br>";
+			// echo $val."<br>";
+			// echo gettype($val)."<br>";
+			// echo strlen($val)."<br>";
+			// echo "<br>".$bind."<br>";
 			OCIBindByName($statement, $bind, $val ,$maxlength = 30 , $type = SQLT_CHR );
 			unset ($val); //make sure you do not remove this. Otherwise $val will remain in an array object wrapper which will not be recognized by Oracle as a proper datatype
 
 		}
 		$r = OCIExecute($statement, OCI_DEFAULT);
-		print ($r);
 		if (!$r) {
 			echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
 			$e = OCI_Error($statement); // For OCIExecute errors pass the statement handle
@@ -69,14 +68,8 @@ function executeBoundSQL($cmdstr, $list) {
 			echo "<br>";
 			$success = False;
 		}
+		return $statement;
 	}
-	return $statement;
-	// print $r;
-	// print $statement;
-	// while ($row = OCI_Fetch_Row($statement)) {
-	// 	echo "<tr><td>" . $row["MENUITEMID"] . "</td><td>" . $row["ITEMNAME"] . "</td></tr>"; //or just use "echo $row[0]"
-	// }
-	// printMenuItems($statement);
 }
 
 function printResult($result) { //prints results from a select statement
