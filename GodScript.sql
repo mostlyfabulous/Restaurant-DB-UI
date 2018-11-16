@@ -4,8 +4,12 @@
 --
 -- drop table transfers;
 --
--- drop table place;
+-- drop table location;
 --
+
+
+
+drop table places;
 
 drop table ingredientorders;
 
@@ -228,10 +232,8 @@ CREATE TABLE Delivers(
     supplierID CHAR(30),
 		deliveryDate CHAR(10),
     PRIMARY KEY (branchID, ingredientName,lotNumber),
-    FOREIGN KEY (ingredientName,lotNumber,branchID) REFERENCES IngredientsInStock
-        ON DELETE CASCADE,
-    FOREIGN KEY (supplierID) REFERENCES Supplier
-				ON DELETE CASCADE);
+    FOREIGN KEY (ingredientName,lotNumber,branchID) REFERENCES IngredientsInStock,
+    FOREIGN KEY (supplierID) REFERENCES Supplier);
 commit ;
 
 CREATE TABLE IngredientOrders(
@@ -242,6 +244,14 @@ CREATE TABLE IngredientOrders(
     PRIMARY KEY (restockID),
     FOREIGN KEY (managerID) REFERENCES Manager
         ON DELETE CASCADE);
+commit ;
+
+CREATE TABLE Places(
+    restockID CHAR(30),
+		supplierID CHAR(30),
+    PRIMARY KEY (restockID,supplierID),
+    FOREIGN KEY (restockID) REFERENCES IngredientOrders,
+    FOREIGN KEY (supplierID) REFERENCES Supplier  );
 commit ;
 
 --////////////////////////////////////////////////////////////////////////////////
@@ -664,7 +674,7 @@ insert into Delivers
 values('B1234','Butter',79, 'S002','2019-03-21');
 
 
---////////////////////////////////////IngredientOrders///////////////////////////////////////////
+--////////////////////////////////////INGREDIENTORDERS///////////////////////////////////////////
 
 
 
@@ -691,6 +701,34 @@ values('R1239','M0167', 'Chickpeas', 1);
 
 insert into IngredientOrders
 values('R1229','M4621', 'Basamati Rice', 13);
+
+
+--////////////////////////////////////PLACES///////////////////////////////////////////
+
+
+insert into Places
+values('R1234','S001');
+
+insert into Places
+values('R1235','S001');
+
+insert into Places
+values('R1236','S001');
+
+insert into Places
+values('R5432','S312');
+
+insert into Places
+values('R1237','S002');
+
+insert into Places
+values('R1238','S003');
+
+insert into Places
+values('R1239','S312');
+
+insert into Places
+values('R1229','S312');
 
 
 
