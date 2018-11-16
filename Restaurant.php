@@ -189,13 +189,18 @@ if ($db_conn) {
         // $delivDate = to_date(date('d-m-Y h:i:s', strtotime($_GET  ['deliveryDate'])),'dd-mm-yy hh24:mi:ss');
         // $delivDate = mysql_real_escape_string($delivDate);
 				$tuple = array (
-					":bind1" => $_GET['driverID'],
+					":bind1" => 'cat',
 					":bind2" => $_GET['orderID'],
           ":bind3" => $_GET['deliveryTime']
 				);
 				$alltuples = array (
 					$tuple
 				);
+        print 'here now';
+        echo $bind1;
+        echo  $_GET['driverID'];
+        echo  $_GET['orderID'];
+        echo  $_GET['deliveryTime'];
         // TODO: see if this CURRENT_TIMESTAMP is used correctly
         // executeBoundSQL("update TakeoutOrder set deliveryTime=:bind3 where driverID=:bind1 and orderID=:bind2", $alltuples);
         executeBoundSQL("update TakeoutOrder set deliveryTime=:bind3 where driverID=:bind1 and  orderID=:bind2", $alltuples);

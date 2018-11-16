@@ -208,10 +208,11 @@ CREATE TABLE IngredientsInStock(
 
 CREATE TABLE Contains(
 	menuItemID CHAR(30),
+	branchID CHAR(30),
 	itemName CHAR(30),
 	quantityInGrams INTEGER,
-	PRIMARY KEY (menuItemID, itemName),
-	FOREIGN KEY (menuItemID) REFERENCES MenuItem
+	PRIMARY KEY (menuItemID, branchID, itemName),
+	FOREIGN KEY (menuItemID, branchID) REFERENCES MenuItem
 		ON DELETE CASCADE,
 	FOREIGN KEY (itemName) REFERENCES Ingredients
 );
@@ -340,7 +341,7 @@ insert into MenuItem
 values('MI006', 'Garlic Bread', 'C3133', 'B1234');
 
 insert into MenuItem
-values('MI006', 'Garlic Bread', 'C5555', 'B1237');
+values('MI006', 'Garlic Bread', 'C5555', 'B1235');
 
 insert into DeliveryDriver
 values('D0001');
@@ -521,6 +522,9 @@ values('S313', 333444555);
 
 insert into Supplier
 values('S314', 444555666);
+
+insert into Supplier
+values('S315', 444555777);
 commit;
 
 
@@ -570,6 +574,9 @@ values('Garlic', 'S313');
 insert into Ingredients
 values('Chicken Thigh', 'S314');
 
+insert into Ingredients
+values('Bread', 'S315');
+
 
 ----//////////////////////////////////INGREDIENTSINSTOCK/////////////////////////////////////////////
 
@@ -599,14 +606,28 @@ values('B1234', 'Garlic', 80, '2019-01-11', 50, '2018-11-01', 'M4621');
 
 ----//////////////////////////////////CONTAINS/////////////////////////////////////////////
 insert into Contains
-values('MI006', 'Garlic', 10);
+values('MI006', 'B1234', 'Garlic', 10);
 
 insert into Contains
-values('MI006', 'Salt', 2);
+values('MI006', 'B1234', 'Salt', 2);
 
 insert into Contains
-values('MI006', 'Butter', 20);
+values('MI006', 'B1234', 'Butter', 20);
 
 insert into Contains
-values('MI006', 'Bread', 100);
+values('MI006', 'B1234', 'Bread', 100);
+
+
+
+insert into Contains
+values('MI006', 'B1235', 'Garlic', 10);
+
+insert into Contains
+values('MI006', 'B1235', 'Salt', 2);
+
+insert into Contains
+values('MI006', 'B1235', 'Butter', 20);
+
+insert into Contains
+values('MI006', 'B1235', 'Bread', 100);
 --///////////////////////////////////////////////////////////////////////////////
