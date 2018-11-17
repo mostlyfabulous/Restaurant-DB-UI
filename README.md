@@ -10,6 +10,9 @@ Todo List:
 2) Use Assert statements when inserting tuples into IngredientsToOrder
 3) Make IngredientsInStock a big table (add more columns)
 4) Reform relation 'contains' from MenuItem to Ingredients
+5) Error handling for invalid inputs
+6) CRUD?
+7) Triggers for 
 
 
 
