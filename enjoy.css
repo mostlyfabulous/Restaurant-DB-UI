@@ -25,3 +25,7 @@ h, a, table ,form {
 th, tr, td {
   border: 1px solid white;
 }
+
+body {
+    background-color: #485e90;
+}
