@@ -144,8 +144,17 @@ function printCountEmployeesByBID($result) { //prints results from a select stat
 		echo "<tr><td>" . $row["BRANCHID"] . "</td><td>" . $row["COUNT(*)"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
+}
 
+function printCountIngsByExpDate($result) { //prints results from a select statement
+	echo "<table>";
+  echo "<caption>Number of Ingredients Expirying by Date:</caption>";
+	echo "<tr><th>Expiry Date</th><th>Number of Ingredients</th></tr>";
 
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "<tr><td>" . $row["EXPIRYDATE"] . "</td><td>" . $row["COUNT(*)"] . "</td></tr>"; //or just use "echo $row[0]"
+	}
+	echo "</table>";
 }
 
 /* OCILogon() allows you to log onto the Oracle database

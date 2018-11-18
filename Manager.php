@@ -57,14 +57,15 @@
     GROUP BY E.branchid");
     printCountEmployeesByBID($result);
 
+    $result = executePlainSQL("
+    SELECT expirydate, COUNT(*) FROM ingredientsinstock
+    GROUP BY expirydate
+    ORDER BY expirydate
+    ");
+
+    printCountIngsByExpDate($result);
   }
 ?>
-<!-- $statement2 = "
-SELECT COUNT(ingredientname) FROM ingredientsinstock
-WHERE expirydate like '" . $_GET['selDate'] . "'
-GROUP BY expirydate
-ORDER BY expirydate
-"; -->
 
 <!-- <input type="submit" value="run hardcoded queries" name="dostuff"></p> -->
 </form>
