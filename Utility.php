@@ -4,7 +4,8 @@
 <?php
 
 $success = True; //keep track of errors so it redirects the page only if there are no errors
-$db_conn = OCILogon("ora_p0w0b", "a59612168", "dbhost.ugrad.cs.ubc.ca:1522/ug");
+// $db_conn = OCILogon("ora_p0w0b", "a59612168", "dbhost.ugrad.cs.ubc.ca:1522/ug");
+$db_conn = OCILogon("ora_u4b1b", "a46210167", "dbhost.ugrad.cs.ubc.ca:1522/ug");
 
 function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL command and executes it
 	//echo "<br>running ".$cmdstr."<br>";
@@ -145,13 +146,27 @@ function printToDeliver($result) { //prints results from a select statement
 	echo "<table>";
 	echo "<tr>
     <th>DriverID</th> <th>OrderID</th><th>Address</th> <th>City</th>
-		<th>Postal CodeD</th><th>Phone Number</th>
+		<th>Postal Code</th><th>Phone Number</th>
 		</tr>";
 
 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 		echo "<tr><td>" . $row["DRIVERID"] . "</td><td>" . $row["ORDERID"] . "</td>
 			<td>" . $row["ADDRESS"] . "</td><td>" . $row["CITY"] . "</td>
 			<td>" . $row["POSTALCODE"] . "</td><td>" . $row["PHONENUMBER"] . "</td>
+			</tr>"; //or just use "echo $row[0]"
+	}
+	echo "</table>";
+}
+
+function printpop($result) { //prints results from a select statement
+	echo "<table>";
+	echo "<tr>
+    <th>MenuItemID</th> <th>ItemName</th><th>BranchID</th> <th>Count</th>
+		</tr>";
+
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "<tr><td>" . $row["MENUITEMID"] . "</td><td>" . $row["ITEMNAME"] . "</td>
+			<td>" . $row["BRANCHID"] . "</td><td>" . $row["COUNT"] . "</td>
 			</tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";

@@ -30,7 +30,9 @@ if ($db_conn && array_key_exists('selectbid', $_GET)) {
   $result = executePlainSQL($sqlquery);
   printMenuItems($result);
 }
+
 ?>
+
 
 <p>Insert values into ORDERHAS below this is a very basic way for the customer to
   add items to their order:</p>
@@ -44,6 +46,14 @@ if ($db_conn && array_key_exists('selectbid', $_GET)) {
 </form>
 <!-- create a form to pass the values. See below for how to
 get the values-->
+
+<p>Insert branchID to see popular items by branch:</p>
+<form method="GET" action="Customer.php">
+<!--refresh page when submit-->
+<p> <input type="text" name="viewBranchID" size="10"placeholder="Branch ID">
+<!--define 3 variables to pass the value-->
+<input type="submit" value="insert" name="viewpopitem"></p>
+</form>
 
 <p> TODO: Update the order by using a query </p>
 <form method="POST" action="Customer.php">
@@ -60,16 +70,19 @@ get the values-->
 
 // Connect Oracle...
 if ($db_conn) {
-	if (array_key_exists('reset', $_POST)) {
-		// Drop old table...
-		echo "<br> dropping table <br>";
-		executePlainSQL("Drop table ORDERHAS");
-
-		// Create new table...
-		echo "<br> creating new table <br>";
-		executePlainSQL("create table ORDERHAS (ORDERID CHAR(30), MENUITEMID CHAR(30), primary key (ORDERID, MENUITEMID))");
-		OCICommit($db_conn);
-
+	if (array_key_exists('viewpopitem', $_GET)) {
+    echo "<p> Popular Delivery MenuItems from Branch: " . $_GET['viewBranchID'] . "</p>";
+    $sqlquery = "create view POP_ITEM(MenuItemID, ItemName, BranchID, Count) as
+    select MenuItem.MenuItemID, MenuItem.itemName, MenuItem.branchID, COUNT(MenuItem.menuItemID)
+    from MenuItem
+    inner join OrderHas on MenuItem.MenuItemID = OrderHas.MenuItemID and MenuItem.BranchID = OrderHas.BranchID
+    inner join TakeoutOrder on TakeoutOrder.orderID = OrderHas.orderID
+    where OrderHas.branchID= '" .$_GET['viewBranchID'] . "'
+    GROUP BY MenuItem.menuItemID, MenuItem.itemName, MenuItem.branchID
+    ORDER BY COUNT(MenuItem.menuItemID) DESC";
+    $result = executePlainSQL($sqlquery);
+    OCICommit($db_conn);
+    printpop($result);
 	} else
 		if (array_key_exists('insertsubmit', $_POST)) {
 			//Getting the values from user and insert data into the table
