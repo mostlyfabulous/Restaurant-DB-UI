@@ -15,19 +15,15 @@
   extension.  You must also change the username and password on the
   OCILogon below to be your ORACLE username and password -->
 <PHP><link rel="stylesheet" type="text/css" href="enjoy.css"></head><PHP>
+<?php include 'Utility.php'; ?>
 <p>Restaurant PHP table</p>
-<p>If you wish to reset the table, press the reset button. If this is the first time you're running this page, you MUST use reset</p>
 <p><a href="index.php">Index page</a></p>
-<form method="POST" action="Delivery.php">
 
-<p><input type="submit" value="Reset" name="reset"></p>
-</form>
 
 <p>Input your driverID to orders to deliver:</p>
 <p><font size="2"> driverID</font></p>
 <form method="GET" action="Delivery.php">
 <!--refresh page when submit-->
-
    <p><input type="text" name="driverID" size="6">
 <!--define two variables to pass the value-->
 
@@ -61,125 +57,17 @@ deliveryTime (format: YYYY-MM-DD)
 $success = True; //keep track of errors so it redirects the page only if there are no errors
 $db_conn = OCILogon("ora_u4b1b", "a46210167", "dbhost.ugrad.cs.ubc.ca:1522/ug");
 
-function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL command and executes it
-	//echo "<br>running ".$cmdstr."<br>";
-	global $db_conn, $success;
-	$statement = OCIParse($db_conn, $cmdstr); //There is a set of comments at the end of the file that describe some of the OCI specific functions and how they work
-
-	if (!$statement) {
-		echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
-		$e = OCI_Error($db_conn); // For OCIParse errors pass the
-		// connection handle
-		echo htmlentities($e['message']);
-		$success = False;
-	}
-
-	$r = OCIExecute($statement, OCI_DEFAULT);
-	if (!$r) {
-		echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
-		$e = oci_error($statement); // For OCIExecute errors pass the statementhandle
-		echo htmlentities($e['message']);
-		$success = False;
-	} else {
-
-	}
-	return $statement;
-
-}
-
-function executeBoundSQL($cmdstr, $list) {
-	/* Sometimes the same statement will be executed for several times ... only
-	 the value of variables need to be changed.
-	 In this case, you don't need to create the statement several times;
-	 using bind variables can make the statement be shared and just parsed once.
-	 This is also very useful in protecting against SQL injection.
-      See the sample code below for how this functions is used */
-
-	global $db_conn, $success;
-	$statement = OCIParse($db_conn, $cmdstr);
-
-	if (!$statement) {
-		echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
-		$e = OCI_Error($db_conn);
-		echo htmlentities($e['message']);
-		$success = False;
-	}
-
-	foreach ($list as $tuple) {
-		foreach ($tuple as $bind => $val) {
-			//echo $val;
-			//echo "<br>".$bind."<br>";
-			OCIBindByName($statement, $bind, $val);
-			unset ($val); //make sure you do not remove this. Otherwise $val will remain in an array object wrapper which will not be recognized by Oracle as a proper datatype
-
-		}
-		$r = OCIExecute($statement, OCI_DEFAULT);
-		if (!$r) {
-			echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
-			$e = OCI_Error($statement); // For OCIExecute errors pass the statement handle
-			echo htmlentities($e['message']);
-			echo "<br>";
-			$success = False;
-		}
-    print $r;
-	}
-
-}
-
-function printDelivery($result) { //prints results from a select statement
-	echo "<br>Got data from table TakeoutOrder:<br>";
-	echo "<table>";
-	echo "<tr>
-      <th>OrderID</th>  <th>Delivery Time</th>
-      <th>Driver ID</th>   <th>BranchID</th>
-      </tr>";
-
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-		echo "<tr><td>"
-        . $row["ORDERID"] . "</td><td>"
-        . $row["DELIVERYTIME"] . "</td><td>"
-        . $row["DRIVERID"] . "</td><td>"
-       . $row["BRANCHID"]
-    . "</td></tr>"; //or just use "echo $row[0]"
-	}
-	echo "</table>";
-
-}
-
-
-function printResult($result) { //prints results from a select statement
-	echo "<br>Orders to Deliver:<br>";
-	echo "<table>";
-	echo "<tr>
-    <th>DriverID</th> <th>OrderID</th> <th>OrderID</th>
-    </tr>";
-
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-		echo "<tr><td>" . $row["DRIVERID"] . "</td><td>" . $row["ORDERID"] . "</td></tr>"; //or just use "echo $row[0]"
-	}
-	echo "</table>";
-}
 
 // Connect Oracle...
 if ($db_conn) {
-
-	if (array_key_exists('reset', $_POST)) {
-		// Drop old table...
-		echo "<br> dropping table <br>";
-		executePlainSQL("Drop table tab1");
-
-		// Create new table...
-		echo "<br> creating new table <br>";
-		executePlainSQL("create table tab1 (nid number, name varchar2(30), primary key (nid))");
-		OCICommit($db_conn);
-	 } else
-		if (array_key_exists('vieworderssubmit', $_GET)) {
-      $result = executePlainSQL("select * from TakeoutOrder where driverID= '" .$_GET['driverID'] . "' and deliveryTime = null");
-      printResult($result);
+	if (array_key_exists('vieworderssubmit', $_GET)) {
+      $result = executePlainSQL("select * from TakeoutOrder where driverID='" .$_GET['driverID'] . "' and deliveryTime is null");
+      printToDeliver($result);
     } else
 			if (array_key_exists('updatesubmit', $_GET)) {
-        executePlainSQL("update TakeoutOrder set deliveryTime= '" .$_GET['deliveryTime'] . "' where driverID='" .$_GET['driverID'] . "' and  orderID='" .$_GET['orderID'] . "'");
+        $result = executePlainSQL("update TakeoutOrder set deliveryTime= '" .$_GET['deliveryTime'] . "' where driverID='" .$_GET['driverID'] . "' and  orderID='" .$_GET['orderID'] . "'");
         OCICommit($db_conn);
+        printDelivery($result);
 
 			} else
 				if (array_key_exists('dostuff', $_POST)) {
