@@ -55,7 +55,6 @@ deliveryTime (format: YYYY-MM-DD)
 //html; it's now parsing PHP
 
 $success = True; //keep track of errors so it redirects the page only if there are no errors
-$db_conn = OCILogon("ora_u4b1b", "a46210167", "dbhost.ugrad.cs.ubc.ca:1522/ug");
 
 
 // Connect Oracle...
