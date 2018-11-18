@@ -106,57 +106,6 @@ function printBranches($result) { //prints results from a select statement
 	echo "</table>";
 }
 
-function printIList($result) { //prints results from a select statement
-	echo "<table style='float: left'>";
-  echo "<caption>Ingredients List for Menuitem:</caption>";
-	echo "<tr><th>MenuItem Name</th><th>Ingredient Name</th><th>Quantity (in grams)</th></tr>";
-
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-		echo  "<tr><td>" . $row["ITEMNAME"] . "</td><td>" . $row["INGREDIENTNAME"] . "</td><td>" . $row["QUANTITYINGRAMS"] . "</td></tr>"; //or just use "echo $row[0]";
-	}
-	echo "</table>";
-
-}
-
-
-function printDelivery($result) { //prints results from a select statement
-	echo "<br>Got data from table TakeoutOrder:<br>";
-	echo "<table>";
-	echo "<tr>
-      <th>OrderID</th>  <th>Delivery Time</th>
-      <th>Driver ID</th>   <th>BranchID</th>
-      </tr>";
-
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-		echo "<tr><td>"
-        . $row["ORDERID"] . "</td><td>"
-        . $row["DELIVERYTIME"] . "</td><td>"
-        . $row["DRIVERID"] . "</td><td>"
-       . $row["BRANCHID"]
-    . "</td></tr>"; //or just use "echo $row[0]"
-	}
-	echo "</table>";
-
-}
-
-
-function printToDeliver($result) { //prints results from a select statement
-	echo "<br>Orders to Deliver:<br>";
-	echo "<table>";
-	echo "<tr>
-    <th>DriverID</th> <th>OrderID</th><th>Address</th> <th>City</th>
-		<th>Postal CodeD</th><th>Phone Number</th>
-		</tr>";
-
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-		echo "<tr><td>" . $row["DRIVERID"] . "</td><td>" . $row["ORDERID"] . "</td>
-			<td>" . $row["ADDRESS"] . "</td><td>" . $row["CITY"] . "</td>
-			<td>" . $row["POSTALCODE"] . "</td><td>" . $row["PHONENUMBER"] . "</td>
-			</tr>"; //or just use "echo $row[0]"
-	}
-	echo "</table>";
-}
-
 function dropdownBranches($result) { //adds results from a select statement
 	echo "<br><select name='selectbid'>";
 	echo "<option value='0'>Please Select a Branch</option>";
@@ -164,6 +113,39 @@ function dropdownBranches($result) { //adds results from a select statement
 		echo "<option value =" . $row['BRANCHID'] . ">" . $row['BRANCHID'] . "</option>";
 	}
 	echo "</select><br>";
+}
+
+function printIngredientsByBranch($result, $bid) { //prints results from a select statement
+	echo "<table>";
+	echo "<caption>Ingredients at Branch: " . $bid . "</caption>";
+	echo "<tr><th>Ingredient Name</th><th>Quantity Left</th><th>Expiry Date</th></tr>";
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "<tr><td>" . $row["INGREDIENTNAME"] . "</td><td>" . $row["QUANTITYLEFT"] . "</td><td>" . $row["EXPIRYDATE"] . "</td></tr>"; //or just use "echo $row[0]"
+	}
+	echo "</table>";
+}
+
+function printIngredientsExpiring($result, $bid) { //prints results from a select statement
+	echo "<table>";
+	echo "<caption>Ingredients at Expiring on: " . $bid . "</caption>";
+	echo "<tr><th>Ingredient Name</th><th>Quantity Left</th><th>Expiry Date</th></tr>";
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "<tr><td>" . $row["INGREDIENTNAME"] . "</td><td>" . $row["QUANTITYLEFT"] . "</td><td>" . $row["EXPIRYDATE"] . "</td></tr>"; //or just use "echo $row[0]"
+	}
+	echo "</table>";
+}
+
+function printCountEmployeesByBID($result) { //prints results from a select statement
+	echo "<table>";
+  echo "<caption>Summary of Total Employees by BranchID:</caption>";
+	echo "<tr><th>Branch ID</th><th>Number of Employees</th></tr>";
+
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "<tr><td>" . $row["BRANCHID"] . "</td><td>" . $row["COUNT(*)"] . "</td></tr>"; //or just use "echo $row[0]"
+	}
+	echo "</table>";
+
+
 }
 
 /* OCILogon() allows you to log onto the Oracle database
