@@ -489,7 +489,11 @@ insert into OrderHas
 values('O000001', 'MI003', 'B1234');
 
 insert into OrderHas
-values('O000001', 'MI005', 'B1236');
+values('O000001', 'MI004', 'B1234');
+
+insert into OrderHas
+values('O000001', 'MI006', 'B1234');
+
 
 insert into OrderHas
 values('O000002', 'MI002', 'B1234');
@@ -515,6 +519,7 @@ values('O000005', 'MI003', 'B1234');
 insert into OrderHas
 values('O000005', 'MI004', 'B1235');
 
+
 insert into OrderHas
 values('O000005', 'MI005', 'B1236');
 
@@ -528,8 +533,10 @@ insert into OrderHas
 values('O000007', 'MI004', 'B1234');
 
 insert into OrderHas
-values('O000008', 'MI003', 'B1234');
+values('O000008', 'MI004', 'B1235');
 
+insert into OrderHas
+values('O000008', 'MI006', 'B1235');
 --//////////////////////////////////LOCATION/////////////////////////////////////////////
 
 insert into Location

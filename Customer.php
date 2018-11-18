@@ -144,7 +144,7 @@ if ($db_conn) {
 		// Select data...
 		$result = executePlainSQL("select * from ORDERHAS");
 		printResult($result);
-    $result = executePlainSQL("select * from MenuItem");
+    $result = executePlainSQL("select distinct * from MenuItem");
     printMenuItems($result);
 	}
 	//Commit to save changes...

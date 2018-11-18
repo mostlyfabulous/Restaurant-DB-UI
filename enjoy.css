@@ -1,5 +1,5 @@
 h, a, table ,form {
-  display: inline-block;
+  display: table-cell;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
@@ -24,4 +24,8 @@ h, a, table ,form {
 
 th, tr, td {
   border: 1px solid white;
+}
+
+body {
+    background-color: #485e90;
 }
