@@ -16,15 +16,13 @@
   OCILogon below to be your ORACLE username and password -->
 <PHP><link rel="stylesheet" type="text/css" href="enjoy.css"></head><PHP>
 <?php include 'Utility.php'; ?>
-<p>Restaurant PHP table</p>
-<p><a href="index.php">Index page</a></p>
-
+<h>Delivery PHP table</h><a href="index.php">Index page</a>
 
 <p>Input your driverID to orders to deliver:</p>
 <p><font size="2"> driverID</font></p>
 <form method="GET" action="Delivery.php">
 <!--refresh page when submit-->
-   <p><input type="text" name="driverID" size="6">
+   <p><input type="text" name="driverID" size="7"placeholder="DriverID">
 <!--define two variables to pass the value-->
 
 <input type="submit" value="submit" name="vieworderssubmit"></p>
@@ -40,15 +38,15 @@ deliveryTime (format: YYYY-MM-DD)
 </font></p>
 <form method="GET" action="Delivery.php">
 <!--refresh page when submit-->
-   <p><input type="text" name="driverID" size="6">
-     <input type="text" name="orderID" size="6">
-     <input type="text" name="deliveryTime" size="6">
+   <p><input type="text" name="driverID" size="7" placeholder="DriverID">
+     <input type="text" name="orderID" size="7" placeholder="OrderID">
+     <input type="text" name="deliveryTime" size="12" placeholder="Delivery Time">
 <!--define two variables to pass the value-->
 
 <input type="submit" value="update" name="updatesubmit"></p>
 <input type="submit" value="run hardcoded queries" name="dostuff"></p>
 </form>
-
+<br><br>
 <?php
 
 //this tells the system that it's no longer just parsing
