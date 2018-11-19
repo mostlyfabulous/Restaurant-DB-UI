@@ -138,11 +138,22 @@ function printIngredientsExpiring($result, $bid) { //prints results from a selec
 
 function printCountEmployeesByBID($result) { //prints results from a select statement
 	echo "<table>";
-  echo "<caption>Summary of Total Employees by BranchID:</caption>";
+  echo "<caption>Total Employees at a Branch:</caption>";
 	echo "<tr><th>Branch ID</th><th>Number of Employees</th></tr>";
 
 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 		echo "<tr><td>" . $row["BRANCHID"] . "</td><td>" . $row["COUNT(*)"] . "</td></tr>"; //or just use "echo $row[0]"
+	}
+	echo "</table>";
+}
+
+function printDivisionByBID($result) { //prints results from a select statement
+	echo "<table>";
+  echo "<caption>Order ID with all Menu Items at a given Branch:</caption>";
+	echo "<tr><th>Order ID</th></tr>";
+
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "<tr><td>" . $row["ORDERID"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
 }

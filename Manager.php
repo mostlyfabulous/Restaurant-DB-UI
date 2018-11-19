@@ -7,15 +7,17 @@
 </form> -->
 
 <p> TODO: DELETE Ingredient when Manager transfers Ingredient to Place </p>
-<p>Retrieve Ingredients in Stock at a Branch ID:</p>
 <form method="GET" action="Manager.php">
+  Retrieve Ingredients in Stock at a Branch ID:
 <p> <input type="text" name="selBID" size="10"placeholder="Branch ID">
     <input type="submit" value="select" name="selectbybid"></p>
 </form>
 <form method="GET" action="Manager.php">
+  Get Ingredients Expirying on a Given Date:
 <p> <input type="text" name="selDate" size="24"placeholder="Expiry Date: YYYY-MM-DD">
     <input type="submit" value="select" name="selectexpdate"></p>
 </form>
+<br>
 <?php
   //
   if ($db_conn) {
@@ -25,7 +27,6 @@
     echo "<br>";
     if ($db_conn && array_key_exists('selectbybid', $_GET)) {
       //Getting the ingredientsinstock at a branch
-      // $_GET['selBID']
       $statement1 = "
       SELECT * FROM ingredientsinstock
       WHERE branchid='" . $_GET['selBID'] . "'";
@@ -37,7 +38,7 @@
 ?>
 <?php
   if ($db_conn && array_key_exists('selectexpdate', $_GET)) {
-    //parseInt(removeDashLines(selDate))
+    // Find ingredients that expire on a given date
     $statement2 = "
     SELECT * FROM ingredientsinstock
     WHERE expirydate like'" . $_GET['selDate'] . "'";
@@ -47,21 +48,42 @@
     echo "<br>";
   }
 ?>
+<form method="GET" action="Manager.php">
+  Get Number of Employees at a Branch:
+<p> <input type="text" name="byBID" size="10"placeholder="Branch ID">
+    <input type="submit" value="select" name="countbybid"></p>
+</form>
 <?php
     echo "<br>";
+    if ($db_conn && array_key_exists('countbybid', $_GET)) {
+      $result = executePlainSQL("
+        SELECT E.BRANCHID, COUNT(*)
+        FROM Employee E, Restaurant R
+        WHERE E.branchid=R.branchid AND E.branchid='" . $_GET['byBID'] . "'
+        GROUP BY E.branchid");
+      printCountEmployeesByBID($result);
 
+      $result = executePlainSQL("
+        SELECT orderID
+        FROM Orders O
+        WHERE NOT EXISTS
+          (
+            SELECT M.menuItemID
+            FROM MenuItem M
+            WHERE M.branchID='" . $_GET['byBID'] . "'
+            MINUS (
+              SELECT  H.menuItemID
+              FROM    OrderHas H
+              WHERE   O.orderID = H.orderID and H.branchID='" . $_GET['byBID'] . "')
+    			  )
+        ");
+      printDivisionByBID($result);
+    }
     $result = executePlainSQL("
-    SELECT E.BRANCHID, COUNT(*)
-    FROM Employee E, Restaurant R
-    WHERE E.branchid=R.branchid
-    GROUP BY E.branchid");
-    printCountEmployeesByBID($result);
-
-    $result = executePlainSQL("
-    SELECT expirydate, COUNT(*) FROM ingredientsinstock
-    GROUP BY expirydate
-    ORDER BY expirydate
-    ");
+      SELECT expirydate, COUNT(*) FROM ingredientsinstock
+      GROUP BY expirydate
+      ORDER BY expirydate DESC
+      ");
 
     printCountIngsByExpDate($result);
   }
