@@ -21,16 +21,16 @@ values('7781115555', null, null, null, null);
 
 
 insert into Restaurant
-values('B1234', '6133 University Blvd', 'Vancouver', 'BC', 'V6T1Z1');
+values('M4621', 'B1234', '6133 University Blvd', 'Vancouver', 'BC', 'V6T1Z1');
 
 insert into Restaurant
-values('B1235', '750 Hornby St', 'Vancouver', 'BC', 'V6Z2H7');
+values('M0167', 'B1235', '750 Hornby St', 'Vancouver', 'BC', 'V6Z2H7');
 
 insert into Restaurant
-values('B1236', '30 10 Ave SW', 'Calgary', 'AB', 'T2R0A9');
+values('M4536', 'B1236', '30 10 Ave SW', 'Calgary', 'AB', 'T2R0A9');
 
 insert into Restaurant
-values('B1237', '675 Belleville St', 'Victoria', 'BC', 'V8W9W2');
+values('M9817', 'B1237', '675 Belleville St', 'Victoria', 'BC', 'V8W9W2');
 
 
 insert into Employee
