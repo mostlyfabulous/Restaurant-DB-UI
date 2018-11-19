@@ -71,6 +71,8 @@ get the values-->
 // Connect Oracle...
 if ($db_conn) {
 	if (array_key_exists('viewpopitem', $_GET)) {
+    executePlainSQL("Drop view POP_ITEM");
+    OCICommit($db_conn);
     echo "<p> Popular Delivery MenuItems from Branch: " . $_GET['viewBranchID'] . "</p>";
     $sqlquery = "create view POP_ITEM(MenuItemID, ItemName, BranchID, Count) as
     select MenuItem.MenuItemID, MenuItem.itemName, MenuItem.branchID, COUNT(MenuItem.menuItemID)

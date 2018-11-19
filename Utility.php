@@ -158,6 +158,74 @@ function printCountIngsByExpDate($result) { //prints results from a select state
 	echo "</table>";
 }
 
+function printIList($result) { //prints results from a select statement
+	echo "<table style='float: left'>";
+  echo "<caption>Ingredients List for Menuitem:</caption>";
+	echo "<tr><th>MenuItem Name</th><th>Ingredient Name</th><th>Quantity (in grams)</th></tr>";
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo  "<tr><td>" . $row["ITEMNAME"] . "</td><td>" . $row["INGREDIENTNAME"] . "</td><td>" . $row["QUANTITYINGRAMS"] . "</td></tr>"; //or just use "echo $row[0]";
+	}
+	echo "</table>";
+}
+
+
+function printDelivery($result) { //prints results from a select statement
+	echo "<br>Got data from table TakeoutOrder:<br>";
+	echo "<table>";
+	echo "<tr>
+      <th>OrderID</th>  <th>Delivery Time</th>
+      <th>Driver ID</th>   <th>BranchID</th>
+      </tr>";
+			while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "<tr><td>"
+        . $row["ORDERID"] . "</td><td>"
+        . $row["DELIVERYTIME"] . "</td><td>"
+        . $row["DRIVERID"] . "</td><td>"
+       . $row["BRANCHID"]
+    . "</td></tr>"; //or just use "echo $row[0]"
+	}
+echo "</table>";
+}
+
+
+function printToDeliver($result) { //prints results from a select statement
+	echo "<br>Orders to Deliver:<br>";
+	echo "<table>";
+	echo "<tr>
+	<th>DriverID</th> <th>OrderID</th><th>Address</th> <th>City</th>
+	<th>Postal Code</th><th>Phone Number</th>
+	</tr>";
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	echo "<tr><td>" . $row["DRIVERID"] . "</td><td>" . $row["ORDERID"] . "</td>
+		<td>" . $row["ADDRESS"] . "</td><td>" . $row["CITY"] . "</td>
+		<td>" . $row["POSTALCODE"] . "</td><td>" . $row["PHONENUMBER"] . "</td>
+		</tr>"; //or just use "echo $row[0]"
+	}
+echo "</table>";
+}
+
+function printpop($result) { //prints results from a select statement
+	echo "<table>";
+	echo "<tr>
+    <th>MenuItemID</th> <th>ItemName</th><th>BranchID</th> <th>Count</th>
+		</tr>";
+		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "<tr><td>" . $row["MENUITEMID"] . "</td><td>" . $row["ITEMNAME"] . "</td>
+			<td>" . $row["BRANCHID"] . "</td><td>" . $row["COUNT"] . "</td>
+			</tr>"; //or just use "echo $row[0]"
+		echo "<tr><td>" . $row["BRANCHID"] . "</td><td>" . $row["COUNT(*)"] . "</td></tr>"; //or just use "echo $row[0]"
+	}
+	echo "</table>";
+}
+// function dropdownBranches($result) { //adds results from a select statement
+// 	echo "<br><select name='selectbid'>";
+// 	echo "<option value='0'>Please Select a Branch</option>";
+// 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+// 		echo "<option value =" . $row['BRANCHID'] . ">" . $row['BRANCHID'] . "</option>";
+// 		echo "</select><br>";
+// 	}
+// }
+
 /* OCILogon() allows you to log onto the Oracle database
      The three arguments are the username, password, and database.
      You will need to replace "username" and "password" for this to
