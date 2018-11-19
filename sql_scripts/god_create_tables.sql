@@ -202,7 +202,7 @@ commit ;
 CREATE TABLE IngredientOrders(
     restockID CHAR(30),
 		managerID CHAR(30),
-    ingredienName CHAR(50),
+    ingredientName CHAR(50),
     quantity INTEGER,
     PRIMARY KEY (restockID),
     FOREIGN KEY (managerID) REFERENCES Manager);
