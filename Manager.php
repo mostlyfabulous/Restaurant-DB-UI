@@ -49,10 +49,17 @@
   }
 ?>
 <form method="GET" action="Manager.php">
-  Get Number of Employees at a Branch:
+  Get Number of Employees at a Branch: <br><br>
 <p> <input type="text" name="byBID" size="10"placeholder="Branch ID">
     <input type="submit" value="select" name="countbybid"></p>
 </form>
+<form method="GET" action="Manager.php">
+  Get OrderIDs where the Order has all <br>
+  the Menu Items available at a Branch:
+<p> <input type="text" name="divBID" size="10"placeholder="Branch ID">
+    <input type="submit" value="select" name="divisionbybid"></p>
+</form>
+<br>
 <?php
     echo "<br>";
     if ($db_conn && array_key_exists('countbybid', $_GET)) {
@@ -62,7 +69,8 @@
         WHERE E.branchid=R.branchid AND E.branchid='" . $_GET['byBID'] . "'
         GROUP BY E.branchid");
       printCountEmployeesByBID($result);
-
+    }
+    if ($db_conn && array_key_exists('divisionbybid', $_GET)) {
       $result = executePlainSQL("
         SELECT orderID
         FROM Orders O
@@ -70,14 +78,14 @@
           (
             SELECT M.menuItemID
             FROM MenuItem M
-            WHERE M.branchID='" . $_GET['byBID'] . "'
+            WHERE M.branchID='" . $_GET['divBID'] . "'
             MINUS (
               SELECT  H.menuItemID
               FROM    OrderHas H
-              WHERE   O.orderID = H.orderID and H.branchID='" . $_GET['byBID'] . "')
+              WHERE   O.orderID = H.orderID and H.branchID='" . $_GET['divBID'] . "')
     			  )
         ");
-      printDivisionByBID($result);
+      printDivisionByBID($result, $_GET['divBID']);
     }
     $result = executePlainSQL("
       SELECT expirydate, COUNT(*) FROM ingredientsinstock

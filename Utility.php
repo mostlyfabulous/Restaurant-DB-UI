@@ -5,7 +5,7 @@
 
 $success = True; //keep track of errors so it redirects the page only if there are no errors
 // $db_conn = OCILogon("ora_p0w0b", "a59612168", "dbhost.ugrad.cs.ubc.ca:1522/ug");
-$db_conn = OCILogon("ora_u4b1b", "a46210167", "dbhost.ugrad.cs.ubc.ca:1522/ug");
+$db_conn = OCILogon("ora_p0w0b", "a59612168", "dbhost.ugrad.cs.ubc.ca:1522/ug");
 
 function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL command and executes it
 	//echo "<br>running ".$cmdstr."<br>";
@@ -147,9 +147,10 @@ function printCountEmployeesByBID($result) { //prints results from a select stat
 	echo "</table>";
 }
 
-function printDivisionByBID($result) { //prints results from a select statement
+function printDivisionByBID($result, $bid) { //prints results from a select statement
 	echo "<table>";
-  echo "<caption>Order ID with all Menu Items at a given Branch:</caption>";
+  echo "<caption>Order IDs with all Menu Items
+	 at a given Branch: " . $bid . "</caption>";
 	echo "<tr><th>Order ID</th></tr>";
 
 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
@@ -181,8 +182,8 @@ function printIList($result) { //prints results from a select statement
 
 
 function printDelivery($result) { //prints results from a select statement
-	echo "<br>Got data from table TakeoutOrder:<br>";
 	echo "<table>";
+	echo "<caption>Got data from table TakeoutOrder:</caption>";
 	echo "<tr>
       <th>OrderID</th>  <th>Delivery Time</th>
       <th>Driver ID</th>   <th>BranchID</th>
@@ -200,8 +201,8 @@ echo "</table>";
 
 
 function printToDeliver($result) { //prints results from a select statement
-	echo "<br>Orders to Deliver:<br>";
 	echo "<table>";
+	echo "<caption>Orders to Deliver:</caption>";
 	echo "<tr>
 	<th>DriverID</th> <th>OrderID</th><th>Address</th> <th>City</th>
 	<th>Postal Code</th><th>Phone Number</th>
