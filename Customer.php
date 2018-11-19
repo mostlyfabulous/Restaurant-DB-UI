@@ -10,8 +10,9 @@
 
 <?php
 // Create's drown down selection menu based on availble restaurants
-$result = executePlainSQL("select * from Restaurant", $alltuples);
+$result = executePlainSQL("select * from Restaurant");
 echo "<form method='GET' action='Customer.php'>";
+echo "Select MenuItems by Branch ID below: <br>";
 dropdownBranches($result);
 echo "<p><input type='submit' value='Submit'></p>";
 echo "</form>";
@@ -48,7 +49,7 @@ get the values-->
 </form>
 
 <p> TODO: Update the order by using a query </p>
-<form method="POST" action="Customer.php">
+<form method="GET" action="Customer.php">
 <!--refresh page when submit-->
 
 <p> <input type="text" name="orderID" size="18" placeholder="Order ID">
@@ -59,18 +60,17 @@ get the values-->
 
 <?php
 
-// Connect Oracle...
 if ($db_conn) {
 	if (array_key_exists('viewpopitem', $_GET)) {
     executePlainSQL("Drop view POP_ITEM");
     OCICommit($db_conn);
-    echo "<p> Popular Delivery MenuItems from Branch: " . $_GET['viewBranchID'] . "</p>";
+    // echo "<p> Popular Delivery MenuItems from Branch: " . $_GET['viewBranchID'] . "</p>";
     $sqlquery = "create view POP_ITEM(MenuItemID, ItemName, BranchID, Count) as
     select MenuItem.MenuItemID, MenuItem.itemName, MenuItem.branchID, COUNT(MenuItem.menuItemID)
     from MenuItem
     inner join OrderHas on MenuItem.MenuItemID = OrderHas.MenuItemID and MenuItem.BranchID = OrderHas.BranchID
     inner join TakeoutOrder on TakeoutOrder.orderID = OrderHas.orderID
-    where OrderHas.branchID= '" .$_GET['viewBranchID'] . "'
+    where OrderHas.branchID= '" . $_GET['viewBranchID'] . "'
     GROUP BY MenuItem.menuItemID, MenuItem.itemName, MenuItem.branchID
     ORDER BY COUNT(MenuItem.menuItemID) DESC";
 
@@ -78,7 +78,7 @@ if ($db_conn) {
     $result = executePlainSQL("
     SELECT * FROM POP_ITEM
     ");
-    printpop($result);
+    printpop($result, $_GET['viewBranchID']);
     OCICommit($db_conn);
 	} else
 		if (array_key_exists('insertsubmit', $_POST)) {
@@ -95,49 +95,59 @@ if ($db_conn) {
 			OCICommit($db_conn);
 
 		} else
-			if (array_key_exists('updatesubmit', $_POST)) {
+			if (array_key_exists('updatesubmit', $_GET)) {
 				// delete tuple using data from user
 					// ":bind1" => $_POST['orderID'],
 					// ":bind2" => $_POST['menuItem']
-				executePlainSQL("delete from ORDERHAS where ORDERID='" . $_POST['orderID'] . "'and MENUITEMID='" . $_POST['menuItem'] . "'");
+				executePlainSQL("delete from ORDERHAS where ORDERID='" . $_GET['orderID'] . "'and MENUITEMID='" . $_GET['menuItem'] . "'");
         // delete from ORDERHAS where ORDERID='O000001' and MENUITEMID='MI001';
 				OCICommit($db_conn);
-			} else
-				if (array_key_exists('dostuff', $_POST)) {
-					// Insert data into table...
-					// executePlainSQL("insert into Orders values (10, 'Frank')");
-					// Inserting data into table using bound variables
-					$list1 = array (
-						":bind1" => 'O000001',
-						":bind2" => 'MI001',
-            ":bind3" => 'B1234'
-					);
-					$list2 = array (
-						":bind1" => 'O000001',
-						":bind2" => 'MI002',
-            ":bind3" => 'B1234'
-					);
-					$allrows = array (
-						$list1,
-						$list2
-					);
-					executeBoundSQL("insert into OrderHas values (:bind1, :bind2, :bind3)", $allrows); //the function takes a list of lists
-					// Update data...
-					//executePlainSQL("update tab1 set nid=10 where nid=2");
-					// Delete data...
-					//executePlainSQL("delete from tab1 where nid=1");
-					OCICommit($db_conn);
-				}
+		} else
+      if (array_key_exists('getorder', $_GET)) {
+        // gets menu items in an orderid
+      $result = executePlainSQL("
+      SELECT DISTINCT O.orderID, M.menuItemID, M.itemname
+      FROM orderhas O, menuitem M
+      WHERE O.menuItemID = M.menuItemID
+      AND O.orderID = '" . $_GET['orderID'] . "'
+      ORDER BY M.menuItemID ASC
+      ");
+
+      // SELECT O.orderID, M.menuitemID, M.itemname
+      // FROM orderhas O, menuitem M
+      // WHERE O.menuItemID = M.menuItemID
+      // AND O.orderID = 'O000001'
+      printOrder($result, $_GET['orderID']);
+    } else
+			if (array_key_exists('dostuff', $_POST)) {
+				$list1 = array (
+					":bind1" => 'O000001',
+					":bind2" => 'MI001',
+          ":bind3" => 'B1234'
+				);
+				$list2 = array (
+					":bind1" => 'O000001',
+					":bind2" => 'MI002',
+          ":bind3" => 'B1234'
+				);
+				$allrows = array (
+					$list1,
+					$list2
+				);
+				executeBoundSQL("insert into OrderHas values (:bind1, :bind2, :bind3)", $allrows); //the function takes a list of lists
+				// Update data...
+				//executePlainSQL("update tab1 set nid=10 where nid=2");
+				// Delete data...
+				//executePlainSQL("delete from tab1 where nid=1");
+				OCICommit($db_conn);
+		}
 
 	if ($_POST && $success) {
 		//POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
-		header("location: Customer.php");
-	} else {
-		// Select data...
-		$result = executePlainSQL("select * from ORDERHAS");
-		printResult($result);
-    $result = executePlainSQL("select distinct * from MenuItem");
-    printMenuItems($result);
+	// 	header("location: Customer.php");
+	// } else {
+  //   $result = executePlainSQL("select distinct * from MenuItem");
+  //   printMenuItems($result);
 	}
 	//Commit to save changes...
 	OCILogoff($db_conn);
