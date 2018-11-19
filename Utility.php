@@ -85,6 +85,23 @@ function printResult($result) { //prints results from a select statement
 
 }
 
+function printOrder($result, $orderid) { //prints results from a select statement
+	echo "<table>";
+  echo "<caption>Retrieved Order Details
+				for OrderID: " . $orderid . "</caption>";
+	echo "<tr><th>MenuItemID</th><th>ItemName</th></tr>";
+
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		// <td>" . $row["ORDERID"] . "</td>
+		echo "<tr>
+							<td>" . $row["MENUITEMID"] . "</td>
+							<td>" . $row["ITEMNAME"] . "</td>
+							</tr>";
+	}
+	echo "</table>";
+
+}
+
 function printMenuItems($result) { //prints results from a select statement
 	echo "<table>";
   echo "<caption>Got data from table MenuItem:</caption>";
@@ -216,8 +233,9 @@ function printToDeliver($result) { //prints results from a select statement
 echo "</table>";
 }
 
-function printpop($result) { //prints results from a select statement
+function printpop($result, $bid) { //prints results from a select statement
 	echo "<table>";
+	echo "<caption>Popular Delivery MenuItems from Branch: ". $bid ." </caption>";
 	echo "<tr>
     <th>MenuItemID</th> <th>ItemName</th><th>BranchID</th> <th>Count</th>
 		</tr>";
