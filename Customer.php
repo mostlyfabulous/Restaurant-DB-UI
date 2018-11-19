@@ -2,7 +2,12 @@
 <?php include 'Utility.php'; ?>
 <h>Customer PHP table</h>
 <a href="index.php">Index page</a>
-<br><br>
+<p>Select MenuItems by Branch ID below:</p>
+  <!-- <form method="GET" action="Customer.php">
+<p> <input type="text" name="setbid" size="10" placeholder="BranchID">
+    <input type="submit" value="search" name="selectsubmit"></p>
+</form> -->
+
 <?php
 // Create's drown down selection menu based on availble restaurants
 $result = executePlainSQL("select * from Restaurant");
@@ -51,8 +56,6 @@ get the values-->
     <input type="text" name="menuItem" size="18" placeholder="Menu Item to remove">
 <!--define two variables to pass the value-->
 <input type="submit" value="remove menu item from order" name="updatesubmit">
-<input type="submit" value="get menu items in order" name="getorder">
-<input type="submit" value="run hardcoded queries" name="dostuff"></p>
 </form> <br>
 
 <?php
