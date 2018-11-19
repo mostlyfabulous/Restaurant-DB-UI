@@ -16,7 +16,7 @@
 
 <?php
 // Create's drown down selection menu based on availble restaurants
-$result = executePlainSQL("select * from Restaurant", $alltuples);
+$result = executePlainSQL("select * from Restaurant");
 echo "<form method='GET' action='Chef.php'>";
 dropdownBranches($result);
 echo "<p><input type='submit' value='Submit'></p>";
