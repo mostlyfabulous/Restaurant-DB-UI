@@ -43,8 +43,6 @@ deliveryTime (format: YYYY-MM-DD)
      <input type="text" name="deliveryTime" size="12" placeholder="Delivery Time">
 <!--define two variables to pass the value-->
 
-<input type="submit" value="update" name="updatesubmit"></p>
-<input type="submit" value="run hardcoded queries" name="dostuff"></p>
 </form>
 <br><br>
 <?php
@@ -66,30 +64,31 @@ if ($db_conn) {
         OCICommit($db_conn);
         printDelivery($result);
 
-			} else
-				if (array_key_exists('dostuff', $_POST)) {
-					// Insert data into table...
-					executePlainSQL("insert into tab1 values (10, 'Frank')");
-					// Inserting data into table using bound variables
-					$list1 = array (
-						":bind1" => 6,
-						":bind2" => "All"
-					);
-					$list2 = array (
-						":bind1" => 7,
-						":bind2" => "John"
-					);
-					$allrows = array (
-						$list1,
-						$list2
-					);
-					executeBoundSQL("insert into tab1 values (:bind1, :bind2)", $allrows); //the function takes a list of lists
-					// Update data...
-					//executePlainSQL("update tab1 set nid=10 where nid=2");
-					// Delete data...
-					//executePlainSQL("delete from tab1 where nid=1");
-					OCICommit($db_conn);
-				}
+			}
+      // else
+			// 	if (array_key_exists('dostuff', $_POST)) {
+			// 		// Insert data into table...
+			// 		executePlainSQL("insert into tab1 values (10, 'Frank')");
+			// 		// Inserting data into table using bound variables
+			// 		$list1 = array (
+			// 			":bind1" => 6,
+			// 			":bind2" => "All"
+			// 		);
+			// 		$list2 = array (
+			// 			":bind1" => 7,
+			// 			":bind2" => "John"
+			// 		);
+			// 		$allrows = array (
+			// 			$list1,
+			// 			$list2
+			// 		);
+			// 		executeBoundSQL("insert into tab1 values (:bind1, :bind2)", $allrows); //the function takes a list of lists
+			// 		// Update data...
+			// 		//executePlainSQL("update tab1 set nid=10 where nid=2");
+			// 		// Delete data...
+			// 		//executePlainSQL("delete from tab1 where nid=1");
+			// 		OCICommit($db_conn);
+			// 	}
 
 	if ($_POST && $success) {
 		//POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get

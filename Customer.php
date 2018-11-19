@@ -2,12 +2,6 @@
 <?php include 'Utility.php'; ?>
 <h>Customer PHP table</h>
 <a href="index.php">Index page</a>
-<p>If you wish to reset the table, press the reset button. If this is the first time you're running this page, you MUST use reset</p>
-
-<form method="POST" action="Customer.php">
-<p><input type="submit" value="Reset" name="reset"></p>
-</form>
-
 <p>Select MenuItems by Branch ID below:</p>
   <!-- <form method="GET" action="Customer.php">
 <p> <input type="text" name="setbid" size="10" placeholder="BranchID">
@@ -61,7 +55,6 @@ get the values-->
     <input type="text" name="menuItem" size="18" placeholder="Menu Item to remove">
 <!--define two variables to pass the value-->
 <input type="submit" value="remove menu item from order" name="updatesubmit">
-<input type="submit" value="run hardcoded queries" name="dostuff"></p>
 </form> <br>
 
 <?php

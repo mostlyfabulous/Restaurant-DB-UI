@@ -16,12 +16,6 @@
   OCILogon below to be your ORACLE username and password -->
 <PHP><link rel="stylesheet" type="text/css" href="enjoy.css"></head><PHP>
 <p>Restaurant PHP table</p>
-<p>If you wish to reset the table, press the reset button. If this is the first time you're running this page, you MUST use reset</p>
-<p><a href="index.php">Index page</a></p>
-<form method="POST" action="Delivery.php">
-
-<p><input type="submit" value="Reset" name="reset"></p>
-</form>
 
 <p>Input your driverID to orders to deliver:</p>
 <p><font size="2"> driverID</font></p>
@@ -163,16 +157,16 @@ function printResult($result) { //prints results from a select statement
 // Connect Oracle...
 if ($db_conn) {
 
-	if (array_key_exists('reset', $_POST)) {
-		// Drop old table...
-		echo "<br> dropping table <br>";
-		executePlainSQL("Drop table tab1");
-
-		// Create new table...
-		echo "<br> creating new table <br>";
-		executePlainSQL("create table tab1 (nid number, name varchar2(30), primary key (nid))");
-		OCICommit($db_conn);
-	 } else
+	// if (array_key_exists('reset', $_POST)) {
+	// 	// Drop old table...
+	// 	echo "<br> dropping table <br>";
+	// 	executePlainSQL("Drop table tab1");
+  //
+	// 	// Create new table...
+	// 	echo "<br> creating new table <br>";
+	// 	executePlainSQL("create table tab1 (nid number, name varchar2(30), primary key (nid))");
+	// 	OCICommit($db_conn);
+	//  } else
 		if (array_key_exists('vieworderssubmit', $_GET)) {
       $result = executePlainSQL("select * from TakeoutOrder where driverID= '" .$_GET['driverID'] . "' and deliveryTime = null");
       printResult($result);

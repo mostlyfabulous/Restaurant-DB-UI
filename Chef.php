@@ -2,11 +2,6 @@
 <?php include 'Utility.php'; ?>
 <h>Customer PHP table</h>
 <a href="index.php">Index page</a>
-<p>If you wish to reset the table, press the reset button. If this is the first time you're running this page, you MUST use reset</p>
-
-<form method="POST" action="Chef.php">
-<p><input type="submit" value="Reset" name="reset"></p>
-</form>
 
 <p>Select MenuItems by Branch ID below:</p>
   <!-- <form method="GET" action="Chef.php">
@@ -51,24 +46,23 @@ get the values-->
     <input type="text" name="menuItem" size="18" placeholder="Menu Item to remove">
 <!--define two variables to pass the value-->
 <input type="submit" value="remove menu item from order" name="updatesubmit">
-<input type="submit" value="run hardcoded queries" name="dostuff"></p>
 </form> <br>
 
 <?php
 
 // Connect Oracle...
 if ($db_conn) {
-	if (array_key_exists('reset', $_POST)) {
-		// Drop old table...
-		echo "<br> dropping table <br>";
-		executePlainSQL("Drop table ORDERHAS");
-
-		// Create new table...
-		echo "<br> creating new table <br>";
-		executePlainSQL("create table ORDERHAS (ORDERID CHAR(30), MENUITEMID CHAR(30), primary key (ORDERID, MENUITEMID))");
-		OCICommit($db_conn);
-
-	} else
+	// if (array_key_exists('reset', $_POST)) {
+	// 	// Drop old table...
+	// 	echo "<br> dropping table <br>";
+	// 	executePlainSQL("Drop table ORDERHAS");
+  //
+	// 	// Create new table...
+	// 	echo "<br> creating new table <br>";
+	// 	executePlainSQL("create table ORDERHAS (ORDERID CHAR(30), MENUITEMID CHAR(30), primary key (ORDERID, MENUITEMID))");
+	// 	OCICommit($db_conn);
+  //
+	// } else
 		if (array_key_exists('listsubmit', $_GET)) {
 			//Getting the values from user and insert data into the table
 			$tuple = array (
@@ -99,32 +93,33 @@ if ($db_conn) {
 				executeBoundSQL("delete from ORDERHAS where ORDERID='" . $_POST['orderID'] . "'and MENUITEMID='" . $_POST['menuItem'] . "'", $alltuples);
         // delete from ORDERHAS where ORDERID='O000001' and MENUITEMID='MI001';
 				OCICommit($db_conn);
-			} else
-				if (array_key_exists('dostuff', $_POST)) {
-					// Insert data into table...
-					// executePlainSQL("insert into Orders values (10, 'Frank')");
-					// Inserting data into table using bound variables
-					$list1 = array (
-						":bind1" => 'O000001',
-						":bind2" => 'MI001',
-            ":bind3" => 'B1234'
-					);
-					$list2 = array (
-						":bind1" => 'O000001',
-						":bind2" => 'MI002',
-            ":bind3" => 'B1234'
-					);
-					$allrows = array (
-						$list1,
-						$list2
-					);
-					executeBoundSQL("insert into OrderHas values (:bind1, :bind2, :bind3)", $allrows); //the function takes a list of lists
-					// Update data...
-					//executePlainSQL("update tab1 set nid=10 where nid=2");
-					// Delete data...
-					//executePlainSQL("delete from tab1 where nid=1");
-					OCICommit($db_conn);
-				}
+			}
+      // else
+			// 	if (array_key_exists('dostuff', $_POST)) {
+			// 		// Insert data into table...
+			// 		// executePlainSQL("insert into Orders values (10, 'Frank')");
+			// 		// Inserting data into table using bound variables
+			// 		$list1 = array (
+			// 			":bind1" => 'O000001',
+			// 			":bind2" => 'MI001',
+      //       ":bind3" => 'B1234'
+			// 		);
+			// 		$list2 = array (
+			// 			":bind1" => 'O000001',
+			// 			":bind2" => 'MI002',
+      //       ":bind3" => 'B1234'
+			// 		);
+			// 		$allrows = array (
+			// 			$list1,
+			// 			$list2
+			// 		);
+			// 		executeBoundSQL("insert into OrderHas values (:bind1, :bind2, :bind3)", $allrows); //the function takes a list of lists
+			// 		// Update data...
+			// 		//executePlainSQL("update tab1 set nid=10 where nid=2");
+			// 		// Delete data...
+			// 		//executePlainSQL("delete from tab1 where nid=1");
+			// 		OCICommit($db_conn);
+			// 	}
 
 	if ($_POST && $success) {
 		//POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
