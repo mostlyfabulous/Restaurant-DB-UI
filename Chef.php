@@ -38,14 +38,16 @@ if ($db_conn && array_key_exists('selectbid', $_GET)) {
 <!-- create a form to pass the values. See below for how to
 get the values-->
 
-<p> TODO: Update the order by using a query </p>
-<form method="POST" action="Chef.php">
+<p> TODO: Update the ingredient quantity to reflect the amount used </p>
+<form method="GET" action="Chef.php">
 <!--refresh page when submit-->
 
-<p> <input type="text" name="orderID" size="18" placeholder="Order ID">
-    <input type="text" name="menuItem" size="18" placeholder="Menu Item to remove">
+<p> <input type="text" name="ingredientName" size="18" placeholder="Ingredient Name">
+    <input type="text" name="lotNumber" size="18" placeholder="Lot Number">
+    <input type="text" name="branchID" size="18" placeholder="Branch ID">
+    <input type="text" name="quantity" size="18" placeholder="Quantity Used">
 <!--define two variables to pass the value-->
-<input type="submit" value="remove menu item from order" name="updatesubmit">
+<input type="submit" value="Update ingredient quantity" name="updatesubmit">
 </form> <br>
 
 <?php
@@ -72,6 +74,7 @@ if ($db_conn) {
 			$alltuples = array (
 				$tuple
 			);
+      echo $_GET['insMenuItemID'];
       $result = executePlainSQL("select * from Contains
         inner join MenuItem on Contains.MenuItemID = MenuItem.MenuItemID and Contains.branchID = MenuItem.branchID
         where Contains.MenuItemID='" . $_GET['insMenuItemID'] . "'and Contains.branchID='" . $_GET['insBranchID'] . "'");
@@ -81,18 +84,40 @@ if ($db_conn) {
 
         printIList($result);
 		} else
-			if (array_key_exists('updatesubmit', $_POST)) {
-				// delete tuple using data from user
-				$tuple = array (
-					":bind1" => $_POST['orderID'],
-					":bind2" => $_POST['menuItem']
-				);
-				$alltuples = array (
-					$tuple
-				);
-				executeBoundSQL("delete from ORDERHAS where ORDERID='" . $_POST['orderID'] . "'and MENUITEMID='" . $_POST['menuItem'] . "'", $alltuples);
+			if (array_key_exists('updatesubmit', $_GET)) {
+        echo "here now";
+        echo  $_GET['quantity'];
+        echo $_GET['ingredientName'];
+        echo  $_GET['branchID'];
+        echo $_GET['lotNumber'];
+        executePlainSQL("update IngredientsInStock
+        set quantityLeft = quantityLeft - '" . $_GET['quantity'] . "'
+        where ingredientName = '" . $_GET['ingredientName'] . "' and
+        branchID = '" . $_GET['branchID'] . "' and
+        lotNumber = '" . $_GET['lotNumber'] . "'");
+        // executePlainSQL("update IngredientsInStock
+        // set quantityLeft = quantityLeft - 1
+        // where ingredientName = 'Russet Potato' and
+        // branchID = 'B1234' and
+        // lotNumber = '60'");
         // delete from ORDERHAS where ORDERID='O000001' and MENUITEMID='MI001';
 				OCICommit($db_conn);
+        $result = executePlainSQL("select * from IngredientsInStock
+        where ingredientName = '" . $_GET['ingredientName'] . "' and
+        branchID = '" . $_GET['branchID'] . "' and
+        lotNumber = '" . $_GET['lotNumber'] . "'");
+        // $result = executePlainSQL("select * from IngredientsInStock where ingredientName = 'Russet Potato'
+        // and branchID = 'B1234' and lotNumber = '60'");
+        printUpdateIList($result);
+
+        // select * from IngredientsInStock where ingredientName = 'Russet Potato'
+        // and branchID = 'B1234' and lotNumber = '60'
+
+        // update IngredientsInStock
+        // set quantityLeft = quantityLeft - 1
+        // where ingredientName = 'Russet Potato' and
+        // branchID = 'B1234' and
+        // lotNumber = '60'
 			}
       // else
 			// 	if (array_key_exists('dostuff', $_POST)) {

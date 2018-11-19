@@ -229,7 +229,8 @@ CREATE TABLE IngredientsInStock(
 	PRIMARY KEY (ingredientName, lotNumber, branchID),
 	FOREIGN KEY (ingredientName) REFERENCES Ingredients
 		ON DELETE CASCADE,
-	FOREIGN KEY (managerID) REFERENCES Manager
+	FOREIGN KEY (managerID) REFERENCES Manager,
+	CHECK (quantityLeft >= 0)
 );
 
 CREATE TABLE Transfers (

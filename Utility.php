@@ -5,7 +5,7 @@
 
 $success = True; //keep track of errors so it redirects the page only if there are no errors
 // $db_conn = OCILogon("ora_p0w0b", "a59612168", "dbhost.ugrad.cs.ubc.ca:1522/ug");
-$db_conn = OCILogon("ora_p0w0b", "a59612168", "dbhost.ugrad.cs.ubc.ca:1522/ug");
+$db_conn = OCILogon("ora_u4b1b", "a46210167", "dbhost.ugrad.cs.ubc.ca:1522/ug");
 
 function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL command and executes it
 	//echo "<br>running ".$cmdstr."<br>";
@@ -193,6 +193,23 @@ function printIList($result) { //prints results from a select statement
 	echo "<tr><th>MenuItem Name</th><th>Ingredient Name</th><th>Quantity (in grams)</th></tr>";
 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 		echo  "<tr><td>" . $row["ITEMNAME"] . "</td><td>" . $row["INGREDIENTNAME"] . "</td><td>" . $row["QUANTITYINGRAMS"] . "</td></tr>"; //or just use "echo $row[0]";
+	}
+	echo "</table>";
+}
+
+function printUpdateIList($result) { //prints results from a select statement
+	echo "<table style='float: left'>";
+  echo "<caption>Updated Ingredient</caption>";
+	echo "<tr>
+		<th>BranchID</th>
+		<th>Ingredient Name</th>
+		<th>Lot Number</th>
+		<th>Quantity Left</th>
+		</tr>";
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo  "<tr><td>" . $row["BRANCHID"] . "</td><td>" . $row["INGREDIENTNAME"] . "</td>
+		<td>" . $row["LOTNUMBER"] . "</td><td>" . $row["QUANTITYLEFT"] . "</td>
+		</tr>"; //or just use "echo $row[0]";
 	}
 	echo "</table>";
 }
