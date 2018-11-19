@@ -49,9 +49,7 @@ get the values-->
 
 <p>Insert branchID to see popular items by branch:</p>
 <form method="GET" action="Customer.php">
-<!--refresh page when submit-->
 <p> <input type="text" name="viewBranchID" size="10"placeholder="Branch ID">
-<!--define 3 variables to pass the value-->
 <input type="submit" value="insert" name="viewpopitem"></p>
 </form>
 
@@ -82,9 +80,13 @@ if ($db_conn) {
     where OrderHas.branchID= '" .$_GET['viewBranchID'] . "'
     GROUP BY MenuItem.menuItemID, MenuItem.itemName, MenuItem.branchID
     ORDER BY COUNT(MenuItem.menuItemID) DESC";
+
     $result = executePlainSQL($sqlquery);
-    OCICommit($db_conn);
+    $result = executePlainSQL("
+    SELECT * FROM POP_ITEM
+    ");
     printpop($result);
+    OCICommit($db_conn);
 	} else
 		if (array_key_exists('insertsubmit', $_POST)) {
 			//Getting the values from user and insert data into the table
@@ -102,14 +104,9 @@ if ($db_conn) {
 		} else
 			if (array_key_exists('updatesubmit', $_POST)) {
 				// delete tuple using data from user
-				$tuple = array (
-					":bind1" => $_POST['orderID'],
-					":bind2" => $_POST['menuItem']
-				);
-				$alltuples = array (
-					$tuple
-				);
-				executeBoundSQL("delete from ORDERHAS where ORDERID='" . $_POST['orderID'] . "'and MENUITEMID='" . $_POST['menuItem'] . "'", $alltuples);
+					// ":bind1" => $_POST['orderID'],
+					// ":bind2" => $_POST['menuItem']
+				executePlainSQL("delete from ORDERHAS where ORDERID='" . $_POST['orderID'] . "'and MENUITEMID='" . $_POST['menuItem'] . "'");
         // delete from ORDERHAS where ORDERID='O000001' and MENUITEMID='MI001';
 				OCICommit($db_conn);
 			} else
