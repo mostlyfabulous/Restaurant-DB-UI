@@ -225,7 +225,7 @@ function printpop($result) { //prints results from a select statement
 		echo "<tr><td>" . $row["MENUITEMID"] . "</td><td>" . $row["ITEMNAME"] . "</td>
 			<td>" . $row["BRANCHID"] . "</td><td>" . $row["COUNT"] . "</td>
 			</tr>"; //or just use "echo $row[0]"
-		echo "<tr><td>" . $row["BRANCHID"] . "</td><td>" . $row["COUNT(*)"] . "</td></tr>"; //or just use "echo $row[0]"
+		// echo "<tr><td>" . $row["BRANCHID"] . "</td><td>" . $row["COUNT(*)"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
 }
