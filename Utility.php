@@ -29,6 +29,7 @@ function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL com
 	} else {
 
 	}
+	// printIList($statement);
 	return $statement;
 
 }
@@ -134,11 +135,14 @@ function dropdownBranches($result) { //adds results from a select statement
 }
 
 function printIngredientsByBranch($result, $bid) { //prints results from a select statement
+	echo "HELLO";
 	echo "<table>";
 	echo "<caption>Ingredients at Branch: " . $bid . "</caption>";
 	echo "<tr><th>Ingredient Name</th><th>Quantity Left</th><th>Expiry Date</th></tr>";
 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "HELLO";
 		echo "<tr><td>" . $row["INGREDIENTNAME"] . "</td><td>" . $row["QUANTITYLEFT"] . "</td><td>" . $row["EXPIRYDATE"] . "</td></tr>"; //or just use "echo $row[0]"
+		echo $row[0];
 	}
 	echo "</table>";
 }
@@ -187,12 +191,27 @@ function printCountIngsByExpDate($result) { //prints results from a select state
 	echo "</table>";
 }
 
+function printIngredientOrders($result) { //prints results from a select statement
+	echo "<table>";
+  echo "<caption>Ingredient Orders:</caption>";
+	echo "<tr><th>Restock ID</th><th>Manager ID</th><th>Supplier ID</th>
+	<th>Ingredient Name</th><th>Quantity</th></tr>";
+
+	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		echo "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td>
+		<td>" . $row[2] . "</td><td>" . $row[3] . "</td>
+		<td>" . $row[4] . "</td></tr>"; //or just use "echo $row[0]"
+	}
+	echo "</table>";
+}
+
 function printIList($result) { //prints results from a select statement
 	echo "<table style='float: left'>";
   echo "<caption>Ingredients List for Menuitem:</caption>";
 	echo "<tr><th>MenuItem Name</th><th>Ingredient Name</th><th>Quantity (in grams)</th></tr>";
 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
 		echo  "<tr><td>" . $row["ITEMNAME"] . "</td><td>" . $row["INGREDIENTNAME"] . "</td><td>" . $row["QUANTITYINGRAMS"] . "</td></tr>"; //or just use "echo $row[0]";
+		// echo $row[0] . $row[1] . $row[2];
 	}
 	echo "</table>";
 }

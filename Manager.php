@@ -15,7 +15,19 @@
 <form method="GET" action="Manager.php">
   Get Ingredients Expirying on a Given Date:
 <p> <input type="text" name="selDate" size="24"placeholder="Expiry Date: YYYY-MM-DD">
-    <input type="submit" value="select" name="selectexpdate"></p>
+    <input type="submit" value="find" name="selectexpdate"></p>
+</form>
+</form>
+// TODO: fix this
+<br><br>
+<form method="GET" action="Manager.php">
+  Add Ingredients for Restocking to ingredientorders and places:
+<p> <input type="text" name="rid" size="12"placeholder="Restock ID">
+    <input type="text" name="mid" size="12"placeholder="Manager ID">
+    <input type="text" name="iName" size="20"placeholder=" Ingredient Name">
+    <input type="text" name="qty" size="12"placeholder="Quantity">
+    <input type="text" name="sid" size="12"placeholder="Supplier ID">
+    <input type="submit" value="create" name="insreorder"></p>
 </form>
 <br>
 <?php
@@ -26,12 +38,15 @@
     }
     echo "<br>";
     if ($db_conn && array_key_exists('selectbybid', $_GET)) {
-      //Getting the ingredientsinstock at a branch
-      $statement1 = "
-      SELECT * FROM ingredientsinstock
-      WHERE branchid='" . $_GET['selBID'] . "'";
-      $result1 = executePlainSQL($statement1);
+      // Getting the ingredientsinstock at a branch
+      // $statement1 = "
+      // SELECT * FROM ingredientsinstock
+      // WHERE branchid='" . $_GET['selBID'] . "'";
+      echo "hello";
+      $result1 = executePlainSQL("SELECT * FROM ingredientsinstock where Branchid='B1234'");
+      $result2 = executePlainSQL("SELECT * FROM ingredientsinstock where Branchid='B1234'");
       printIngredientsByBranch($result1, $_GET['selBID']);
+      printIngredientsByBranch($result2, $_GET['selBID']);
 
       echo "<br>";
     }
@@ -104,18 +119,18 @@
 
 // Connect Oracle...
 if ($db_conn) {
-  //
-	// if (array_key_exists('reset', $_POST)) {
-	// 	// Drop old table...
-	// 	echo "<br> dropping table <br>";
-	// 	executePlainSQL("Drop table ORDERHAS");
-  //
-	// 	// Create new table...
-	// 	echo "<br> creating new table <br>";
-	// 	executePlainSQL("create table ORDERHAS (ORDERID CHAR(30), MENUITEMID CHAR(30), primary key (ORDERID, MENUITEMID))");
-	// 	OCICommit($db_conn);
-  //
-	// } else
+
+	if (array_key_exists('reset', $_POST)) {
+		// Drop old table...
+		echo "<br> dropping table <br>";
+		executePlainSQL("Drop table ORDERHAS");
+
+		// Create new table...
+		echo "<br> creating new table <br>";
+		executePlainSQL("create table ORDERHAS (ORDERID CHAR(30), MENUITEMID CHAR(30), primary key (ORDERID, MENUITEMID))");
+		OCICommit($db_conn);
+
+	} else
     if (array_key_exists('updatesubmit', $_POST)) {
 				// Update tuple using data from user
 				$tuple = array (
@@ -128,39 +143,77 @@ if ($db_conn) {
 				executeBoundSQL("update tab1 set name=:bind2 where name=:bind1", $alltuples);
 				OCICommit($db_conn);
 
-	}
-  // else
-	// 	if (array_key_exists('dostuff', $_POST)) {
-	// 		// Insert data into table...
-	// 		// executePlainSQL("insert into Orders values (10, 'Frank')");
-	// 		// Inserting data into table using bound variables
-	// 		$list1 = array (
-	// 			":bind1" => 'O0001',
-	// 			":bind2" => 'Grass'
-	// 		);
-	// 		$list2 = array (
-	// 			":bind1" => 'O0002',
-	// 			":bind2" => 'Water'
-	// 		);
-	// 		$allrows = array (
-	// 			$list1,
-	// 			$list2
-	// 		);
-	// 		executeBoundSQL("insert into OrderHas values (:bind1, :bind2)", $allrows); //the function takes a list of lists
-	// 		// Update data...
-	// 		//executePlainSQL("update tab1 set nid=10 where nid=2");
-	// 		// Delete data...
-	// 		//executePlainSQL("delete from tab1 where nid=1");
-	// 		OCICommit($db_conn);
-	// 	}
+	} else
+		if (array_key_exists('dostuff', $_POST)) {
+			// Insert data into table...
+			// executePlainSQL("insert into Orders values (10, 'Frank')");
+			// Inserting data into table using bound variables
+			$list1 = array (
+				":bind1" => 'O0001',
+				":bind2" => 'Grass'
+			);
+			$list2 = array (
+				":bind1" => 'O0002',
+				":bind2" => 'Water'
+			);
+			$allrows = array (
+				$list1,
+				$list2
+			);
+			executeBoundSQL("insert into OrderHas values (:bind1, :bind2)", $allrows); //the function takes a list of lists
+			// Update data...
+			//executePlainSQL("update tab1 set nid=10 where nid=2");
+			// Delete data...
+			//executePlainSQL("delete from tab1 where nid=1");
+			OCICommit($db_conn);
+		}
+    else if ($db_conn && array_key_exists('insreorder', $_GET)) {
+      // INSERT ALL
+      // INTO ingredientorders (restockID, managerID, ingredientName, quantity)
+      // VALUES (RID, MID, iName, qty)
+      // INTO places (restockID, supplierID)
+      // VALUES (RID, SID)
+      // WITH names AS (
+      // SELECT 'R1240' RID, 'M4621' MID, 'Milk' iName, 50 qty,
+      // 'S312' SID
+      // FROM dual)
+      // SELECT * FROM names
+      executePlainSQL("
+      INSERT ALL
+      INTO ingredientorders (restockID, managerID, ingredientName, quantity)
+      VALUES (RID, MID, iName, qty)
+      INTO places (restockID, supplierID)
+      VALUES (RID, SID)
+      WITH names AS (
+      SELECT '" . $_GET[rid] ."' RID, '" . $_GET[mid] . "' MID, '"
+                . $_GET[iName] ."' iName, " . $_GET[qty] . " qty, '"
+                . $_GET[sid] . "' SID
+      FROM dual)
+      SELECT * FROM names
+        ");
+      OCICommit($db_conn);
+      // $result = executePlainSQL("
+      // SELECT * FROM ingredientorders I, places P
+      // SELECT I.restockID, I.managerID, P.supplierID, I.ingredientName, I.quantity
+      // FROM ingredientorders I, places P
+      // WHERE I.restockID = P.restockID
+      // ");
+      // printIngredientOrders($result);
+    }
 
 	if ($_POST && $success) {
 		//POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
 		header("location: Manager.php");
 	} else {
 		// Select data...
-		// $result = executePlainSQL("select * from ORDERHAS");
-		// printResult($result);
+		$result = executePlainSQL("select * from ORDERHAS");
+		printResult($result);
+    $result = executePlainSQL("
+    SELECT I.restockID, I.managerID, P.supplierID, I.ingredientName, I.quantity
+    FROM ingredientorders I, places P
+    WHERE I.restockID = P.restockID
+    ");
+    printIngredientOrders($result);
 	}
 	//Commit to save changes...
 	OCILogoff($db_conn);
