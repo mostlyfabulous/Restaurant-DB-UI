@@ -4,7 +4,8 @@ address varchar(40),
 city varchar(20),
 province char(2),
 postalCode varchar(6),
-PRIMARY KEY (phoneNumber));
+PRIMARY KEY (phoneNumber),
+CHECK (phoneNumber >= 0));
 grant select on Customer to public;
 
 create table Restaurant(
@@ -84,7 +85,8 @@ CREATE TABLE TakeoutOrder(
         ON DELETE CASCADE,
     FOREIGN KEY (branchID) REFERENCES Restaurant,
     FOREIGN KEY (phoneNumber) REFERENCES Customer,
-    FOREIGN KEY (driverID) REFERENCES DeliveryDriver);
+    FOREIGN KEY (driverID) REFERENCES DeliveryDriver,
+		CHECK (phoneNumber >= 0));
 
 CREATE TABLE PickupOrder(
     orderID CHAR(30),
@@ -95,7 +97,8 @@ CREATE TABLE PickupOrder(
     FOREIGN KEY (orderID) REFERENCES Orders
         ON DELETE CASCADE,
     FOREIGN KEY (branchID) REFERENCES Restaurant,
-    FOREIGN KEY (phoneNumber) REFERENCES Customer);
+    FOREIGN KEY (phoneNumber) REFERENCES Customer,
+		CHECK (phoneNumber >= 0));
 
 CREATE TABLE OrderHas(
     orderID CHAR(30),
@@ -113,14 +116,15 @@ commit ;
 
 CREATE TABLE Location (
 	phoneNumber INTEGER,
-	PRIMARY KEY (phoneNumber));
+	PRIMARY KEY (phoneNumber),
+	CHECK (phoneNumber >= 0));
 	commit;
 
 CREATE TABLE Disposal (
 	phoneNumber INTEGER,
 	PRIMARY KEY (phoneNumber),
-	FOREIGN KEY (phoneNumber) REFERENCES Location
-);
+	FOREIGN KEY (phoneNumber) REFERENCES Location,
+	CHECK (phoneNumber >= 0));
 	commit;
 
 CREATE TABLE HomelessShelter (
@@ -130,7 +134,8 @@ CREATE TABLE HomelessShelter (
 	province char(2),
 	postalCode varchar(6),
 	PRIMARY KEY (phoneNumber),
-	FOREIGN KEY (phoneNumber) REFERENCES Location);
+	FOREIGN KEY (phoneNumber) REFERENCES Location,
+	CHECK (phoneNumber >= 0));
 	commit;
 
 
@@ -161,8 +166,7 @@ CREATE TABLE IngredientsInStock(
 	FOREIGN KEY (ingredientName) REFERENCES Ingredients
 		ON DELETE CASCADE,
 	FOREIGN KEY (managerID) REFERENCES Manager,
-	CHECK (quantityLeft >= 0)
-);
+	CHECK (quantityLeft >= 0));
 
 CREATE TABLE Transfers (
 	phoneNumber INTEGER,
@@ -174,8 +178,8 @@ CREATE TABLE Transfers (
 	FOREIGN KEY (phoneNumber) REFERENCES Location,
 	FOREIGN KEY (ingredientName,lotNumber,branchID) REFERENCES IngredientsInStock
 		ON DELETE CASCADE,
-	FOREIGN KEY (managerID) REFERENCES Manager
-);
+	FOREIGN KEY (managerID) REFERENCES Manager,
+	CHECK (phoneNumber >= 0));
 	commit;
 
 CREATE TABLE Contains(
