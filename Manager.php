@@ -6,7 +6,6 @@
 <p><input type="submit" value="Reset" name="reset"></p>
 </form> -->
 
-<p> TODO: DELETE Ingredient when Manager transfers Ingredient to Place </p>
 <form method="GET" action="Manager.php">
   Retrieve Ingredients in Stock at a Branch ID:
 <p> <input type="text" name="selBID" size="10"placeholder="Branch ID">
@@ -18,7 +17,6 @@
     <input type="submit" value="find" name="selectexpdate"></p>
 </form>
 </form>
-// TODO: fix this
 <br><br>
 <form method="GET" action="Manager.php">
   Add Ingredients for Restocking to ingredientorders and places:
@@ -39,15 +37,11 @@
     echo "<br>";
     if ($db_conn && array_key_exists('selectbybid', $_GET)) {
       // Getting the ingredientsinstock at a branch
-      // $statement1 = "
-      // SELECT * FROM ingredientsinstock
-      // WHERE branchid='" . $_GET['selBID'] . "'";
-      echo "hello";
-      $result1 = executePlainSQL("SELECT * FROM ingredientsinstock where Branchid='B1234'");
-      $result2 = executePlainSQL("SELECT * FROM ingredientsinstock where Branchid='B1234'");
+      $statement1 = "
+      SELECT * FROM ingredientsinstock
+      WHERE branchid='" . $_GET['selBID'] . "'";
+      $result1 = executePlainSQL($statement1);
       printIngredientsByBranch($result1, $_GET['selBID']);
-      printIngredientsByBranch($result2, $_GET['selBID']);
-
       echo "<br>";
     }
 ?>
