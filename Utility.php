@@ -4,32 +4,42 @@
 <?php
 
 $success = True; //keep track of errors so it redirects the page only if there are no errors
+$db_conn = pg_connect("host=localhost port=5432 dbname=Andrew user=Andrew" ) or die("Could not connect");
 // $db_conn = OCILogon("ora_p0w0b", "a59612168", "dbhost.ugrad.cs.ubc.ca:1522/ug");
-$db_conn = OCILogon("ora_p0w0b", "a59612168", "dbhost.ugrad.cs.ubc.ca:1522/ug");
+$stat = pg_connection_status($db_conn);
+  if ($stat === PGSQL_CONNECTION_OK) {
+      echo '<h>Connection status ok</h><br><br>';
+  } else {
+      echo '<h>Connection status bad</h><br><br>';
+  }
 
 function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL command and executes it
 	//echo "<br>running ".$cmdstr."<br>";
 	global $db_conn, $success;
-	$statement = OCIParse($db_conn, $cmdstr); //There is a set of comments at the end of the file that describe some of the OCI specific functions and how they work
-
-	if (!$statement) {
-		echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
-		$e = OCI_Error($db_conn); // For OCIParse errors pass the
-		// connection handle
-		echo htmlentities($e['message']);
-		$success = False;
-	}
-
-	$r = OCIExecute($statement, OCI_DEFAULT); //returns true or false
+	// $statement = OCIParse($db_conn, $cmdstr); //There is a set of comments at the end of the file that describe some of the OCI specific functions and how they work
+	// pg_prepare($statement, $cmdstr);
+	// if (!$statement) {
+	// 	echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
+	// 	// $e = OCI_Error($db_conn); // For OCIParse errors pass the
+	// 	$e = pg_last_error($db_conn);
+	// 	// connection handle
+	// 	echo htmlentities($e);
+	// 	// echo htmlentities($e['message']);
+	// 	$success = False;
+	// }
+	$r = pg_query($db_conn, $cmdstr);
+	// $r = OCIExecute($statement, OCI_DEFAULT); //returns true or false
 	if (!$r) {
 		echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
-		$e = oci_error($statement); // For OCIExecute errors pass the statementhandle
-		echo htmlentities($e['message']);
+		// $e = oci_error($statement); // For OCIExecute errors pass the statementhandle
+		$e = pg_last_error($db_conn);
+		echo htmlentities($e);
+		// echo htmlentities($e['message']);
 		$success = False;
 	} else {
 
 	}
-	return $statement;
+	return $r;
 
 }
 
@@ -78,7 +88,7 @@ function printResult($result) { //prints results from a select statement
   echo "<caption>Got data from table OrderHas:</caption>";
 	echo "<tr><th>OrderID</th><th>MenuItemID</th></tr>";
 
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	while ($row = pg_fetch_row($result)) {
 		echo "<tr><td>" . $row["ORDERID"] . "</td><td>" . $row["MENUITEMID"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
@@ -91,7 +101,7 @@ function printOrder($result, $orderid) { //prints results from a select statemen
 				for OrderID: " . $orderid . "</caption>";
 	echo "<tr><th>MenuItemID</th><th>ItemName</th></tr>";
 
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	while ($row = pg_fetch_row($result)) {
 		// <td>" . $row["ORDERID"] . "</td>
 		echo "<tr>
 							<td>" . $row["MENUITEMID"] . "</td>
@@ -107,7 +117,7 @@ function printMenuItems($result) { //prints results from a select statement
   echo "<caption>Got data from table MenuItem:</caption>";
 	echo "<tr><th>MenuItemID</th><th>Name</th></tr>";
 
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	while ($row = pg_fetch_row($result)) {
 		echo "<tr><td>" . $row["MENUITEMID"] . "</td><td>" . $row["ITEMNAME"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
@@ -118,7 +128,7 @@ function printBranches($result) { //prints results from a select statement
 	echo "<table>";
   echo "<caption>All Branches:</caption>";
 	echo "<tr><th>Branch ID</th><th>Address</th><th>City</th></tr>";
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	while ($row = pg_fetch_row($result)) {
 		echo "<tr><td>" . $row["BRANCHID"] . "</td><td>" . $row["ADDRESS"] . "</td><td>" . $row["CITY"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
@@ -127,7 +137,7 @@ function printBranches($result) { //prints results from a select statement
 function dropdownBranches($result) { //adds results from a select statement
 	echo "<br><select name='selectbid'>";
 	echo "<option value='0'>Please Select a Branch</option>";
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	while ($row = pg_fetch_row($result)) {
 		echo "<option value =" . $row['BRANCHID'] . ">" . $row['BRANCHID'] . "</option>";
 	}
 	echo "</select><br>";
@@ -137,7 +147,7 @@ function printIngredientsByBranch($result, $bid) { //prints results from a selec
 	echo "<table>";
 	echo "<caption>Ingredients at Branch: " . $bid . "</caption>";
 	echo "<tr><th>Ingredient Name</th><th>Quantity Left</th><th>Expiry Date</th></tr>";
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	while ($row = pg_fetch_row($result)) {
 		echo "<tr><td>" . $row["INGREDIENTNAME"] . "</td><td>" . $row["QUANTITYLEFT"] . "</td><td>" . $row["EXPIRYDATE"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
@@ -147,7 +157,7 @@ function printIngredientsExpiring($result, $bid) { //prints results from a selec
 	echo "<table>";
 	echo "<caption>Ingredients at Expiring on: " . $bid . "</caption>";
 	echo "<tr><th>Ingredient Name</th><th>Quantity Left</th><th>Expiry Date</th></tr>";
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	while ($row = pg_fetch_row($result)) {
 		echo "<tr><td>" . $row["INGREDIENTNAME"] . "</td><td>" . $row["QUANTITYLEFT"] . "</td><td>" . $row["EXPIRYDATE"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
@@ -158,7 +168,7 @@ function printCountEmployeesByBID($result) { //prints results from a select stat
   echo "<caption>Total Employees at a Branch:</caption>";
 	echo "<tr><th>Branch ID</th><th>Number of Employees</th></tr>";
 
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	while ($row = pg_fetch_row($result)) {
 		echo "<tr><td>" . $row["BRANCHID"] . "</td><td>" . $row["COUNT(*)"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
@@ -170,7 +180,7 @@ function printDivisionByBID($result, $bid) { //prints results from a select stat
 	 at a given Branch: " . $bid . "</caption>";
 	echo "<tr><th>Order ID</th></tr>";
 
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	while ($row = pg_fetch_row($result)) {
 		echo "<tr><td>" . $row["ORDERID"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
@@ -181,7 +191,7 @@ function printCountIngsByExpDate($result) { //prints results from a select state
   echo "<caption>Number of Ingredients Expirying by Date:</caption>";
 	echo "<tr><th>Expiry Date</th><th>Number of Ingredients</th></tr>";
 
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	while ($row = pg_fetch_row($result)) {
 		echo "<tr><td>" . $row["EXPIRYDATE"] . "</td><td>" . $row["COUNT(*)"] . "</td></tr>"; //or just use "echo $row[0]"
 	}
 	echo "</table>";
@@ -194,7 +204,7 @@ function printIList($result) { //prints results from a select statement
 	<th>MenuItem ID</th>
 	<th>Item Name</th>
 	<th>Chef ID</th></tr>";
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	while ($row = pg_fetch_row($result)) {
 		echo  "<tr><td>"
 		 . $row["MENUITEMID"] . "</td><td>"
 		 . $row["ITEMNAME"] . "</td><td>"
@@ -213,7 +223,7 @@ function printUpdateIList($result) { //prints results from a select statement
 		<th>Lot Number</th>
 		<th>Quantity Left</th>
 		</tr>";
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	while ($row = pg_fetch_row($result)) {
 		echo  "<tr><td>" . $row["BRANCHID"] . "</td><td>" . $row["INGREDIENTNAME"] . "</td>
 		<td>" . $row["LOTNUMBER"] . "</td><td>" . $row["QUANTITYLEFT"] . "</td>
 		</tr>"; //or just use "echo $row[0]";
@@ -229,13 +239,13 @@ function printDelivery($result) { //prints results from a select statement
       <th>OrderID</th>  <th>Delivery Time</th>
       <th>Driver ID</th>   <th>BranchID</th>
       </tr>";
-			while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+			while ($row = pg_fetch_row($result)) {
 		echo "<tr><td>"
-        . $row["ORDERID"] . "</td><td>"
-        . $row["DELIVERYTIME"] . "</td><td>"
-        . $row["DRIVERID"] . "</td><td>"
-       . $row["BRANCHID"]
-    . "</td></tr>"; //or just use "echo $row[0]"
+        . $row[0] . "</td><td>"
+        . $row[1] . "</td><td>"
+        . $row[6] . "</td><td>"
+       	. $row[8]
+    . "</td></tr>";
 	}
 echo "</table>";
 }
@@ -248,11 +258,15 @@ function printToDeliver($result) { //prints results from a select statement
 	<th>DriverID</th> <th>OrderID</th><th>Address</th> <th>City</th>
 	<th>Postal Code</th><th>Phone Number</th>
 	</tr>";
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-	echo "<tr><td>" . $row["DRIVERID"] . "</td><td>" . $row["ORDERID"] . "</td>
-		<td>" . $row["ADDRESS"] . "</td><td>" . $row["CITY"] . "</td>
-		<td>" . $row["POSTALCODE"] . "</td><td>" . $row["PHONENUMBER"] . "</td>
-		</tr>"; //or just use "echo $row[0]"
+	while ($row = pg_fetch_row($result)) {
+	// echo "<tr><td>" . $row["DRIVERID"] . "</td><td>" . $row["ORDERID"] . "</td>
+	// 	<td>" . $row["ADDRESS"] . "</td><td>" . $row["CITY"] . "</td>
+	// 	<td>" . $row["POSTALCODE"] . "</td><td>" . $row["PHONENUMBER"] . "</td>
+	// 	</tr>";
+	echo "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td>
+		<td>" . $row[2] . "</td><td>" . $row[3] . "</td>
+		<td>" . $row[4] . "</td><td>" . $row[5] . "</td>
+		</tr>";
 	}
 echo "</table>";
 }
@@ -263,7 +277,7 @@ function printpop($result, $bid) { //prints results from a select statement
 	echo "<tr>
     <th>MenuItemID</th> <th>ItemName</th><th>BranchID</th> <th>Count</th>
 		</tr>";
-		while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+		while ($row = pg_fetch_row($result)) {
 		echo "<tr><td>" . $row["MENUITEMID"] . "</td><td>" . $row["ITEMNAME"] . "</td>
 			<td>" . $row["BRANCHID"] . "</td><td>" . $row["COUNT"] . "</td>
 			</tr>"; //or just use "echo $row[0]"
@@ -278,7 +292,7 @@ function printIngredientOrders($result) { //prints results from a select stateme
 	echo "<tr><th>Restock ID</th><th>Manager ID</th><th>Supplier ID</th>
 	<th>Ingredient Name</th><th>Quantity</th></tr>";
 
-	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+	while ($row = pg_fetch_row($result)) {
 		echo "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td>
 		<td>" . $row[2] . "</td><td>" . $row[3] . "</td>
 		<td>" . $row[4] . "</td></tr>"; //or just use "echo $row[0]"
@@ -289,7 +303,7 @@ function printIngredientOrders($result) { //prints results from a select stateme
 // function dropdownBranches($result) { //adds results from a select statement
 // 	echo "<br><select name='selectbid'>";
 // 	echo "<option value='0'>Please Select a Branch</option>";
-// 	while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+// 	while ($row = pg_fetch_row($result)) {
 // 		echo "<option value =" . $row['BRANCHID'] . ">" . $row['BRANCHID'] . "</option>";
 // 		echo "</select><br>";
 // 	}
