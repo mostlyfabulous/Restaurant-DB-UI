@@ -239,12 +239,12 @@ function printDelivery($result) { //prints results from a select statement
       <th>OrderID</th>  <th>Delivery Time</th>
       <th>Driver ID</th>   <th>BranchID</th>
       </tr>";
-			while ($row = pg_fetch_row($result)) {
+			while ($row = pg_fetch_array($result)) {
 		echo "<tr><td>"
-        . $row[0] . "</td><td>"
-        . $row[1] . "</td><td>"
-        . $row[6] . "</td><td>"
-       	. $row[8]
+        . $row["orderid"] . "</td><td>"
+        . $row["deliverytime"] . "</td><td>"
+        . $row["driverid"] . "</td><td>"
+       	. $row["branchid"]
     . "</td></tr>";
 	}
 echo "</table>";
@@ -258,15 +258,15 @@ function printToDeliver($result) { //prints results from a select statement
 	<th>DriverID</th> <th>OrderID</th><th>Address</th> <th>City</th>
 	<th>Postal Code</th><th>Phone Number</th>
 	</tr>";
-	while ($row = pg_fetch_row($result)) {
-	// echo "<tr><td>" . $row["DRIVERID"] . "</td><td>" . $row["ORDERID"] . "</td>
-	// 	<td>" . $row["ADDRESS"] . "</td><td>" . $row["CITY"] . "</td>
-	// 	<td>" . $row["POSTALCODE"] . "</td><td>" . $row["PHONENUMBER"] . "</td>
-	// 	</tr>";
-	echo "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td>
-		<td>" . $row[2] . "</td><td>" . $row[3] . "</td>
-		<td>" . $row[4] . "</td><td>" . $row[5] . "</td>
+	while ($row = pg_fetch_array($result)) {
+	echo "<tr><td>" . $row["driverid"] . "</td><td>" . $row["orderid"] . "</td>
+		<td>" . $row["address"] . "</td><td>" . $row["city"] . "</td>
+		<td>" . $row["postalcode"] . "</td><td>" . $row["phonenumber"] . "</td>
 		</tr>";
+	// echo "<tr><td>" . $row[6] . "</td><td>" . $row[0] . "</td>
+	// 	<td>" . $row[2] . "</td><td>" . $row[3] . "</td>
+	// 	<td>" . $row[4] . "</td><td>" . $row[5] . "</td>
+	// 	</tr>";
 	}
 echo "</table>";
 }
