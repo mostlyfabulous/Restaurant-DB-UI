@@ -2,19 +2,11 @@
 
 Todo List:
 
-1) Determine if "Is IngredientsInStock also a weak entity then? I would suggest looking into that. Regardless, do keep in mind that entities can only be the weak entity to ONE other entity. It cannot have more than one parent."
-		We might be able to simplify Ingredients to just one table?
-		i) Maybe the manager just queries the ingredients and their stock levels/expiry dates.
-		ii) The manger then inserts ingredients into the IngredientsToOrder table and that would be what could be sent to the suppliers?
-		
-2) Use Assert statements when inserting tuples into IngredientsToOrder
-3) Make IngredientsInStock a big table (add more columns)
-4) Reform relation 'contains' from MenuItem to Ingredients
-5) Error handling for invalid inputs
-6) CRUD?
-7) Triggers for 
-
-
+1) Use Assert statements when inserting tuples into IngredientsToOrder
+2) Reform relation 'contains' from MenuItem to Ingredients
+3) Error handling for invalid inputs
+4) CRUD?
+5) Triggers?
 
 
 
