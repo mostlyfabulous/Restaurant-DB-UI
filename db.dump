@@ -1,0 +1,1158 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 10.5
+-- Dumped by pg_dump version 10.5
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: chef; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.chef (
+    chefid character(30) NOT NULL,
+    socialinsurancenumber character(9),
+    branchid character(30)
+);
+
+
+ALTER TABLE public.chef OWNER TO "Andrew";
+
+--
+-- Name: contains; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.contains (
+    menuitemid character(30) NOT NULL,
+    branchid character(30) NOT NULL,
+    ingredientname character(50) NOT NULL,
+    quantityingrams integer
+);
+
+
+ALTER TABLE public.contains OWNER TO "Andrew";
+
+--
+-- Name: customer; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.customer (
+    phonenumber character(10) NOT NULL,
+    address character varying(40),
+    city character varying(20),
+    province character(2),
+    postalcode character varying(6)
+);
+
+
+ALTER TABLE public.customer OWNER TO "Andrew";
+
+--
+-- Name: delivers; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.delivers (
+    branchid character(30) NOT NULL,
+    ingredientname character(50) NOT NULL,
+    lotnumber integer NOT NULL,
+    supplierid character(30),
+    deliverydate character(10)
+);
+
+
+ALTER TABLE public.delivers OWNER TO "Andrew";
+
+--
+-- Name: deliverydriver; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.deliverydriver (
+    driverid character(30) NOT NULL
+);
+
+
+ALTER TABLE public.deliverydriver OWNER TO "Andrew";
+
+--
+-- Name: disposal; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.disposal (
+    phonenumber character(10) NOT NULL
+);
+
+
+ALTER TABLE public.disposal OWNER TO "Andrew";
+
+--
+-- Name: employee; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.employee (
+    branchid character(30),
+    socialinsurancenumber character(9) NOT NULL
+);
+
+
+ALTER TABLE public.employee OWNER TO "Andrew";
+
+--
+-- Name: homelessshelter; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.homelessshelter (
+    phonenumber character(10) NOT NULL,
+    address character varying(40),
+    city character varying(20),
+    province character(2),
+    postalcode character varying(6)
+);
+
+
+ALTER TABLE public.homelessshelter OWNER TO "Andrew";
+
+--
+-- Name: ingredientorders; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.ingredientorders (
+    restockid character(30) NOT NULL,
+    managerid character(30),
+    ingredientname character(50),
+    quantity integer
+);
+
+
+ALTER TABLE public.ingredientorders OWNER TO "Andrew";
+
+--
+-- Name: ingredients; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.ingredients (
+    ingredientname character(50) NOT NULL,
+    supplierid character(30)
+);
+
+
+ALTER TABLE public.ingredients OWNER TO "Andrew";
+
+--
+-- Name: ingredientsinstock; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.ingredientsinstock (
+    branchid character(30) NOT NULL,
+    ingredientname character(50) NOT NULL,
+    lotnumber integer NOT NULL,
+    expirydate character(10),
+    quantityleft integer,
+    managerid character(30),
+    CONSTRAINT ingredientsinstock_quantityleft_check CHECK ((quantityleft >= 0))
+);
+
+
+ALTER TABLE public.ingredientsinstock OWNER TO "Andrew";
+
+--
+-- Name: location; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.location (
+    phonenumber character(10) NOT NULL
+);
+
+
+ALTER TABLE public.location OWNER TO "Andrew";
+
+--
+-- Name: manager; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.manager (
+    managerid character(30) NOT NULL,
+    socialinsurancenumber character(9),
+    branchid character(30)
+);
+
+
+ALTER TABLE public.manager OWNER TO "Andrew";
+
+--
+-- Name: menuitem; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.menuitem (
+    menuitemid character(30) NOT NULL,
+    itemname character(30) NOT NULL,
+    chefid character(30),
+    branchid character(30) NOT NULL
+);
+
+
+ALTER TABLE public.menuitem OWNER TO "Andrew";
+
+--
+-- Name: orderhas; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.orderhas (
+    orderid character(30) NOT NULL,
+    menuitemid character(30) NOT NULL,
+    branchid character(30) NOT NULL
+);
+
+
+ALTER TABLE public.orderhas OWNER TO "Andrew";
+
+--
+-- Name: orders; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.orders (
+    orderid character(30) NOT NULL
+);
+
+
+ALTER TABLE public.orders OWNER TO "Andrew";
+
+--
+-- Name: pickuporder; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.pickuporder (
+    orderid character(30) NOT NULL,
+    pickuptime character(10),
+    phonenumber character(10),
+    branchid character(30)
+);
+
+
+ALTER TABLE public.pickuporder OWNER TO "Andrew";
+
+--
+-- Name: places; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.places (
+    restockid character(30) NOT NULL,
+    supplierid character(30) NOT NULL
+);
+
+
+ALTER TABLE public.places OWNER TO "Andrew";
+
+--
+-- Name: restaurant; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.restaurant (
+    branchid character(30) NOT NULL,
+    address character varying(40) NOT NULL,
+    city character varying(20) NOT NULL,
+    province character(2) NOT NULL,
+    postalcode character varying(6) NOT NULL
+);
+
+
+ALTER TABLE public.restaurant OWNER TO "Andrew";
+
+--
+-- Name: supplier; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.supplier (
+    supplierid character(30) NOT NULL,
+    bankaccountno integer
+);
+
+
+ALTER TABLE public.supplier OWNER TO "Andrew";
+
+--
+-- Name: takeoutorder; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.takeoutorder (
+    orderid character(30) NOT NULL,
+    deliverytime character(10),
+    address character varying(40) NOT NULL,
+    city character varying(20) NOT NULL,
+    province character(2) NOT NULL,
+    postalcode character varying(6) NOT NULL,
+    driverid character(30),
+    phonenumber character(10),
+    branchid character(30)
+);
+
+
+ALTER TABLE public.takeoutorder OWNER TO "Andrew";
+
+--
+-- Name: transfers; Type: TABLE; Schema: public; Owner: Andrew
+--
+
+CREATE TABLE public.transfers (
+    phonenumber character(10) NOT NULL,
+    branchid character(30) NOT NULL,
+    ingredientname character(50) NOT NULL,
+    lotnumber integer NOT NULL,
+    managerid character(30) NOT NULL
+);
+
+
+ALTER TABLE public.transfers OWNER TO "Andrew";
+
+--
+-- Data for Name: chef; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.chef (chefid, socialinsurancenumber, branchid) FROM stdin;
+C3131                         	313312778	B1234                         
+C3132                         	313312779	B1234                         
+C3133                         	313312228	B1234                         
+C4372                         	313312878	B1234                         
+C5525                         	978320817	B1235                         
+C5450                         	313312348	B1236                         
+\.
+
+
+--
+-- Data for Name: contains; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.contains (menuitemid, branchid, ingredientname, quantityingrams) FROM stdin;
+MI006                         	B1235                         	Garlic                                            	10
+MI006                         	B1235                         	Salt                                              	2
+MI006                         	B1235                         	Butter                                            	20
+MI006                         	B1235                         	Bread                                             	100
+MI005                         	B1237                         	Cheese                                            	10
+MI005                         	B1237                         	Salt                                              	2
+MI005                         	B1237                         	Butter                                            	20
+MI005                         	B1237                         	Pasta                                             	100
+MI004                         	B1236                         	Cheese                                            	10
+MI004                         	B1236                         	Salt                                              	2
+MI004                         	B1236                         	Butter                                            	20
+MI004                         	B1236                         	Bread                                             	100
+\.
+
+
+--
+-- Data for Name: customer; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.customer (phonenumber, address, city, province, postalcode) FROM stdin;
+7783209817	2350 Health Sciences Mall	Vancouver	BC	V6T1Z3
+7783334444	2366 Main Mall	Vancouver	BC	V6T1Z4
+7781112222	800 Robson St	Vancouver	BC	V6Z3B7
+7781113333	\N	\N	\N	\N
+7781114444	\N	\N	\N	\N
+7781115555	\N	\N	\N	\N
+\.
+
+
+--
+-- Data for Name: delivers; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.delivers (branchid, ingredientname, lotnumber, supplierid, deliverydate) FROM stdin;
+B1234                         	Salt                                              	11	S310                          	2018-12-25
+B1235                         	Basamati Rice                                     	8	S310                          	2019-01-01
+B1235                         	Chickpeas                                         	9	S310                          	2019-02-21
+B1234                         	Egg                                               	273	S313                          	2018-12-22
+B1234                         	Butter                                            	79	S312                          	2019-03-21
+\.
+
+
+--
+-- Data for Name: deliverydriver; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.deliverydriver (driverid) FROM stdin;
+D0001                         
+D0002                         
+D0003                         
+D0004                         
+D0005                         
+\.
+
+
+--
+-- Data for Name: disposal; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.disposal (phonenumber) FROM stdin;
+7785598006
+7785558007
+7783397777
+7789870055
+7786258776
+\.
+
+
+--
+-- Data for Name: employee; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.employee (branchid, socialinsurancenumber) FROM stdin;
+B1234                         	123456789
+B1235                         	123456788
+B1236                         	412786555
+B1237                         	313312777
+B1234                         	313312778
+B1234                         	313312779
+B1234                         	313312228
+B1234                         	313312878
+B1235                         	978320817
+B1236                         	313312348
+\.
+
+
+--
+-- Data for Name: homelessshelter; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.homelessshelter (phonenumber, address, city, province, postalcode) FROM stdin;
+7786208716	2345 West 45th Ave	Vancouver	BC	V6T8X3
+7786255481	5432 West 4rd Ave	Vancouver	BC	V6T1L9
+7787840909	222 West Broadway	Vancouver	BC	V6T5T9
+7786298004	204 Metrotown	Vancouver	BC	V6T9M3
+7785388993	555 West Balsam	Vancouver	BC	V6T8N5
+\.
+
+
+--
+-- Data for Name: ingredientorders; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.ingredientorders (restockid, managerid, ingredientname, quantity) FROM stdin;
+R1234                         	M4621                         	Oliver Oil                                        	3
+R1235                         	M0167                         	Ketchup                                           	10
+R1236                         	M0167                         	Egg                                               	50
+R5432                         	M4621                         	Butter                                            	20
+R1237                         	M4621                         	Garlic                                            	60
+R1238                         	M0167                         	Bread                                             	10
+R1239                         	M0167                         	Chickpeas                                         	1
+R1229                         	M4621                         	Basamati Rice                                     	13
+\.
+
+
+--
+-- Data for Name: ingredients; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.ingredients (ingredientname, supplierid) FROM stdin;
+Peanut Butter                                     	S310                          
+Salt                                              	S310                          
+Basamati Rice                                     	S310                          
+Chickpeas                                         	S310                          
+Bread Flour                                       	S310                          
+Cake Flour                                        	S310                          
+Olive Oil                                         	S310                          
+Ketchup                                           	S311                          
+Butter                                            	S312                          
+Whole Milk                                        	S312                          
+Russet Potato                                     	S313                          
+Apple                                             	S313                          
+Egg                                               	S313                          
+Garlic                                            	S313                          
+Chicken Thigh                                     	S314                          
+Bread                                             	S315                          
+Pasta                                             	S315                          
+Cheese                                            	S315                          
+\.
+
+
+--
+-- Data for Name: ingredientsinstock; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.ingredientsinstock (branchid, ingredientname, lotnumber, expirydate, quantityleft, managerid) FROM stdin;
+B1234                         	Russet Potato                                     	60	2017-12-13	10	M4621                         
+B1234                         	Salt                                              	11	2020-01-25	10	M4621                         
+B1235                         	Basamati Rice                                     	8	2019-11-03	5	M0167                         
+B1235                         	Chickpeas                                         	9	2017-09-21	10	M0167                         
+B1234                         	Apple                                             	99	2017-12-10	50	M4621                         
+B1234                         	Egg                                               	273	2017-12-02	50	M4621                         
+B1234                         	Butter                                            	79	2019-04-15	50	M4621                         
+B1234                         	Garlic                                            	80	2019-01-11	50	M4621                         
+\.
+
+
+--
+-- Data for Name: location; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.location (phonenumber) FROM stdin;
+7785598006
+7785558007
+7783397777
+7789870055
+7786258776
+7785388993
+7786298004
+7787840909
+7786255481
+7786208716
+\.
+
+
+--
+-- Data for Name: manager; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.manager (managerid, socialinsurancenumber, branchid) FROM stdin;
+M4621                         	123456789	B1234                         
+M0167                         	123456788	B1235                         
+M4536                         	412786555	B1236                         
+M9817                         	313312777	B1237                         
+\.
+
+
+--
+-- Data for Name: menuitem; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.menuitem (menuitemid, itemname, chefid, branchid) FROM stdin;
+MI001                         	Cobb Salad                    	C3131                         	B1234                         
+MI002                         	Yam Fries                     	C3131                         	B1234                         
+MI003                         	Tomato Soup                   	C3132                         	B1234                         
+MI004                         	Grilled Cheese                	C3132                         	B1234                         
+MI004                         	Grilled Cheese                	C5525                         	B1235                         
+MI004                         	Grilled Cheese                	C5450                         	B1236                         
+MI005                         	Mac and Cheese                	C5450                         	B1236                         
+MI005                         	Mac and Cheese                	C3132                         	B1237                         
+MI006                         	Garlic Bread                  	C3133                         	B1234                         
+MI006                         	Garlic Bread                  	C5525                         	B1235                         
+\.
+
+
+--
+-- Data for Name: orderhas; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.orderhas (orderid, menuitemid, branchid) FROM stdin;
+O000001                       	MI001                         	B1234                         
+O000001                       	MI002                         	B1234                         
+O000001                       	MI003                         	B1234                         
+O000001                       	MI004                         	B1234                         
+O000001                       	MI006                         	B1234                         
+O000002                       	MI002                         	B1234                         
+O000003                       	MI004                         	B1234                         
+O000003                       	MI005                         	B1236                         
+O000004                       	MI001                         	B1234                         
+O000004                       	MI003                         	B1234                         
+O000005                       	MI002                         	B1234                         
+O000005                       	MI003                         	B1234                         
+O000005                       	MI004                         	B1235                         
+O000005                       	MI005                         	B1236                         
+O000006                       	MI005                         	B1237                         
+O000007                       	MI001                         	B1234                         
+O000007                       	MI004                         	B1234                         
+O000008                       	MI004                         	B1235                         
+O000008                       	MI006                         	B1235                         
+\.
+
+
+--
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.orders (orderid) FROM stdin;
+O000001                       
+O000002                       
+O000003                       
+O000004                       
+O000005                       
+O000006                       
+O000007                       
+O000008                       
+\.
+
+
+--
+-- Data for Name: pickuporder; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.pickuporder (orderid, pickuptime, phonenumber, branchid) FROM stdin;
+O000006                       	2018-12-01	7781113333	B1234                         
+O000007                       	2018-12-01	7781114444	B1234                         
+O000008                       	2018-12-01	7781115555	B1235                         
+\.
+
+
+--
+-- Data for Name: places; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.places (restockid, supplierid) FROM stdin;
+R1234                         	S001                          
+R1235                         	S001                          
+R1236                         	S001                          
+R5432                         	S312                          
+R1237                         	S002                          
+R1238                         	S003                          
+R1239                         	S312                          
+R1229                         	S312                          
+\.
+
+
+--
+-- Data for Name: restaurant; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.restaurant (branchid, address, city, province, postalcode) FROM stdin;
+B1234                         	6133 University Blvd	Vancouver	BC	V6T1Z1
+B1235                         	750 Hornby St	Vancouver	BC	V6Z2H7
+B1236                         	30 10 Ave SW	Calgary	AB	T2R0A9
+B1237                         	675 Belleville St	Victoria	BC	V8W9W2
+\.
+
+
+--
+-- Data for Name: supplier; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.supplier (supplierid, bankaccountno) FROM stdin;
+S001                          	100000000
+S002                          	543342111
+S003                          	444333222
+S310                          	333222111
+S311                          	111222333
+S312                          	222333444
+S313                          	333444555
+S314                          	444555666
+S315                          	444555777
+\.
+
+
+--
+-- Data for Name: takeoutorder; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.takeoutorder (orderid, deliverytime, address, city, province, postalcode, driverid, phonenumber, branchid) FROM stdin;
+O000002                       	2018-12-02	2350 Health Sciences Mall	Vancouver	BC	V6T1Z3	D0002                         	7783209817	B1234                         
+O000003                       	\N	6133 University Blvd	Vancouver	BC	V6T1Z1	D0002                         	7783334444	B1234                         
+O000004                       	2018-12-02	689 Thurlow St	Vancouver	BC	V6E4M3	D0003                         	7781112222	B1235                         
+O000005                       	2018-12-02	701 W Georgia St	Vancouver	BC	V7Y1G5	D0003                         	7781112222	B1235                         
+O000001                       	2019-12-01	2350 Health Sciences Mall	Vancouver	BC	V6T1Z3	D0001                         	7783209817	B1234                         
+\.
+
+
+--
+-- Data for Name: transfers; Type: TABLE DATA; Schema: public; Owner: Andrew
+--
+
+COPY public.transfers (phonenumber, branchid, ingredientname, lotnumber, managerid) FROM stdin;
+7783397777	B1234                         	Russet Potato                                     	60	M4621                         
+7783397777	B1235                         	Chickpeas                                         	9	M0167                         
+7783397777	B1234                         	Apple                                             	99	M4621                         
+7783397777	B1234                         	Egg                                               	273	M4621                         
+\.
+
+
+--
+-- Name: chef chef_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.chef
+    ADD CONSTRAINT chef_pkey PRIMARY KEY (chefid);
+
+
+--
+-- Name: contains contains_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.contains
+    ADD CONSTRAINT contains_pkey PRIMARY KEY (menuitemid, branchid, ingredientname);
+
+
+--
+-- Name: customer customer_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.customer
+    ADD CONSTRAINT customer_pkey PRIMARY KEY (phonenumber);
+
+
+--
+-- Name: delivers delivers_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.delivers
+    ADD CONSTRAINT delivers_pkey PRIMARY KEY (branchid, ingredientname, lotnumber);
+
+
+--
+-- Name: deliverydriver deliverydriver_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.deliverydriver
+    ADD CONSTRAINT deliverydriver_pkey PRIMARY KEY (driverid);
+
+
+--
+-- Name: disposal disposal_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.disposal
+    ADD CONSTRAINT disposal_pkey PRIMARY KEY (phonenumber);
+
+
+--
+-- Name: employee employee_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.employee
+    ADD CONSTRAINT employee_pkey PRIMARY KEY (socialinsurancenumber);
+
+
+--
+-- Name: homelessshelter homelessshelter_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.homelessshelter
+    ADD CONSTRAINT homelessshelter_pkey PRIMARY KEY (phonenumber);
+
+
+--
+-- Name: ingredientorders ingredientorders_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.ingredientorders
+    ADD CONSTRAINT ingredientorders_pkey PRIMARY KEY (restockid);
+
+
+--
+-- Name: ingredients ingredients_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.ingredients
+    ADD CONSTRAINT ingredients_pkey PRIMARY KEY (ingredientname);
+
+
+--
+-- Name: ingredientsinstock ingredientsinstock_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.ingredientsinstock
+    ADD CONSTRAINT ingredientsinstock_pkey PRIMARY KEY (ingredientname, lotnumber, branchid);
+
+
+--
+-- Name: location location_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.location
+    ADD CONSTRAINT location_pkey PRIMARY KEY (phonenumber);
+
+
+--
+-- Name: manager manager_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.manager
+    ADD CONSTRAINT manager_pkey PRIMARY KEY (managerid);
+
+
+--
+-- Name: menuitem menuitem_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.menuitem
+    ADD CONSTRAINT menuitem_pkey PRIMARY KEY (menuitemid, branchid);
+
+
+--
+-- Name: orderhas orderhas_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.orderhas
+    ADD CONSTRAINT orderhas_pkey PRIMARY KEY (orderid, menuitemid, branchid);
+
+
+--
+-- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_pkey PRIMARY KEY (orderid);
+
+
+--
+-- Name: pickuporder pickuporder_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.pickuporder
+    ADD CONSTRAINT pickuporder_pkey PRIMARY KEY (orderid);
+
+
+--
+-- Name: places places_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.places
+    ADD CONSTRAINT places_pkey PRIMARY KEY (restockid, supplierid);
+
+
+--
+-- Name: restaurant restaurant_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.restaurant
+    ADD CONSTRAINT restaurant_pkey PRIMARY KEY (branchid);
+
+
+--
+-- Name: supplier supplier_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.supplier
+    ADD CONSTRAINT supplier_pkey PRIMARY KEY (supplierid);
+
+
+--
+-- Name: takeoutorder takeoutorder_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.takeoutorder
+    ADD CONSTRAINT takeoutorder_pkey PRIMARY KEY (orderid);
+
+
+--
+-- Name: transfers transfers_pkey; Type: CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.transfers
+    ADD CONSTRAINT transfers_pkey PRIMARY KEY (managerid, phonenumber, branchid, ingredientname, lotnumber);
+
+
+--
+-- Name: chef chef_branchid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.chef
+    ADD CONSTRAINT chef_branchid_fkey FOREIGN KEY (branchid) REFERENCES public.restaurant(branchid);
+
+
+--
+-- Name: chef chef_socialinsurancenumber_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.chef
+    ADD CONSTRAINT chef_socialinsurancenumber_fkey FOREIGN KEY (socialinsurancenumber) REFERENCES public.employee(socialinsurancenumber);
+
+
+--
+-- Name: contains contains_ingredientname_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.contains
+    ADD CONSTRAINT contains_ingredientname_fkey FOREIGN KEY (ingredientname) REFERENCES public.ingredients(ingredientname);
+
+
+--
+-- Name: contains contains_menuitemid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.contains
+    ADD CONSTRAINT contains_menuitemid_fkey FOREIGN KEY (menuitemid, branchid) REFERENCES public.menuitem(menuitemid, branchid) ON DELETE CASCADE;
+
+
+--
+-- Name: delivers delivers_ingredientname_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.delivers
+    ADD CONSTRAINT delivers_ingredientname_fkey FOREIGN KEY (ingredientname, lotnumber, branchid) REFERENCES public.ingredientsinstock(ingredientname, lotnumber, branchid);
+
+
+--
+-- Name: delivers delivers_supplierid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.delivers
+    ADD CONSTRAINT delivers_supplierid_fkey FOREIGN KEY (supplierid) REFERENCES public.supplier(supplierid);
+
+
+--
+-- Name: disposal disposal_phonenumber_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.disposal
+    ADD CONSTRAINT disposal_phonenumber_fkey FOREIGN KEY (phonenumber) REFERENCES public.location(phonenumber);
+
+
+--
+-- Name: employee employee_branchid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.employee
+    ADD CONSTRAINT employee_branchid_fkey FOREIGN KEY (branchid) REFERENCES public.restaurant(branchid) ON DELETE CASCADE;
+
+
+--
+-- Name: homelessshelter homelessshelter_phonenumber_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.homelessshelter
+    ADD CONSTRAINT homelessshelter_phonenumber_fkey FOREIGN KEY (phonenumber) REFERENCES public.location(phonenumber);
+
+
+--
+-- Name: ingredientorders ingredientorders_managerid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.ingredientorders
+    ADD CONSTRAINT ingredientorders_managerid_fkey FOREIGN KEY (managerid) REFERENCES public.manager(managerid);
+
+
+--
+-- Name: ingredients ingredients_supplierid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.ingredients
+    ADD CONSTRAINT ingredients_supplierid_fkey FOREIGN KEY (supplierid) REFERENCES public.supplier(supplierid) ON DELETE CASCADE;
+
+
+--
+-- Name: ingredientsinstock ingredientsinstock_ingredientname_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.ingredientsinstock
+    ADD CONSTRAINT ingredientsinstock_ingredientname_fkey FOREIGN KEY (ingredientname) REFERENCES public.ingredients(ingredientname) ON DELETE CASCADE;
+
+
+--
+-- Name: ingredientsinstock ingredientsinstock_managerid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.ingredientsinstock
+    ADD CONSTRAINT ingredientsinstock_managerid_fkey FOREIGN KEY (managerid) REFERENCES public.manager(managerid);
+
+
+--
+-- Name: manager manager_branchid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.manager
+    ADD CONSTRAINT manager_branchid_fkey FOREIGN KEY (branchid) REFERENCES public.restaurant(branchid);
+
+
+--
+-- Name: manager manager_socialinsurancenumber_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.manager
+    ADD CONSTRAINT manager_socialinsurancenumber_fkey FOREIGN KEY (socialinsurancenumber) REFERENCES public.employee(socialinsurancenumber);
+
+
+--
+-- Name: menuitem menuitem_branchid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.menuitem
+    ADD CONSTRAINT menuitem_branchid_fkey FOREIGN KEY (branchid) REFERENCES public.restaurant(branchid) ON DELETE CASCADE;
+
+
+--
+-- Name: menuitem menuitem_chefid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.menuitem
+    ADD CONSTRAINT menuitem_chefid_fkey FOREIGN KEY (chefid) REFERENCES public.chef(chefid);
+
+
+--
+-- Name: orderhas orderhas_menuitemid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.orderhas
+    ADD CONSTRAINT orderhas_menuitemid_fkey FOREIGN KEY (menuitemid, branchid) REFERENCES public.menuitem(menuitemid, branchid) ON DELETE CASCADE;
+
+
+--
+-- Name: orderhas orderhas_orderid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.orderhas
+    ADD CONSTRAINT orderhas_orderid_fkey FOREIGN KEY (orderid) REFERENCES public.orders(orderid) ON DELETE CASCADE;
+
+
+--
+-- Name: pickuporder pickuporder_branchid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.pickuporder
+    ADD CONSTRAINT pickuporder_branchid_fkey FOREIGN KEY (branchid) REFERENCES public.restaurant(branchid);
+
+
+--
+-- Name: pickuporder pickuporder_orderid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.pickuporder
+    ADD CONSTRAINT pickuporder_orderid_fkey FOREIGN KEY (orderid) REFERENCES public.orders(orderid) ON DELETE CASCADE;
+
+
+--
+-- Name: pickuporder pickuporder_phonenumber_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.pickuporder
+    ADD CONSTRAINT pickuporder_phonenumber_fkey FOREIGN KEY (phonenumber) REFERENCES public.customer(phonenumber);
+
+
+--
+-- Name: places places_restockid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.places
+    ADD CONSTRAINT places_restockid_fkey FOREIGN KEY (restockid) REFERENCES public.ingredientorders(restockid);
+
+
+--
+-- Name: places places_supplierid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.places
+    ADD CONSTRAINT places_supplierid_fkey FOREIGN KEY (supplierid) REFERENCES public.supplier(supplierid);
+
+
+--
+-- Name: takeoutorder takeoutorder_branchid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.takeoutorder
+    ADD CONSTRAINT takeoutorder_branchid_fkey FOREIGN KEY (branchid) REFERENCES public.restaurant(branchid);
+
+
+--
+-- Name: takeoutorder takeoutorder_driverid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.takeoutorder
+    ADD CONSTRAINT takeoutorder_driverid_fkey FOREIGN KEY (driverid) REFERENCES public.deliverydriver(driverid);
+
+
+--
+-- Name: takeoutorder takeoutorder_orderid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.takeoutorder
+    ADD CONSTRAINT takeoutorder_orderid_fkey FOREIGN KEY (orderid) REFERENCES public.orders(orderid) ON DELETE CASCADE;
+
+
+--
+-- Name: takeoutorder takeoutorder_phonenumber_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.takeoutorder
+    ADD CONSTRAINT takeoutorder_phonenumber_fkey FOREIGN KEY (phonenumber) REFERENCES public.customer(phonenumber);
+
+
+--
+-- Name: transfers transfers_ingredientname_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.transfers
+    ADD CONSTRAINT transfers_ingredientname_fkey FOREIGN KEY (ingredientname, lotnumber, branchid) REFERENCES public.ingredientsinstock(ingredientname, lotnumber, branchid) ON DELETE CASCADE;
+
+
+--
+-- Name: transfers transfers_managerid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.transfers
+    ADD CONSTRAINT transfers_managerid_fkey FOREIGN KEY (managerid) REFERENCES public.manager(managerid);
+
+
+--
+-- Name: transfers transfers_phonenumber_fkey; Type: FK CONSTRAINT; Schema: public; Owner: Andrew
+--
+
+ALTER TABLE ONLY public.transfers
+    ADD CONSTRAINT transfers_phonenumber_fkey FOREIGN KEY (phonenumber) REFERENCES public.location(phonenumber);
+
+
+--
+-- Name: TABLE customer; Type: ACL; Schema: public; Owner: Andrew
+--
+
+GRANT SELECT ON TABLE public.customer TO PUBLIC;
+
+
+--
+-- Name: TABLE deliverydriver; Type: ACL; Schema: public; Owner: Andrew
+--
+
+GRANT SELECT ON TABLE public.deliverydriver TO PUBLIC;
+
+
+--
+-- Name: TABLE employee; Type: ACL; Schema: public; Owner: Andrew
+--
+
+GRANT SELECT ON TABLE public.employee TO PUBLIC;
+
+
+--
+-- Name: TABLE manager; Type: ACL; Schema: public; Owner: Andrew
+--
+
+GRANT SELECT ON TABLE public.manager TO PUBLIC;
+
+
+--
+-- Name: TABLE menuitem; Type: ACL; Schema: public; Owner: Andrew
+--
+
+GRANT SELECT ON TABLE public.menuitem TO PUBLIC;
+
+
+--
+-- Name: TABLE orders; Type: ACL; Schema: public; Owner: Andrew
+--
+
+GRANT SELECT ON TABLE public.orders TO PUBLIC;
+
+
+--
+-- Name: TABLE restaurant; Type: ACL; Schema: public; Owner: Andrew
+--
+
+GRANT SELECT ON TABLE public.restaurant TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
