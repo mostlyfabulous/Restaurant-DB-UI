@@ -2,9 +2,9 @@
   Created by Jiemin Zhang, 2011, Modified by Simona Radu and others -->
 
 <?php
-
 $success = True; //keep track of errors so it redirects the page only if there are no errors
-$db_conn = pg_connect("host=localhost port=5432 dbname=Andrew user=Andrew" ) or die("Could not connect");
+$db_conn = pg_connect(getenv("DATABASE_URL"));
+// $db_conn = pg_connect("host=localhost port=5432 dbname=Andrew user=Andrew" ) or die("Could not connect");
 // $db_conn = OCILogon("ora_p0w0b", "a59612168", "dbhost.ugrad.cs.ubc.ca:1522/ug");
 $stat = pg_connection_status($db_conn);
   if ($stat === PGSQL_CONNECTION_OK) {
@@ -309,36 +309,6 @@ function printIngredientOrders($result) { //prints results from a select stateme
 // 	}
 // }
 
-/* OCILogon() allows you to log onto the Oracle database
-     The three arguments are the username, password, and database.
-     You will need to replace "username" and "password" for this to
-     to work.
-     all strings that start with "$" are variables; they are created
-     implicitly by appearing on the left hand side of an assignment
-     statement */
-/* OCIParse() Prepares Oracle statement for execution
-      The two arguments are the connection and SQL query. */
-/* OCIExecute() executes a previously parsed statement
-      The two arguments are the statement which is a valid OCI
-      statement identifier, and the mode.
-      default mode is OCI_COMMIT_ON_SUCCESS. Statement is
-      automatically committed after OCIExecute() call when using this
-      mode.
-      Here we use OCI_DEFAULT. Statement is not committed
-      automatically when using this mode. */
-/* OCI_Fetch_Array() Returns the next row from the result data as an
-     associative or numeric array, or both.
-     The two arguments are a valid OCI statement identifier, and an
-     optinal second parameter which can be any combination of the
-     following constants:
+// DATABASE_URL: postgres://nirqdlupyjxoxr:f07eaf07be5c5af0ce1cdf0cf8029443e7019c0a9e0e2673d0a3b6b1e51c37f6@ec2-23-21-201-12.compute-1.amazonaws.com:5432/dki11jv212dl5
 
-     OCI_BOTH - return an array with both associative and numeric
-     indices (the same as OCI_ASSOC + OCI_NUM). This is the default
-     behavior.
-     OCI_ASSOC - return an associative array (as OCI_Fetch_Assoc()
-     works).
-     OCI_NUM - return a numeric array, (as OCI_Fetch_Row() works).
-     OCI_RETURN_NULLS - create empty elements for the NULL fields.
-     OCI_RETURN_LOBS - return the value of a LOB of the descriptor.
-     Default mode is OCI_BOTH.  */
 ?>
