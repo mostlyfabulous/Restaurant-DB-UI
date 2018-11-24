@@ -1,10 +1,14 @@
 <PHP> <link rel="stylesheet" type="text/css" href="enjoy.css"></head> <PHP>
-
+<div class="boxes">
+  <div class="box box1"></div>
+  <div class="box box2">
 <a href="Chef.php">Chef page</a>
 <a href="Customer.php">Customer page</a>
 <a href="Delivery.php">Delivery Driver page</a>
 <a href="Manager.php">Manager page</a>
-
+  </div>
+  <div class="box box3"></div>
+</div>
 <!-- <?php
 
 $conn = pg_pconnect("host=localhost port=5432 dbname=Andrew user=Andrew" );

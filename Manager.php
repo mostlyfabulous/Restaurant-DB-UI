@@ -31,17 +31,18 @@
 <?php
   //
   if ($db_conn) {
-    // empties cache
-    while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-    }
     echo "<br>";
     if ($db_conn && array_key_exists('selectbybid', $_GET)) {
       // Getting the ingredientsinstock at a branch
-      $statement1 = "
-      SELECT * FROM ingredientsinstock
-      WHERE branchid='" . $_GET['selBID'] . "'";
-      $result1 = executePlainSQL($statement1);
+      // $statement1 = "
+      // SELECT * FROM ingredientsinstock
+      // WHERE branchid='" . $_GET['selBID'] . "'";
+      echo "hello";
+      $result1 = executePlainSQL("SELECT * FROM ingredientsinstock where Branchid='B1234'");
+      $result2 = executePlainSQL("SELECT * FROM ingredientsinstock where Branchid='B1234'");
       printIngredientsByBranch($result1, $_GET['selBID']);
+      printIngredientsByBranch($result2, $_GET['selBID']);
+
       echo "<br>";
     }
 ?>
@@ -88,7 +89,7 @@
             SELECT M.menuItemID
             FROM MenuItem M
             WHERE M.branchID='" . $_GET['divBID'] . "'
-            MINUS (
+            EXCEPT (
               SELECT  H.menuItemID
               FROM    OrderHas H
               WHERE   O.orderID = H.orderID and H.branchID='" . $_GET['divBID'] . "')
@@ -122,7 +123,7 @@ if ($db_conn) {
 		// Create new table...
 		echo "<br> creating new table <br>";
 		executePlainSQL("create table ORDERHAS (ORDERID CHAR(30), MENUITEMID CHAR(30), primary key (ORDERID, MENUITEMID))");
-		OCICommit($db_conn);
+
 
 	} else
     if (array_key_exists('updatesubmit', $_POST)) {
@@ -135,7 +136,7 @@ if ($db_conn) {
 					$tuple
 				);
 				executeBoundSQL("update tab1 set name=:bind2 where name=:bind1", $alltuples);
-				OCICommit($db_conn);
+
 
 	} else
 		if (array_key_exists('dostuff', $_POST)) {
@@ -159,7 +160,7 @@ if ($db_conn) {
 			//executePlainSQL("update tab1 set nid=10 where nid=2");
 			// Delete data...
 			//executePlainSQL("delete from tab1 where nid=1");
-			OCICommit($db_conn);
+
 		}
     else if ($db_conn && array_key_exists('insreorder', $_GET)) {
       // INSERT ALL
@@ -185,7 +186,7 @@ if ($db_conn) {
       FROM dual)
       SELECT * FROM names
         ");
-      OCICommit($db_conn);
+
       // $result = executePlainSQL("
       // SELECT * FROM ingredientorders I, places P
       // SELECT I.restockID, I.managerID, P.supplierID, I.ingredientName, I.quantity
@@ -209,13 +210,13 @@ if ($db_conn) {
     ");
     printIngredientOrders($result);
 	}
-	//Commit to save changes...
-	OCILogoff($db_conn);
-} else {
-	echo "cannot connect";
-	$e = OCI_Error(); // For OCILogon errors pass no handle
-	echo htmlentities($e['message']);
-}
+
+  pg_close($db_conn);
+  } else {
+  echo "cannot connect";
+  $e = pg_last_error();
+  echo htmlentities($e);
+  }
 
 ?>
 <!--
