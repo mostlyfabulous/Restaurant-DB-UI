@@ -26,6 +26,34 @@ th, tr, td {
   border: 1px solid white;
 }
 
+caption {
+text-align: center
+  width: 240px
+}
+
 body {
     background-color: #485e90;
+}
+
+.box {
+  width: 100%;
+  display: table-cell;
+  text-align: center;
+  vertical-align:middle;
+  line-height: 13em;
+}
+
+.box1 {
+  width: 20%;
+  background: #37425b;
+}
+
+.box2 {
+  width: 60%;
+  background: #485e90;
+}
+
+.box3 {
+  width: 20%;
+  background: #37425b;
 }

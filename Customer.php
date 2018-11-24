@@ -2,7 +2,7 @@
 <?php include 'Utility.php'; ?>
 <h>Customer PHP table</h>
 <a href="index.php">Index page</a>
-<p>Select MenuItems by Branch ID below:</p>
+<br><br>
   <!-- <form method="GET" action="Customer.php">
 <p> <input type="text" name="setbid" size="10" placeholder="BranchID">
     <input type="submit" value="search" name="selectsubmit"></p>
@@ -27,12 +27,9 @@ if ($db_conn && array_key_exists('selectbid', $_GET)) {
 }
 
 ?>
-
-
-<p>Insert values into ORDERHAS below this is a very basic way for the customer to
-  add items to their order:</p>
+<br><br>
 <form method="POST" action="Customer.php">
-<!--refresh page when submit-->
+  Insert values into ORDERHAS - <br>  Customer can add items to their order:
 <p> <input type="text" name="insORDERID" size="10" placeholder="Order ID">
     <input type="text" name="insMenuItemID" size="18"placeholder="Menu Item ID">
     <input type="text" name="insBranchID" size="10"placeholder="Branch ID">
@@ -41,17 +38,16 @@ if ($db_conn && array_key_exists('selectbid', $_GET)) {
 </form>
 <!-- create a form to pass the values. See below for how to
 get the values-->
-
-<p>Insert branchID to see popular items by branch:</p>
+<br><br>
 <form method="GET" action="Customer.php">
+  Input Branch ID to see popular items at that Branch:
 <p> <input type="text" name="viewBranchID" size="10"placeholder="Branch ID">
 <input type="submit" value="insert" name="viewpopitem"></p>
 </form>
-
-<p> TODO: Update the order by using a query </p>
+<br><br>
 <form method="GET" action="Customer.php">
 <!--refresh page when submit-->
-
+Remove Menu Item from Order ID
 <p> <input type="text" name="orderID" size="18" placeholder="Order ID">
     <input type="text" name="menuItem" size="18" placeholder="Menu Item to remove">
 <!--define two variables to pass the value-->
@@ -63,7 +59,7 @@ get the values-->
 if ($db_conn) {
 	if (array_key_exists('viewpopitem', $_GET)) {
     executePlainSQL("Drop view POP_ITEM");
-    OCICommit($db_conn);
+
     // echo "<p> Popular Delivery MenuItems from Branch: " . $_GET['viewBranchID'] . "</p>";
     $sqlquery = "create view POP_ITEM(MenuItemID, ItemName, BranchID, Count) as
     select MenuItem.MenuItemID, MenuItem.itemName, MenuItem.branchID, COUNT(MenuItem.menuItemID)
@@ -79,7 +75,7 @@ if ($db_conn) {
     SELECT * FROM POP_ITEM
     ");
     printpop($result, $_GET['viewBranchID']);
-    OCICommit($db_conn);
+
 	} else
 		if (array_key_exists('insertsubmit', $_POST)) {
 			//Getting the values from user and insert data into the table
@@ -92,7 +88,7 @@ if ($db_conn) {
 				$tuple
 			);
 			executeBoundSQL("insert into ORDERHAS values (:bind1, :bind2, :bind3)", $alltuples);
-			OCICommit($db_conn);
+
 
 		} else
 			if (array_key_exists('updatesubmit', $_GET)) {
@@ -101,7 +97,7 @@ if ($db_conn) {
 					// ":bind2" => $_POST['menuItem']
 				executePlainSQL("delete from ORDERHAS where ORDERID='" . $_GET['orderID'] . "'and MENUITEMID='" . $_GET['menuItem'] . "'");
         // delete from ORDERHAS where ORDERID='O000001' and MENUITEMID='MI001';
-				OCICommit($db_conn);
+
 		} else
       if (array_key_exists('getorder', $_GET)) {
         // gets menu items in an orderid
@@ -139,22 +135,22 @@ if ($db_conn) {
 				//executePlainSQL("update tab1 set nid=10 where nid=2");
 				// Delete data...
 				//executePlainSQL("delete from tab1 where nid=1");
-				OCICommit($db_conn);
+
 		}
 
 	if ($_POST && $success) {
-		//POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
+		// POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
 	// 	header("location: Customer.php");
 	// } else {
   //   $result = executePlainSQL("select distinct * from MenuItem");
   //   printMenuItems($result);
 	}
 	//Commit to save changes...
-	OCILogoff($db_conn);
-} else {
-	echo "cannot connect";
-	$e = OCI_Error(); // For OCILogon errors pass no handle
-	echo htmlentities($e['message']);
-}
+  pg_close($db_conn);
+  } else {
+  echo "cannot connect";
+  $e = pg_last_error();
+  echo htmlentities($e);
+  }
 
 ?>
