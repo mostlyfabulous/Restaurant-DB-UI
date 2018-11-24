@@ -3,8 +3,8 @@
 
 <?php
 $success = True; //keep track of errors so it redirects the page only if there are no errors
-// $db_conn = pg_connect(getenv("DATABASE_URL"));
-$db_conn = pg_connect("host=localhost port=5432 dbname=Andrew user=Andrew" ) or die("Could not connect");
+$db_conn = pg_connect(getenv("DATABASE_URL"));
+// $db_conn = pg_connect("host=localhost port=5432 dbname=Andrew user=Andrew" ) or die("Could not connect");
 // $db_conn = OCILogon("ora_p0w0b", "a59612168", "dbhost.ugrad.cs.ubc.ca:1522/ug");
 $stat = pg_connection_status($db_conn);
   if ($stat === PGSQL_CONNECTION_OK) {
