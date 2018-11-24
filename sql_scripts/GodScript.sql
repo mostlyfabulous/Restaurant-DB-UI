@@ -1,12 +1,4 @@
--- updated the size of notes in titles relation// Hazra
-
 --//////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
 
 drop table places;
 
@@ -67,7 +59,7 @@ drop table customer;
 commit;
 
 CREATE TABLE Customer (
-phoneNumber INTEGER,
+phoneNumber CHAR(10),
 address varchar(40),
 city varchar(20),
 province char(2),
@@ -76,7 +68,6 @@ PRIMARY KEY (phoneNumber));
 grant select on Customer to public;
 
 create table Restaurant(
-	managerID CHAR(30),
 	branchID CHAR(30),
     address varchar(40) not null,
     city varchar(20) not null,
@@ -84,7 +75,6 @@ create table Restaurant(
     postalCode varchar(6) not null,
 	PRIMARY KEY (branchID));
 grant select on Restaurant to public;
-commit;
 
 create table Employee(
     branchID CHAR(30),
@@ -113,7 +103,6 @@ create table Chef(
     FOREIGN KEY (socialInsuranceNumber) REFERENCES Employee,
     FOREIGN KEY (branchID) REFERENCES Restaurant
     );
-commit;
 
 CREATE TABLE MenuItem(
     menuItemID CHAR(30),
@@ -130,14 +119,13 @@ CREATE TABLE DeliveryDriver(
     driverID CHAR(30),
     PRIMARY KEY (driverID));
 grant select on DeliveryDriver to public;
-commit;
 
 CREATE TABLE Orders(
     orderID CHAR(30) NOT NULL,
     PRIMARY KEY(orderID)
 );
 grant select on Orders to public;
-commit;
+
 CREATE TABLE TakeoutOrder(
     orderID CHAR(30),
     deliveryTime CHAR(10),
@@ -146,25 +134,29 @@ CREATE TABLE TakeoutOrder(
     province char(2) not null,
     postalCode varchar(6) not null,
     driverID CHAR(30),
-    phoneNumber INTEGER,
+    phoneNumber CHAR(10),
     branchID CHAR(30),
     PRIMARY KEY (orderID),
     FOREIGN KEY (orderID) REFERENCES Orders
         ON DELETE CASCADE,
     FOREIGN KEY (branchID) REFERENCES Restaurant,
     FOREIGN KEY (phoneNumber) REFERENCES Customer,
-    FOREIGN KEY (driverID) REFERENCES DeliveryDriver);
+    FOREIGN KEY (driverID) REFERENCES DeliveryDriver
+		);
+
 
 CREATE TABLE PickupOrder(
     orderID CHAR(30),
 		PickUpTime CHAR(10),
-    phoneNumber INTEGER,
+    phoneNumber CHAR(10),
     branchID CHAR(30),
     PRIMARY KEY (orderID),
     FOREIGN KEY (orderID) REFERENCES Orders
         ON DELETE CASCADE,
     FOREIGN KEY (branchID) REFERENCES Restaurant,
-    FOREIGN KEY (phoneNumber) REFERENCES Customer);
+    FOREIGN KEY (phoneNumber) REFERENCES Customer
+		);
+
 
 CREATE TABLE OrderHas(
     orderID CHAR(30),
@@ -175,37 +167,31 @@ CREATE TABLE OrderHas(
         ON DELETE CASCADE,
     FOREIGN KEY (menuItemID, branchID) REFERENCES MenuItem
 				ON DELETE CASCADE);
-commit ;
 
 
 --////////////////////////////////////////////////////////////////////////////////
 
 CREATE TABLE Location (
-	phoneNumber INTEGER,
-	PRIMARY KEY (phoneNumber));
-	commit;
+	phoneNumber CHAR(10),
+	PRIMARY KEY (phoneNumber)
+);
 
 CREATE TABLE Disposal (
-	phoneNumber INTEGER,
+	phoneNumber CHAR(10),
 	PRIMARY KEY (phoneNumber),
 	FOREIGN KEY (phoneNumber) REFERENCES Location
+	/* CHECK (phoneNumber >= 0) */
 );
-	commit;
 
 CREATE TABLE HomelessShelter (
-	phoneNumber INTEGER,
+	phoneNumber CHAR(10),
 	address varchar(40),
 	city varchar(20),
 	province char(2),
 	postalCode varchar(6),
 	PRIMARY KEY (phoneNumber),
-	FOREIGN KEY (phoneNumber) REFERENCES Location);
-	commit;
-
-
-
-
-
+	FOREIGN KEY (phoneNumber) REFERENCES Location
+);
 
 CREATE TABLE Supplier(
   supplierID CHAR(30),
@@ -234,7 +220,7 @@ CREATE TABLE IngredientsInStock(
 );
 
 CREATE TABLE Transfers (
-	phoneNumber INTEGER,
+	phoneNumber CHAR(10),
 	branchID CHAR(30),
 	ingredientName CHAR(50),
 	lotNumber INTEGER,
@@ -245,7 +231,6 @@ CREATE TABLE Transfers (
 		ON DELETE CASCADE,
 	FOREIGN KEY (managerID) REFERENCES Manager
 );
-	commit;
 
 CREATE TABLE Contains(
 	menuItemID CHAR(30),
@@ -266,8 +251,8 @@ CREATE TABLE Delivers(
 		deliveryDate CHAR(10),
     PRIMARY KEY (branchID, ingredientName,lotNumber),
     FOREIGN KEY (ingredientName,lotNumber,branchID) REFERENCES IngredientsInStock,
-    FOREIGN KEY (supplierID) REFERENCES Supplier);
-commit ;
+    FOREIGN KEY (supplierID) REFERENCES Supplier
+		);
 
 CREATE TABLE IngredientOrders(
     restockID CHAR(30),
@@ -275,16 +260,15 @@ CREATE TABLE IngredientOrders(
     ingredientName CHAR(50),
     quantity INTEGER,
     PRIMARY KEY (restockID),
-    FOREIGN KEY (managerID) REFERENCES Manager);
-commit ;
+    FOREIGN KEY (managerID) REFERENCES Manager
+		);
 
 CREATE TABLE Places(
     restockID CHAR(30),
 		supplierID CHAR(30),
     PRIMARY KEY (restockID,supplierID),
     FOREIGN KEY (restockID) REFERENCES IngredientOrders,
-    FOREIGN KEY (supplierID) REFERENCES Supplier  );
-commit ;
+    FOREIGN KEY (supplierID) REFERENCES Supplier);
 
 --////////////////////////////////////////////////////////////////////////////////
 
@@ -308,16 +292,16 @@ insert into Customer
 values('7781115555', null, null, null, null);
 
 insert into Restaurant
-values('M4621', 'B1234', '6133 University Blvd', 'Vancouver', 'BC', 'V6T1Z1');
+values('B1234', '6133 University Blvd', 'Vancouver', 'BC', 'V6T1Z1');
 
 insert into Restaurant
-values('M0167', 'B1235', '750 Hornby St', 'Vancouver', 'BC', 'V6Z2H7');
+values('B1235', '750 Hornby St', 'Vancouver', 'BC', 'V6Z2H7');
 
 insert into Restaurant
-values('M4536', 'B1236', '30 10 Ave SW', 'Calgary', 'AB', 'T2R0A9');
+values('B1236', '30 10 Ave SW', 'Calgary', 'AB', 'T2R0A9');
 
 insert into Restaurant
-values('M9817', 'B1237', '675 Belleville St', 'Victoria', 'BC', 'V8W9W2');
+values('B1237', '675 Belleville St', 'Victoria', 'BC', 'V8W9W2');
 
 insert into Employee
 values('B1234', '123456789');
@@ -632,7 +616,6 @@ values('S314', 444555666);
 
 insert into Supplier
 values('S315', 444555777);
-commit;
 
 
 ----//////////////////////////////////INGREDIENTS/////////////////////////////////////////////
@@ -835,7 +818,6 @@ insert into Places
 values('R1229','S312');
 
 
-
 --////////////////////////////////////////TRANSFERS///////////////////////////////////////
 
 insert into Transfers
@@ -851,10 +833,4 @@ insert into Transfers
 values('7783397777','B1234', 'Egg', 273, 'M4621');
 
 
-
-
-
-
-
---///////////////////////////////////////////////////////////////////////////////
-commit ;
+commit;
