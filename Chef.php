@@ -15,6 +15,9 @@ get the values-->
 <form method="GET" action="Chef.php">
 Update the ingredient quantity to reflect the amount used
 <p> <input type="text" name="branchID" size="18" placeholder="Branch ID">
+	<input type="number" name="quantity" size="18" placeholder="quantity">
+	<input type="text" name="ingredientName" size="18" placeholder="Ingredient Name">
+	<input type="text" name="lotNumber" size="18" placeholder="Lot Number">
 <!--define two variables to pass the value-->
 <input type="submit" value="Update ingredient quantity" name="updatesubmit">
 </form> <br>
@@ -43,11 +46,10 @@ if ($db_conn) {
       printIList($result);
 		} else
 			if (array_key_exists('updatesubmit', $_GET)) {
-        // echo "here now";
-        // echo  $_GET['quantity'];
-        // echo $_GET['ingredientName'];
-        // echo  $_GET['branchID'];
-        // echo $_GET['lotNumber'];
+        echo  $_GET['quantity'];
+        echo $_GET['ingredientName'];
+        echo  $_GET['branchID'];
+        echo $_GET['lotNumber'];
         // $result = executePlainSQL("select * from IngredientsInStock
         // where ingredientName = '" . $_GET['ingredientName'] . "' and branchID = '" . $_GET['branchID'] . "'
         // and lotNumber = " . $_GET['lotNumber'] . "");
