@@ -35,6 +35,16 @@ body {
     background-color: #485e90;
 }
 
+.description {
+  font: normal 16px/normal Tahoma, Geneva, sans-serif;
+  color: rgba(255,255,255,0.9);
+  width: 100%;
+  min-height: 3rem;
+  background: #37425b;
+  text-align: center;
+
+}
+
 .box {
   width: 100%;
   display: table-cell;
@@ -44,16 +54,16 @@ body {
 }
 
 .box1 {
-  width: 20%;
+  width: 50%;
   background: #37425b;
 }
 
 .box2 {
-  width: 60%;
+  width: auto;
   background: #485e90;
 }
 
 .box3 {
-  width: 20%;
+  width: 50%;
   background: #37425b;
 }

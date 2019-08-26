@@ -9,6 +9,12 @@
   </div>
   <div class="box box3"></div>
 </div>
+<div class="description">
+  <h4>This is a group project for CPSC 304 to create a database with various 
+    types of relations with a simple UI for interactivity.<h4>
+</div>
+<div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;toolbar&quot;:&quot;zoom layers lightbox&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;url&quot;:&quot;https://drive.google.com/uc?id=1Raa86s9VgAzLE14Y05EfJncJpZZCVBQJ&amp;export=download&quot;}"></div>
+<script type="text/javascript" src="https://www.draw.io/embed2.js?&fetch=https%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1Raa86s9VgAzLE14Y05EfJncJpZZCVBQJ%26export%3Ddownload"></script>
 <!-- <?php
 
 $conn = pg_pconnect("host=localhost port=5432 dbname=Andrew user=Andrew" );
@@ -29,7 +35,3 @@ while ($row = pg_fetch_row($result)) {
 }
 
 ?> -->
-
-
-<div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;toolbar&quot;:&quot;zoom layers lightbox&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;url&quot;:&quot;https://drive.google.com/uc?id=1Raa86s9VgAzLE14Y05EfJncJpZZCVBQJ&amp;export=download&quot;}"></div>
-<script type="text/javascript" src="https://www.draw.io/embed2.js?&fetch=https%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1Raa86s9VgAzLE14Y05EfJncJpZZCVBQJ%26export%3Ddownload"></script>

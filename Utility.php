@@ -1,11 +1,10 @@
-<!--Test Oracle file for UBC CPSC 304, modified by Andrew Wong for Group 12 - W1 2018 session
-  Created by Jiemin Zhang, 2011, Modified by Simona Radu and others -->
+<!--Project for CPSC 304, Group 12 - W1 2018 session, migrated from Oracle to
+PostgreSQL by Andrew Wong-->
 
 <?php
 $success = True; //keep track of errors so it redirects the page only if there are no errors
 $db_conn = pg_connect(getenv("DATABASE_URL"));
 // $db_conn = pg_connect("host=localhost port=5432 dbname=Andrew user=Andrew" ) or die("Could not connect");
-// $db_conn = OCILogon("ora_p0w0b", "a59612168", "dbhost.ugrad.cs.ubc.ca:1522/ug");
 $stat = pg_connection_status($db_conn);
   if ($stat === PGSQL_CONNECTION_OK) {
       echo '<h>Connection status ok</h><br><br>';
@@ -16,15 +15,11 @@ $stat = pg_connection_status($db_conn);
 function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL command and executes it
 	//echo "<br>running ".$cmdstr."<br>";
 	global $db_conn, $success;
-	// $statement = OCIParse($db_conn, $cmdstr); //There is a set of comments at the end of the file that describe some of the OCI specific functions and how they work
+	// $statement = OCIParse($db_conn, $cmdstr);
 	// pg_prepare($statement, $cmdstr);
 	// if (!$statement) {
 	// 	echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
 	// 	// $e = OCI_Error($db_conn); // For OCIParse errors pass the
-	// 	$e = pg_last_error($db_conn);
-	// 	// connection handle
-	// 	echo htmlentities($e);
-	// 	// echo htmlentities($e['message']);
 	// 	$success = False;
 	// }
 	$r = pg_query($db_conn, $cmdstr);
@@ -68,8 +63,8 @@ function executeBoundSQL($cmdstr, $list) {
 			// echo strlen($val)."<br>";
 			// echo "<br>".$bind."<br>";
 			OCIBindByName($statement, $bind, $val ,$maxlength = 30 , $type = SQLT_CHR );
-			unset ($val); //make sure you do not remove this. Otherwise $val will remain in an array object wrapper which will not be recognized by Oracle as a proper datatype
-
+			unset ($val); //make sure you do not remove this. Otherwise $val will
+      // remain in an array object wrapper which will not be recognized by Oracle as a proper datatype
 		}
 		$r = OCIExecute($statement, OCI_DEFAULT);
 		if (!$r) {
@@ -83,7 +78,7 @@ function executeBoundSQL($cmdstr, $list) {
 	return $statement;
 }
 
-function printResult($result) { //prints results from a select statement
+function printResult($result) {
 	echo "<table style='float: left'>";
   echo "<caption>Got data from table OrderHas:</caption>";
 	echo "<tr><th>OrderID</th><th>MenuItemID</th></tr>";
@@ -95,7 +90,7 @@ function printResult($result) { //prints results from a select statement
 
 }
 
-function printOrder($result, $orderid) { //prints results from a select statement
+function printOrder($result, $orderid) {
 	echo "<table>";
   echo "<caption>Retrieved Order Details
 				for OrderID: " . $orderid . "</caption>";
@@ -112,7 +107,7 @@ function printOrder($result, $orderid) { //prints results from a select statemen
 
 }
 
-function printMenuItems($result) { //prints results from a select statement
+function printMenuItems($result) {
 	echo "<table>";
   echo "<caption>Got data from table MenuItem:</caption>";
 	echo "<tr><th>MenuItemID</th><th>Name</th></tr>";
@@ -124,7 +119,7 @@ function printMenuItems($result) { //prints results from a select statement
 
 }
 
-function printBranches($result) { //prints results from a select statement
+function printBranches($result) {
 	echo "<table>";
   echo "<caption>All Branches:</caption>";
 	echo "<tr><th>Branch ID</th><th>Address</th><th>City</th></tr>";
@@ -143,7 +138,7 @@ function dropdownBranches($result) { //adds results from a select statement
 	echo "</select><br>";
 }
 
-function printIngredientsByBranch($result, $bid) { //prints results from a select statement
+function printIngredientsByBranch($result, $bid) {
 	echo "<table>";
 	echo "<caption>Ingredients at Branch: " . $bid . "</caption>";
 	echo "<tr><th>Ingredient Name</th><th>Quantity Left</th><th>Expiry Date</th></tr>";
@@ -153,7 +148,7 @@ function printIngredientsByBranch($result, $bid) { //prints results from a selec
 	echo "</table>";
 }
 
-function printIngredientsExpiring($result, $bid) { //prints results from a select statement
+function printIngredientsExpiring($result, $bid) {
 	echo "<table>";
 	echo "<caption>Ingredients at Expiring on: " . $bid . "</caption>";
 	echo "<tr><th>Ingredient Name</th><th>Quantity Left</th><th>Expiry Date</th></tr>";
@@ -163,7 +158,7 @@ function printIngredientsExpiring($result, $bid) { //prints results from a selec
 	echo "</table>";
 }
 
-function printCountEmployeesByBID($result) { //prints results from a select statement
+function printCountEmployeesByBID($result) {
 	echo "<table>";
   echo "<caption>Total Employees at a Branch:</caption>";
 	echo "<tr><th>Branch ID</th><th>Number of Employees</th></tr>";
@@ -174,7 +169,7 @@ function printCountEmployeesByBID($result) { //prints results from a select stat
 	echo "</table>";
 }
 
-function printDivisionByBID($result, $bid) { //prints results from a select statement
+function printDivisionByBID($result, $bid) {
 	echo "<table>";
   echo "<caption>Order IDs with all Menu Items
 	 at a given Branch: " . $bid . "</caption>";
@@ -186,7 +181,7 @@ function printDivisionByBID($result, $bid) { //prints results from a select stat
 	echo "</table>";
 }
 
-function printCountIngsByExpDate($result) { //prints results from a select statement
+function printCountIngsByExpDate($result) {
 	echo "<table>";
   echo "<caption>Number of Ingredients Expirying by Date:</caption>";
 	echo "<tr><th>Expiry Date</th><th>Number of Ingredients</th></tr>";
@@ -197,7 +192,7 @@ function printCountIngsByExpDate($result) { //prints results from a select state
 	echo "</table>";
 }
 
-function printIList($result) { //prints results from a select statement
+function printIList($result) {
 	echo "<table style='float: left'>";
   echo "<caption>MenuItem You're Responsible For:</caption>";
 	echo "<tr>
@@ -214,7 +209,7 @@ function printIList($result) { //prints results from a select statement
 }
 
 
-function printUpdateIList($result) { //prints results from a select statement
+function printUpdateIList($result) {
 	echo "<table style='float: left'>";
   echo "<caption>Updated Ingredient</caption>";
 	echo "<tr>
@@ -232,7 +227,7 @@ function printUpdateIList($result) { //prints results from a select statement
 }
 
 
-function printDelivery($result) { //prints results from a select statement
+function printDelivery($result) {
 	echo "<table>";
 	echo "<caption>Got data from table TakeoutOrder:</caption>";
 	echo "<tr>
@@ -251,7 +246,7 @@ echo "</table>";
 }
 
 
-function printToDeliver($result) { //prints results from a select statement
+function printToDeliver($result) {
 	echo "<table>";
 	echo "<caption>Orders to Deliver:</caption>";
 	echo "<tr>
@@ -271,7 +266,7 @@ function printToDeliver($result) { //prints results from a select statement
 echo "</table>";
 }
 
-function printpop($result, $bid) { //prints results from a select statement
+function printpop($result, $bid) {
 	echo "<table>";
 	echo "<caption>Popular Delivery MenuItems from Branch: ". $bid ." </caption>";
 	echo "<tr>
@@ -286,7 +281,7 @@ function printpop($result, $bid) { //prints results from a select statement
 	echo "</table>";
 }
 
-function printIngredientOrders($result) { //prints results from a select statement
+function printIngredientOrders($result) {
 	echo "<table>";
   echo "<caption>Ingredient Orders:</caption>";
 	echo "<tr><th>Restock ID</th><th>Manager ID</th><th>Supplier ID</th>
@@ -308,7 +303,5 @@ function printIngredientOrders($result) { //prints results from a select stateme
 // 		echo "</select><br>";
 // 	}
 // }
-
-// DATABASE_URL: postgres://nirqdlupyjxoxr:f07eaf07be5c5af0ce1cdf0cf8029443e7019c0a9e0e2673d0a3b6b1e51c37f6@ec2-23-21-201-12.compute-1.amazonaws.com:5432/dki11jv212dl5
 
 ?>
