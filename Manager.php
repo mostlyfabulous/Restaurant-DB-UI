@@ -37,8 +37,7 @@
       // $statement1 = "
       // SELECT * FROM ingredientsinstock
       // WHERE branchid='" . $_GET['selBID'] . "'";
-      echo "hello";
-      $result1 = executePlainSQL("SELECT * FROM ingredientsinstock where Branchid='B1234'");
+      $result1 = executePlainSQL("SELECT * FROM ingredientsinstock where Branchid='" . $_GET['selBID'] . "'");
       $result2 = executePlainSQL("SELECT * FROM ingredientsinstock where Branchid='B1234'");
       printIngredientsByBranch($result1, $_GET['selBID']);
       printIngredientsByBranch($result2, $_GET['selBID']);
