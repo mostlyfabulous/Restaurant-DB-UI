@@ -20,10 +20,9 @@ echo "</form>";
 // selectbid defined in dropdownBranches function
 if ($db_conn && array_key_exists('selectbid', $_GET)) {
   // Get MenuItems by BranchID
-  echo "<p> Fetching Menu Items from Branch: " . $_GET['selectbid'] . "</p>";
   $sqlquery = "select * from MenuItem where BRANCHID='" . $_GET['selectbid'] . "'";
   $result = executePlainSQL($sqlquery);
-  printMenuItems($result);
+  printMenuItems($result, $_GET['selectbid']);
 }
 
 ?>
