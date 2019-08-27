@@ -1,4 +1,5 @@
-<PHP> <link rel="stylesheet" type="text/css" href="enjoy.css"></head> <PHP>
+<PHP>   <title>Restaurant Management System</title>
+<link rel="stylesheet" type="text/css" href="enjoy.css"></head> <PHP>
 <div class="boxes">
   <div class="box box1"></div>
   <div class="box box2">
@@ -10,7 +11,7 @@
   <div class="box box3"></div>
 </div>
 <div class="description">
-  <h4>This is a group project for CPSC 304 to create a database with various 
+  <h4>This is a group project for CPSC 304 to create a database with various
     types of relations with a simple UI for interactivity.<h4>
 </div>
 <div class="mxgraph" style="max-width:100%;border:1px solid transparent;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;toolbar&quot;:&quot;zoom layers lightbox&quot;,&quot;edit&quot;:&quot;_blank&quot;,&quot;url&quot;:&quot;https://drive.google.com/uc?id=1Raa86s9VgAzLE14Y05EfJncJpZZCVBQJ&amp;export=download&quot;}"></div>
