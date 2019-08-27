@@ -138,6 +138,15 @@ function dropdownBranches($result) { //adds results from a select statement
 	echo "</select><br>";
 }
 
+function dropdownIngredients($result) { //adds results from a select statement
+	echo "<br><select name='selIngredient'>";
+	echo "<option value='0'>Choose an ingredient</option>";
+	while ($row = pg_fetch_array($result)) {
+		echo "<option value =" . $row['ingredientname'] . ">" . $row['ingredientname'] . "</option>";
+	}
+	echo "</select><br>";
+}
+
 function printIngredientsByBranch($result, $bid) {
 	echo "<table>";
 	echo "<caption>Ingredients at Branch: " . $bid . "</caption>";
