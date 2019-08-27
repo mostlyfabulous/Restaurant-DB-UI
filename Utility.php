@@ -109,7 +109,7 @@ function printOrder($result, $orderid) {
 
 function printMenuItems($result, $bid) {
 	echo "<table>";
-  echo "<caption> Menu Items from Branch:". $bid ."</caption>";
+  echo "<caption> Menu Items from Branch: ". $bid ."</caption>";
 	echo "<tr><th>MenuItemID</th><th>Name</th></tr>";
 
 	while ($row = pg_fetch_array($result)) {

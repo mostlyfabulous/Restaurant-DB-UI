@@ -60,7 +60,7 @@ if ($db_conn) {
         // branchID = 'B1234' and
         // lotNumber = 60");
 
-				OCICommit($db_conn);
+				// OCICommit($db_conn);
         // $result = executePlainSQL("select * from IngredientsInStock
         // where ingredientName = '" . $_GET['ingredientName'] . "' and
         // branchID = '" . $_GET['branchID'] . "' and

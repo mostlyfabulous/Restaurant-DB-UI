@@ -14,7 +14,7 @@ $result = executePlainSQL("select * from Restaurant");
 echo "<form method='GET' action='Customer.php'>";
 echo "Select MenuItems by Branch ID below: <br>";
 dropdownBranches($result);
-echo "<p><input type='submit' value='Submit'></p>";
+echo "<p><input type='submit' value='submit'></p>";
 echo "</form>";
 
 // selectbid defined in dropdownBranches function
@@ -41,7 +41,7 @@ get the values-->
 <form method="GET" action="Customer.php">
   Input Branch ID to see popular items at that Branch:
 <p> <input type="text" name="viewBranchID" size="10"placeholder="Branch ID">
-<input type="submit" value="insert" name="viewpopitem"></p>
+<input type="submit" value="suvvmit" name="viewpopitem"></p>
 </form>
 <br><br>
 <form method="GET" action="Customer.php">
