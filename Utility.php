@@ -130,7 +130,7 @@ function printBranches($result) {
 }
 
 function dropdownBranches($result) { //adds results from a select statement
-	echo "<br><select name='selectbid'>";
+	echo "<select name='selectbid'>";
 	echo "<option value='0'>Please Select a Branch</option>";
 	while ($row = pg_fetch_array($result)) {
 		echo "<option value =" . $row['branchid'] . ">" . $row['branchid'] . "</option>";
@@ -139,7 +139,7 @@ function dropdownBranches($result) { //adds results from a select statement
 }
 
 function dropdownIngredients($result) { //adds results from a select statement
-	echo "<br><select name='selIngredient'>";
+	echo "<select name='selIngredient'>";
 	echo "<option value='0'>Choose an ingredient</option>";
 	while ($row = pg_fetch_array($result)) {
 		echo "<option value ='" . $row['ingredientname'] . "'>" . $row['ingredientname'] . "</option>";
