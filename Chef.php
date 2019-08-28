@@ -54,21 +54,19 @@ if ($db_conn) {
 		} else
 			if (array_key_exists('updatesubmit', $_GET)) {
         echo  $_GET['quantity'];
-        echo $_GET['ingredientName'];
-        echo  $_GET['branchID'];
         echo $_GET['lotNumber'];
 				echo  $_GET['selectbid'];
 				echo  $_GET['selIngredient'];
-        $result = executePlainSQL("select * from IngredientsInStock
-        where ingredientName = '" .  $_GET['selIngredient'] . "' and branchID = '" . $_GET['selectbid'] . "'
-        and lotNumber = " . $_GET['lotNumber'] . "");
-				printUpdateIList($result);
         // $result = executePlainSQL("select * from IngredientsInStock where branchID ='" . $_GET['branchID'] . "'");
         executePlainSQL("update IngredientsInStock
         set quantityLeft = ". $_GET['quantity'] ."
         where ingredientName = '". $_GET['selIngredient'] . "' and
         branchID = '". $_GET['selectbid']. "'and
         lotNumber =". $_GET['lotNumber'] ."");
+
+				$result = executePlainSQL("select * from IngredientsInStock
+				where ingredientName = '" .  $_GET['selIngredient'] . "' and branchID = '" . $_GET['selectbid'] . "'
+				and lotNumber = " . $_GET['lotNumber'] . "");
 				printUpdateIList($result);
 
         // $result = executePlainSQL("select * from IngredientsInStock

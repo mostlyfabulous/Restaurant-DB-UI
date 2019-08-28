@@ -142,7 +142,7 @@ function dropdownIngredients($result) { //adds results from a select statement
 	echo "<br><select name='selIngredient'>";
 	echo "<option value='0'>Choose an ingredient</option>";
 	while ($row = pg_fetch_array($result)) {
-		echo "<option value ='" . $row['ingredientname'] . "'>" . $row['ingredientname'] . "</option>";
+		echo "<option value =" . $row['ingredientname'] . ">" . $row['ingredientname'] . "</option>";
 	}
 	echo "</select><br>";
 }
