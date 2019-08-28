@@ -20,7 +20,7 @@ Update the ingredient quantity to reflect the amount used
 	<?php
 	$result = executePlainSQL("select * from Restaurant");
 	dropdownBranches($result);
-	$result = executePlainSQL("select distinct * from IngredientsInStock");
+	$result = executePlainSQL("select * from IngredientsInStock order by ingredientname desc");
 	dropdownIngredients($result);
 	?>
 	<input type="number" name="quantity" size="18" placeholder="quantity">
