@@ -66,7 +66,7 @@ if ($db_conn) {
         executePlainSQL("update IngredientsInStock
         set quantityLeft =". $_GET['quantity'] ."
         where ingredientName = " . $_GET['selIngredient'] . " and
-        branchID = $_GET['selectbid'] and
+        branchID = ". $_GET['selectbid']. " and
         lotNumber =". $_GET['lotNumber'] ."");
 				printUpdateIList($result);
 
