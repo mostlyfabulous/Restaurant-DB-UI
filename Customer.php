@@ -14,6 +14,7 @@ $result = executePlainSQL("select * from Restaurant");
 echo "<form method='GET' action='Customer.php'>";
 echo "Select MenuItems by Branch ID below: <br>";
 dropdownBranches($result);
+echo "<br>"
 echo "<p><input type='submit' value='submit'></p>";
 echo "</form>";
 

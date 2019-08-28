@@ -53,10 +53,6 @@ if ($db_conn) {
       printIList($result);
 		} else
 			if (array_key_exists('updatesubmit', $_GET)) {
-        echo  $_GET['quantity'];
-        echo $_GET['lotNumber'];
-				echo  $_GET['selectbid'];
-				echo  $_GET['selIngredient'];
         // $result = executePlainSQL("select * from IngredientsInStock where branchID ='" . $_GET['branchID'] . "'");
         executePlainSQL("update IngredientsInStock
         set quantityLeft = ". $_GET['quantity'] ."
@@ -79,12 +75,10 @@ if ($db_conn) {
 			}
 
 	if ($_POST && $success) {
-		//POST-REDIRECT-GET -- See http://en.wikipedia.org/wiki/Post/Redirect/Get
 		header("location: Chef.php");
 	} else {
 		// Select data...
 	}
-	//Commit to save changes...
 	pg_close($db_conn);
 } else {
 	echo "cannot connect";

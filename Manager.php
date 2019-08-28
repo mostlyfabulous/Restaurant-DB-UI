@@ -8,8 +8,12 @@
 
 <form method="GET" action="Manager.php">
   Retrieve Ingredients in Stock at a Branch ID:
-<p> <input type="text" name="selBID" size="10"placeholder="Branch ID">
-    <input type="submit" value="select" name="selectbybid"></p>
+<p>
+  <?php
+  $result = executePlainSQL("select * from Restaurant");
+  dropdownBranches($result);
+  ?>
+  <input type="submit" value="select" name="selectbybid"></p>
 </form>
 <form method="GET" action="Manager.php">
   Get Ingredients Expirying on a Given Date:
@@ -39,7 +43,7 @@
       // WHERE branchid='" . $_GET['selBID'] . "'";
       $result1 = executePlainSQL("SELECT * FROM ingredientsinstock where Branchid='" . $_GET['selBID'] . "'");
       // $result2 = executePlainSQL("SELECT * FROM ingredientsinstock where Branchid='B1234'");
-      printIngredientsByBranch($result1, $_GET['selBID']);
+      printIngredientsByBranch($result1, $_GET['selectbid']);
       // printIngredientsByBranch($result2, $_GET['selBID']);
 
       echo "<br>";
