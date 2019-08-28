@@ -14,16 +14,17 @@ get the values-->
 
 <form method="GET" action="Chef.php">
 Update the ingredient quantity to reflect the amount used
-<p> <input type="text" name="branchID" size="18" placeholder="Branch ID">
+<p>
+	<!-- <input type="text" name="branchID" size="18" placeholder="Branch ID">
+	<input type="text" name="ingredientName" size="18" placeholder="Ingredient Name"> -->
+	<?php
+	$result = executePlainSQL("select * from Restaurant");
+	dropdownBranches($result);
+	$result = executePlainSQL("select distinct * from IngredientsInStock");
+	dropdownIngredients($result);
+	?>
 	<input type="number" name="quantity" size="18" placeholder="quantity">
-	<input type="text" name="ingredientName" size="18" placeholder="Ingredient Name">
 	<input type="number" name="lotNumber" size="18" placeholder="Lot Number">
-<?php
-$result = executePlainSQL("select * from Restaurant");
-dropdownBranches($result);
-$result = executePlainSQL("select distinct * from IngredientsInStock");
-dropdownIngredients($result);
-?>
 <input type="submit" value="Update ingredient quantity" name="updatesubmit">
 
 </form> <br>
@@ -59,14 +60,14 @@ if ($db_conn) {
 				echo  $_GET['selectbid'];
 				echo  $_GET['selIngredient'];
         $result = executePlainSQL("select * from IngredientsInStock
-        where ingredientName = '" . $_GET['ingredientName'] . "' and branchID = '" . $_GET['branchID'] . "'
+        where ingredientName = '" .  $_GET['selIngredient'] . "' and branchID = '" . $_GET['selectbid'] . "'
         and lotNumber = " . $_GET['lotNumber'] . "");
 				printUpdateIList($result);
         // $result = executePlainSQL("select * from IngredientsInStock where branchID ='" . $_GET['branchID'] . "'");
         executePlainSQL("update IngredientsInStock
-        set quantityLeft =". $_GET['quantity'] ."
-        where ingredientName = " . $_GET['selIngredient'] . " and
-        branchID = ". $_GET['selectbid']. " and
+        set quantityLeft = ". $_GET['quantity'] ."
+        where ingredientName = '". $_GET['selIngredient'] . "' and
+        branchID = '". $_GET['selectbid']. "'and
         lotNumber =". $_GET['lotNumber'] ."");
 				printUpdateIList($result);
 
